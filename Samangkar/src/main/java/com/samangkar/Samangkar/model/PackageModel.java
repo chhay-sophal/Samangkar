@@ -3,7 +3,7 @@ package com.samangkar.Samangkar.model;
 import jakarta.persistence.*;
 
 @Entity
-public class ServiceEntity {
+public class PackageModel {
 
     public long getId() {
         return id;
@@ -29,19 +29,29 @@ public class ServiceEntity {
         this.description = description;
     }
 
-    public ShopEntity getProvider() {
-        return provider;
+    public Shop getShop() {
+        return shop;
     }
 
-    public void setProvider(ShopEntity provider) {
-        this.provider = provider;
+    public void setShop(Shop shop) {
+        this.shop = shop;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
     private String name;
     private String description;
-    @ManyToOne(cascade = CascadeType.ALL)
-    private ShopEntity provider;
+
+    @ManyToOne
+    @JoinColumn(name = "shop_id")
+    private Shop shop;
+
+    public PackageModel() {}
+    public PackageModel(String name, String description, Shop shop) {
+        this.name = name;
+        this.description = description;
+        this.shop = shop;
+    }
 }

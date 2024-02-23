@@ -2,10 +2,16 @@ package com.samangkar.Samangkar.model;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
-public class ShopEntity {
+public class Shop {
+
+    public Shop() {}
+    public Shop(String name, String description, String shopImageUrl, User owner) {
+        this.name = name;
+        this.description = description;
+        this.shopImageUrl = shopImageUrl;
+        this.owner = owner;
+    }
 
     public long getId() {
         return id;
@@ -39,11 +45,11 @@ public class ShopEntity {
         this.shopImageUrl = shopImageUrl;
     }
 
-    public UserEntity getOwner() {
+    public User getOwner() {
         return owner;
     }
 
-    public void setOwner(UserEntity owner) {
+    public void setOwner(User owner) {
         this.owner = owner;
     }
 
@@ -63,24 +69,19 @@ public class ShopEntity {
         this.trending = trending;
     }
 
-    public List<ShopContactEntity> getContacts() {
-        return contacts;
-    }
-
-    public void setContacts(List<ShopContactEntity> contacts) {
-        this.contacts = contacts;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
     private String name;
     private String description;
     private String shopImageUrl;
-    private UserEntity owner;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
+
     private boolean activated;
     private boolean trending;
-    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
-    private List<ShopContactEntity> contacts;
 
 }

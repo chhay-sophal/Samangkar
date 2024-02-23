@@ -1,0 +1,188 @@
+package com.samangkar.Samangkar.config;
+
+import com.samangkar.Samangkar.model.*;
+import com.samangkar.Samangkar.repository.*;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.Transactional;
+
+@Configuration
+public class DatabaseSeederConfig {
+
+    @Bean
+    CommandLineRunner initDatabase(
+            UserTypeRepository userTypeRepository,
+            UserRepository userRepository,
+            ContactTypeRepository contactTypeRepository,
+            ShopRepository shopRepository,
+            ShopContactRepository shopContactRepository,
+            PackageRepository packageRepository,
+            ServiceRepository serviceRepository,
+            UserCardRepository userCardRepository
+    ) {
+        return args -> {
+            // Seed user types
+            seedUserType(userTypeRepository, "admin");
+            seedUserType(userTypeRepository, "shop owner");
+            seedUserType(userTypeRepository, "user");
+
+            // Seed users
+            seedUser(userRepository, "admin1", "admin1@example.com", "admin1234", "admin", userTypeRepository);
+            seedUser(userRepository, "admin2", "admin2@example.com", "admin5678", "admin", userTypeRepository);
+            seedUser(userRepository, "shop_owner1", "shop_owner1@example.com", "shop1234", "shop owner", userTypeRepository);
+            seedUser(userRepository, "shop_owner2", "shop_owner2@example.com", "shop5678", "shop owner", userTypeRepository);
+            seedUser(userRepository, "shop_owner3", "shop_owner3@example.com", "shop8910", "shop owner", userTypeRepository);
+            seedUser(userRepository, "user1", "user1@example.com", "user1234", "user", userTypeRepository);
+            seedUser(userRepository, "user2", "user2@example.com", "user5678", "user", userTypeRepository);
+            seedUser(userRepository, "user3", "user3@example.com", "user8910", "user", userTypeRepository);
+
+            // Seed contact types
+            seedContactType(contactTypeRepository, "Phone Number");
+            seedContactType(contactTypeRepository, "Email");
+            seedContactType(contactTypeRepository, "Facebook");
+            seedContactType(contactTypeRepository, "Instagram");
+            seedContactType(contactTypeRepository, "Tik Tok");
+
+            // Seed shops
+            seedShop(shopRepository, "shop1", "This is shop 1", "ImageUrl1", userRepository.findFirstByUsername("shop_owner1"));
+            seedShop(shopRepository, "shop2", "This is shop 2", "ImageUrl2", userRepository.findFirstByUsername("shop_owner2"));
+            seedShop(shopRepository, "shop3", "This is shop 3", "ImageUrl3", userRepository.findFirstByUsername("shop_owner3"));
+
+            // Seed shop contacts
+            seedShopContact(shopContactRepository, contactTypeRepository.findFirstByPlatform("Phone Number"), "0987654321", shopRepository.findFirstByName("shop1"));
+            seedShopContact(shopContactRepository, contactTypeRepository.findFirstByPlatform("Phone Number"), "0123456789", shopRepository.findFirstByName("shop1"));
+            seedShopContact(shopContactRepository, contactTypeRepository.findFirstByPlatform("Email"), "shop1@example.com", shopRepository.findFirstByName("shop1"));
+            seedShopContact(shopContactRepository, contactTypeRepository.findFirstByPlatform("Facebook"), "shop2.facebook.com", shopRepository.findFirstByName("shop2"));
+            seedShopContact(shopContactRepository, contactTypeRepository.findFirstByPlatform("Instagram"), "shop2.instagram.com", shopRepository.findFirstByName("shop2"));
+            seedShopContact(shopContactRepository, contactTypeRepository.findFirstByPlatform("Tik Tok"), "shop3.tiktok.com", shopRepository.findFirstByName("shop3"));
+            seedShopContact(shopContactRepository, contactTypeRepository.findFirstByPlatform("Phone Number"), "09878374321", shopRepository.findFirstByName("shop3"));
+            seedShopContact(shopContactRepository, contactTypeRepository.findFirstByPlatform("Email"), "shop3@example.com", shopRepository.findFirstByName("shop3"));
+            seedShopContact(shopContactRepository, contactTypeRepository.findFirstByPlatform("Phone Number"), "0987602621", shopRepository.findFirstByName("shop2"));
+
+            // Seed packages
+            seedPackage(packageRepository, "Standard", "Most affordable", shopRepository.findFirstByName("shop1"));
+            seedPackage(packageRepository, "Premium", "Balance", shopRepository.findFirstByName("shop1"));
+            seedPackage(packageRepository, "Platinum", "The best of us", shopRepository.findFirstByName("shop1"));
+            seedPackage(packageRepository, "Standard", "Most affordable", shopRepository.findFirstByName("shop2"));
+            seedPackage(packageRepository, "Legend", "Exclusive package for you", shopRepository.findFirstByName("shop2"));
+            seedPackage(packageRepository, "Golden", "Golden package", shopRepository.findFirstByName("shop3"));
+            seedPackage(packageRepository, "Silver", "Silver package", shopRepository.findFirstByName("shop3"));
+            seedPackage(packageRepository, "Luxury", "Luxury package", shopRepository.findFirstByName("shop3"));
+
+            // Seed service
+            seedService(serviceRepository, "Make up", "Make the groom and bride look beautiful", shopRepository.findFirstByName("shop1"));
+            seedService(serviceRepository, "Place", "Where to put your wedding", shopRepository.findFirstByName("shop1"));
+            seedService(serviceRepository, "Sound", "Sound make magic", shopRepository.findFirstByName("shop1"));
+            seedService(serviceRepository, "Food", "Delicious with every bit", shopRepository.findFirstByName("shop2"));
+            seedService(serviceRepository, "Make up", "Make the groom and bride look beautiful", shopRepository.findFirstByName("shop2"));
+            seedService(serviceRepository, "Make up", "Make the groom and bride look beautiful", shopRepository.findFirstByName("shop3"));
+            seedService(serviceRepository, "Environment", "Keep the atmosphere cool and relaxed", shopRepository.findFirstByName("shop3"));
+
+            // Seed user card
+            seedUserCard(
+                    userCardRepository,
+                    userRepository.findFirstByUsername("user1"),
+                    shopRepository.findFirstByName("shop1"),
+                    serviceRepository.findFirstByNameAndShop("Make up", shopRepository.findFirstByName("shop1")),
+                    2000.00,
+                    1);
+            seedUserCard(
+                    userCardRepository,
+                    userRepository.findFirstByUsername("user2"),
+                    shopRepository.findFirstByName("shop3"),
+                    serviceRepository.findFirstByNameAndShop("Environment", shopRepository.findFirstByName("shop3")),
+                    2030.00,
+                    3
+                    );
+            seedUserCard(
+                    userCardRepository,
+                    userRepository.findFirstByUsername("user3"),
+                    shopRepository.findFirstByName("shop2"),
+                    serviceRepository.findFirstByNameAndShop("Food", shopRepository.findFirstByName("shop2")),
+                    5000.00,
+                    1);
+            seedUserCard(
+                    userCardRepository,
+                    userRepository.findFirstByUsername("user1"),
+                    shopRepository.findFirstByName("shop2"),
+                    serviceRepository.findFirstByNameAndShop("Make up", shopRepository.findFirstByName("shop2")),
+                    2000.00,
+                    1);
+            // After seeding data, display this message
+            System.out.println("Data Seeding: Data seeded successfully!");
+
+        };
+    }
+
+    @Transactional
+    private void seedUserType(UserTypeRepository repository, String name) {
+        if (repository.findByName(name).isEmpty()) {
+            UserType userType = new UserType();
+            userType.setName(name);
+            repository.save(userType);
+        }
+    }
+
+    @Transactional
+    private void seedUser(UserRepository userRepository, String username, String email, String password, String userType, UserTypeRepository userTypeRepository) {
+        UserType type = userTypeRepository.findFirstByName(userType);
+        if (type != null && userRepository.findByUsername(username).isEmpty()) {
+            User user = new User();
+            user.setUsername(username);
+            user.setEmail(email);
+            user.setPassword(password);
+            user.setUserType(type);
+            userRepository.save(user);
+        }
+    }
+
+    @Transactional
+    private void seedContactType(ContactTypeRepository repository, String platform) {
+        if (repository.findByPlatform(platform).isEmpty()) {
+            ContactType contactType = new ContactType();
+            contactType.setPlatform(platform);
+            repository.save(contactType);
+        }
+    }
+
+    @Transactional
+    private void seedShop(ShopRepository repository, String name, String description, String shopImageUrl, User owner) {
+        if (repository.findByName(name).isEmpty()) {
+            Shop shop = new Shop(name, description, shopImageUrl, owner);
+            repository.save(shop);
+        }
+    }
+
+    @Transactional
+    private void seedShopContact(ShopContactRepository repository, ContactType contactType, String url, Shop shop) {
+        if (repository.findByUrl(url).isEmpty()) {
+            ShopContact shopContact = new ShopContact(contactType, url, shop);
+            repository.save(shopContact);
+        }
+    }
+
+    @Transactional
+    private void seedPackage(PackageRepository repository, String name, String description, Shop shop) {
+        if (repository.findByNameAndShop(name, shop).isEmpty()) {
+            PackageModel packageModel = new PackageModel(name, description, shop);
+            repository.save(packageModel);
+        }
+    }
+
+    @Transactional
+    private void seedService(ServiceRepository repository, String name, String description, Shop shop) {
+        if (repository.findByNameAndShop(name, shop).isEmpty()) {
+            ServiceModel serviceModel = new ServiceModel(name, description, shop);
+            repository.save(serviceModel);
+        }
+    }
+
+    @Transactional
+    private void seedUserCard(UserCardRepository repository, User user, Shop shop, ServiceModel service, double total, int quantity) {
+        if (repository.findByUserAndShopAndService(user, shop, service).isEmpty()) {
+            UserCard userCard = new UserCard(user, shop, service, total, quantity);
+            repository.save(userCard);
+        }
+    }
+}

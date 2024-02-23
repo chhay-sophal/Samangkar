@@ -3,7 +3,7 @@ package com.samangkar.Samangkar.model;
 import jakarta.persistence.*;
 
 @Entity
-public class ShopContactEntity {
+public class ShopContact {
 
     public long getId() {
         return id;
@@ -13,11 +13,11 @@ public class ShopContactEntity {
         this.id = id;
     }
 
-    public ContactTypeEntity getContactType() {
+    public ContactType getContactType() {
         return contactType;
     }
 
-    public void setContactType(ContactTypeEntity contactType) {
+    public void setContactType(ContactType contactType) {
         this.contactType = contactType;
     }
 
@@ -29,21 +29,32 @@ public class ShopContactEntity {
         this.url = url;
     }
 
-    public ShopEntity getShop() {
+    public Shop getShop() {
         return shop;
     }
 
-    public void setShop(ShopEntity shop) {
+    public void setShop(Shop shop) {
         this.shop = shop;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @ManyToOne
-    private ContactTypeEntity contactType;
-    private String url;
-    @ManyToOne
-    private ShopEntity shop;
 
+    @ManyToOne
+    @JoinColumn(name = "contact_type_id")
+    private ContactType contactType;
+
+    private String url;
+
+    @ManyToOne
+    @JoinColumn(name = "shop_id")
+    private Shop shop;
+
+    public ShopContact() {}
+    public ShopContact(ContactType contactType, String url, Shop shop) {
+        this.contactType = contactType;
+        this.url = url;
+        this.shop = shop;
+    }
 }

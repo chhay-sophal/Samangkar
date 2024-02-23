@@ -1,9 +1,12 @@
 package com.samangkar.Samangkar.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
-public class ContactTypeEntity {
+public class ContactType {
 
     public long getId() {
         return id;
@@ -24,7 +27,7 @@ public class ContactTypeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @Column(unique = true)
+
     private String platform;
 
 }

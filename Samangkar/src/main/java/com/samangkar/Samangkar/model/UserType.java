@@ -6,14 +6,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class UserTypeEntity {
+public class UserType {
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setId(long user_type_id) {
+        this.id = user_type_id;
     }
 
     public String getName() {
