@@ -19,7 +19,9 @@ public class DatabaseSeederConfig {
             ShopContactRepository shopContactRepository,
             PackageRepository packageRepository,
             ServiceRepository serviceRepository,
-            UserCardRepository userCardRepository
+            UserCardRepository userCardRepository,
+            UserFavoriteRepository userFavoriteRepository,
+            UserReviewRepository userReviewRepository
     ) {
         return args -> {
             // Seed user types
@@ -109,6 +111,37 @@ public class DatabaseSeederConfig {
                     serviceRepository.findFirstByNameAndShop("Make up", shopRepository.findFirstByName("shop2")),
                     2000.00,
                     1);
+
+            // Seed user favorites
+            seedUserFavorite(userFavoriteRepository, userRepository.findFirstByUsername("user1"), shopRepository.findFirstByName("shop1"));
+            seedUserFavorite(userFavoriteRepository, userRepository.findFirstByUsername("user1"), shopRepository.findFirstByName("shop2"));
+            seedUserFavorite(userFavoriteRepository, userRepository.findFirstByUsername("user2"), shopRepository.findFirstByName("shop2"));
+            seedUserFavorite(userFavoriteRepository, userRepository.findFirstByUsername("user2"), shopRepository.findFirstByName("shop3"));
+            seedUserFavorite(userFavoriteRepository, userRepository.findFirstByUsername("user3"), shopRepository.findFirstByName("shop3"));
+
+            // Seed user reviews
+            seedUserReview(
+                    userReviewRepository,
+                    userRepository.findFirstByUsername("user1"),
+                    shopRepository.findFirstByName("shop1"),
+                    5,
+                    "This shop is good",
+                    "Description of this review.");
+            seedUserReview(
+                    userReviewRepository,
+                    userRepository.findFirstByUsername("user1"),
+                    shopRepository.findFirstByName("shop2"),
+                    3,
+                    "This shop is not good",
+                    "Description of this review.");
+            seedUserReview(
+                    userReviewRepository,
+                    userRepository.findFirstByUsername("user2"),
+                    shopRepository.findFirstByName("shop2"),
+                    4,
+                    "This shop is almost good",
+                    "Description of this review.");
+
             // After seeding data, display this message
             System.out.println("Data Seeding: Data seeded successfully!");
 
@@ -184,5 +217,25 @@ public class DatabaseSeederConfig {
             UserCard userCard = new UserCard(user, shop, service, total, quantity);
             repository.save(userCard);
         }
+    }
+
+    @Transactional
+    private void seedUserFavorite(UserFavoriteRepository repository, User user, Shop shop) {
+        if (repository.findByUserAndShop(user, shop).isEmpty()) {
+            UserFavorite userFavorite = new UserFavorite(user, shop);
+            repository.save(userFavorite);
+        }
+    }
+
+    @Transactional
+    private void seedUserReview(UserReviewRepository repository, User user, Shop shop, int stars, String title, String description) {
+//        if (repository.findByUserAndShop(user, shop).isEmpty()) {
+//            UserReview userReview = new UserReview(user, shop, title, description);
+//            repository.save(userReview);
+//        }
+
+        UserReview userReview = new UserReview(user, shop, stars, title, description);
+        repository.save(userReview);
+
     }
 }

@@ -2,6 +2,8 @@ package com.samangkar.Samangkar.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Shop {
 
@@ -84,4 +86,36 @@ public class Shop {
     private boolean activated;
     private boolean trending;
 
+    @OneToMany(mappedBy = "shop")
+    private List<PackageModel> packageModels;
+
+    @OneToMany(mappedBy = "shop")
+    private List<ServiceModel> serviceModels;
+
+    @OneToMany(mappedBy = "shop")
+    private List<ShopContact> shopContacts;
+
+    public List<PackageModel> getPackageModels() {
+        return packageModels;
+    }
+
+    public void setPackageModels(List<PackageModel> packageModels) {
+        this.packageModels = packageModels;
+    }
+
+    public List<ServiceModel> getServiceModels() {
+        return serviceModels;
+    }
+
+    public void setServiceModels(List<ServiceModel> serviceModels) {
+        this.serviceModels = serviceModels;
+    }
+
+    public List<ShopContact> getShopContacts() {
+        return shopContacts;
+    }
+
+    public void setShopContacts(List<ShopContact> shopContacts) {
+        this.shopContacts = shopContacts;
+    }
 }

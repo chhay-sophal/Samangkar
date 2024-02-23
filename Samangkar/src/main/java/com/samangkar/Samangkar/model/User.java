@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.List;
+
 @Entity
 public class User {
 
@@ -88,4 +90,21 @@ public class User {
     private String profileUrl;
 
     private boolean active = true;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserFavorite> favoriteShops;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserReview> reviewShops;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserCard> cards;
+
+    public List<UserFavorite> getFavoriteShops() {
+        return favoriteShops;
+    }
+
+    public void setFavoriteShops(List<UserFavorite> favoriteShops) {
+        this.favoriteShops = favoriteShops;
+    }
 }
