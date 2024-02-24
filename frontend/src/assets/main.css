@@ -1,6 +1,10 @@
 @import './base.css';
 
-#app {
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* #app {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -32,4 +36,9 @@ a,
     grid-template-columns: 1fr 1fr;
     padding: 0 2rem;
   }
+} */
+
+.dark {
+  background: #16171d;
+  color: #fff;
 }
