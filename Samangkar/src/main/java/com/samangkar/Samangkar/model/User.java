@@ -4,18 +4,65 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
 @Entity
 public class User {
 
-    public long getUser_id() {
-        return user_id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Use IDENTITY for auto-increment columns.
+    private Long id; // It's common to use wrapper classes for IDs.
+
+    @NotBlank(message = "Username is mandatory")
+    @Column(nullable = false, unique = true)
+    private String username;
+
+    @NotBlank(message = "Email is mandatory")
+    @Email(message = "Email should be valid")
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @NotBlank(message = "Password is mandatory")
+    @Length(min = 8, message = "Password should have at least 8 characters")
+    private String password; // Store the hashed password directly.
+
+    @ManyToOne
+    @JoinColumn(name = "user_type_id") // Clarify the join column.
+    private UserType userType;
+
+    private String profileUrl;
+
+    private boolean active = true;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserFavorite> favoriteShops;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserReview> reviewShops;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserCard> cards;
+
+    // Default constructor is required by JPA.
+    public User() {}
+
+    // Custom constructor to handle new user creation.
+    public User(String username, String email, String plainPassword, UserType userType) {
+        this.username = username;
+        this.email = email;
+        setPassword(plainPassword); // Use the setter to hash the password.
+        this.userType = userType;
     }
 
-    public void setUser_id(long user_id) {
-        this.user_id = user_id;
+    public long getUser_id() {
+        return id;
+    }
+
+    public void setUser_id(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -38,8 +85,9 @@ public class User {
         return password;
     }
 
+    // Set password and automatically hash it.
     public void setPassword(String password) {
-        this.password = password;
+        this.password = new BCryptPasswordEncoder().encode(password);
     }
 
     public UserType getUserType() {
@@ -66,40 +114,6 @@ public class User {
         this.active = active;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long user_id;
-
-    @NotBlank(message = "Username is mandatory")
-    @Column(nullable = false, unique = true)
-    private String username;
-
-    @NotBlank(message = "Email is mandatory")
-    @Email(message = "Email should be valid")
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @NotBlank(message = "Password is mandatory")
-    @Length(min = 8, message = "Password should have at least 8 characters")
-    private String password;
-
-    @ManyToOne // Assuming UserType can be shared across Users
-    @JoinColumn(name = "user_type_id") // Explicitly define the join column
-    private UserType userType;
-
-    private String profileUrl;
-
-    private boolean active = true;
-
-    @OneToMany(mappedBy = "user")
-    private List<UserFavorite> favoriteShops;
-
-    @OneToMany(mappedBy = "user")
-    private List<UserReview> reviewShops;
-
-    @OneToMany(mappedBy = "user")
-    private List<UserCard> cards;
-
     public List<UserFavorite> getFavoriteShops() {
         return favoriteShops;
     }
@@ -107,4 +121,21 @@ public class User {
     public void setFavoriteShops(List<UserFavorite> favoriteShops) {
         this.favoriteShops = favoriteShops;
     }
+
+    public List<UserReview> getReviewShops() {
+        return reviewShops;
+    }
+
+    public void setReviewShops(List<UserReview> reviewShops) {
+        this.reviewShops = reviewShops;
+    }
+
+    public List<UserCard> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<UserCard> cards) {
+        this.cards = cards;
+    }
+
 }

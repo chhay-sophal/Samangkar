@@ -8,11 +8,23 @@ import jakarta.persistence.Id;
 @Entity
 public class ContactType {
 
-    public long getId() {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    private String platform;
+
+    public ContactType() {}
+
+    public ContactType(String platform) {
+        this.platform = platform;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -23,11 +35,4 @@ public class ContactType {
     public void setPlatform(String platform) {
         this.platform = platform;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-
-    private String platform;
-
 }

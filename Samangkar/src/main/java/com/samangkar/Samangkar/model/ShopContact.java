@@ -5,11 +5,25 @@ import jakarta.persistence.*;
 @Entity
 public class ShopContact {
 
-    public long getId() {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "contact_type_id")
+    private ContactType contactType;
+
+    private String url;
+
+    @ManyToOne
+    @JoinColumn(name = "shop_id")
+    private Shop shop;
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -37,21 +51,8 @@ public class ShopContact {
         this.shop = shop;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-
-    @ManyToOne
-    @JoinColumn(name = "contact_type_id")
-    private ContactType contactType;
-
-    private String url;
-
-    @ManyToOne
-    @JoinColumn(name = "shop_id")
-    private Shop shop;
-
     public ShopContact() {}
+
     public ShopContact(ContactType contactType, String url, Shop shop) {
         this.contactType = contactType;
         this.url = url;

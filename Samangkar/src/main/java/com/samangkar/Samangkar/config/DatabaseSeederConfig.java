@@ -30,14 +30,14 @@ public class DatabaseSeederConfig {
             seedUserType(userTypeRepository, "user");
 
             // Seed users
-            seedUser(userRepository, "admin1", "admin1@example.com", "admin1234", "admin", userTypeRepository);
-            seedUser(userRepository, "admin2", "admin2@example.com", "admin5678", "admin", userTypeRepository);
-            seedUser(userRepository, "shop_owner1", "shop_owner1@example.com", "shop1234", "shop owner", userTypeRepository);
-            seedUser(userRepository, "shop_owner2", "shop_owner2@example.com", "shop5678", "shop owner", userTypeRepository);
-            seedUser(userRepository, "shop_owner3", "shop_owner3@example.com", "shop8910", "shop owner", userTypeRepository);
-            seedUser(userRepository, "user1", "user1@example.com", "user1234", "user", userTypeRepository);
-            seedUser(userRepository, "user2", "user2@example.com", "user5678", "user", userTypeRepository);
-            seedUser(userRepository, "user3", "user3@example.com", "user8910", "user", userTypeRepository);
+            seedUser(userRepository, "admin1", "admin1@example.com", "admin1234", userTypeRepository.findFirstByName("admin"));
+            seedUser(userRepository, "admin2", "admin2@example.com", "admin5678", userTypeRepository.findFirstByName("admin"));
+            seedUser(userRepository, "shop_owner1", "shop_owner1@example.com", "shop1234", userTypeRepository.findFirstByName("shop owner"));
+            seedUser(userRepository, "shop_owner2", "shop_owner2@example.com", "shop5678", userTypeRepository.findFirstByName("shop owner"));
+            seedUser(userRepository, "shop_owner3", "shop_owner3@example.com", "shop8910", userTypeRepository.findFirstByName("shop owner"));
+            seedUser(userRepository, "user1", "user1@example.com", "user1234", userTypeRepository.findFirstByName("user"));
+            seedUser(userRepository, "user2", "user2@example.com", "user5678", userTypeRepository.findFirstByName("user"));
+            seedUser(userRepository, "user3", "user3@example.com", "user8910", userTypeRepository.findFirstByName("user"));
 
             // Seed contact types
             seedContactType(contactTypeRepository, "Phone Number");
@@ -158,14 +158,10 @@ public class DatabaseSeederConfig {
     }
 
     @Transactional
-    private void seedUser(UserRepository userRepository, String username, String email, String password, String userType, UserTypeRepository userTypeRepository) {
-        UserType type = userTypeRepository.findFirstByName(userType);
-        if (type != null && userRepository.findByUsername(username).isEmpty()) {
-            User user = new User();
-            user.setUsername(username);
-            user.setEmail(email);
-            user.setPassword(password);
-            user.setUserType(type);
+    private void seedUser(UserRepository userRepository, String username, String email, String password, UserType type) {
+//        UserType type = userTypeRepository.findFirstByName(userType);
+        if (userRepository.findByUsername(username).isEmpty()) {
+            User user = new User(username, email, password, type);
             userRepository.save(user);
         }
     }

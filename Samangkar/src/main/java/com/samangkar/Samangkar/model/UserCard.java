@@ -7,7 +7,7 @@ public class UserCard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @ManyToOne
     private User user;
@@ -23,6 +23,7 @@ public class UserCard {
     private int quantity;
 
     public UserCard() {}
+
     public UserCard(User user, Shop shop, ServiceModel service, double total, int quantity) {
         this.user = user;
         this.shop = shop;
@@ -31,11 +32,11 @@ public class UserCard {
         this.quantity = quantity;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

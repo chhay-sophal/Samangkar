@@ -5,11 +5,29 @@ import jakarta.persistence.*;
 @Entity
 public class PackageModel {
 
-    public long getId() {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    private String name;
+    private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "shop_id")
+    private Shop shop;
+
+    public PackageModel() {}
+    public PackageModel(String name, String description, Shop shop) {
+        this.name = name;
+        this.description = description;
+        this.shop = shop;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -34,24 +52,6 @@ public class PackageModel {
     }
 
     public void setShop(Shop shop) {
-        this.shop = shop;
-    }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-
-    private String name;
-    private String description;
-
-    @ManyToOne
-    @JoinColumn(name = "shop_id")
-    private Shop shop;
-
-    public PackageModel() {}
-    public PackageModel(String name, String description, Shop shop) {
-        this.name = name;
-        this.description = description;
         this.shop = shop;
     }
 }

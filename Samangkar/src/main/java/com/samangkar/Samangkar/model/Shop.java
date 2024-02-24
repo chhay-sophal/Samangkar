@@ -7,6 +7,30 @@ import java.util.List;
 @Entity
 public class Shop {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
+    private String name;
+    private String description;
+    private String shopImageUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
+
+    private boolean activated;
+    private boolean trending;
+
+    @OneToMany(mappedBy = "shop")
+    private List<PackageModel> packageModels;
+
+    @OneToMany(mappedBy = "shop")
+    private List<ServiceModel> serviceModels;
+
+    @OneToMany(mappedBy = "shop")
+    private List<ShopContact> shopContacts;
+
     public Shop() {}
     public Shop(String name, String description, String shopImageUrl, User owner) {
         this.name = name;
@@ -70,30 +94,6 @@ public class Shop {
     public void setTrending(boolean trending) {
         this.trending = trending;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-
-    private String name;
-    private String description;
-    private String shopImageUrl;
-
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
-    private User owner;
-
-    private boolean activated;
-    private boolean trending;
-
-    @OneToMany(mappedBy = "shop")
-    private List<PackageModel> packageModels;
-
-    @OneToMany(mappedBy = "shop")
-    private List<ServiceModel> serviceModels;
-
-    @OneToMany(mappedBy = "shop")
-    private List<ShopContact> shopContacts;
 
     public List<PackageModel> getPackageModels() {
         return packageModels;

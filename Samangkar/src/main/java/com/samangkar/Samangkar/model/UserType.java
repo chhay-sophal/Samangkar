@@ -8,11 +8,22 @@ import jakarta.persistence.Id;
 @Entity
 public class UserType {
 
-    public long getId() {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    private String name;
+
+    public UserType() {}
+
+    public UserType(String name) {
+        this.name = name;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long user_type_id) {
+    public void setId(Long user_type_id) {
         this.id = user_type_id;
     }
 
@@ -23,10 +34,5 @@ public class UserType {
     public void setName(String name) {
         this.name = name;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-    private String name;
 
 }

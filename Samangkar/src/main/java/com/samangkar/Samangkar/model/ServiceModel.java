@@ -7,7 +7,7 @@ public class ServiceModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     private String name;
     private String description;
@@ -16,7 +16,7 @@ public class ServiceModel {
     @JoinColumn(name = "shop_id")
     private Shop shop;
 
-
+    public ServiceModel() {}
 
     public ServiceModel(String name, String description, Shop shop) {
         this.name = name;
@@ -24,13 +24,11 @@ public class ServiceModel {
         this.shop = shop;
     }
 
-    public ServiceModel() {}
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
