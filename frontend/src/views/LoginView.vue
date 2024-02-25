@@ -6,6 +6,12 @@
       </svg>
     </div>
     <div class="flex flex-col justify-center gap-5">
+      <!-- <form th:action="@{http://localhost:8080/login}" method="post">
+        <label>Login</label>
+        <div><label> User Name : <input type="text" name="username" class="border-2"/> </label></div>
+        <div><label> Password: <input type="password" name="password" class="border-2"/> </label></div>
+        <button type="submit">Sign In</button>
+      </form> -->
       <div class="flex flex-col justify-end">
         <h1 class="text-center text-5xl mb-5">Log In</h1>
       </div>
@@ -44,17 +50,27 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   data() {
     return {
       username: null,
       password: null,
+      greeting: null,
     };
   },
   methods: {
     login() {
+      axios.post('http://localhost:8080/login', { username: this.username, password: this.password })
+      .then(response => {
+        console.log(response.data);
+        // Handle the response accordingly
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        // Handle the error accordingly
+      });
       console.log(this.username, this.password);
-      
     }
   }
 };
