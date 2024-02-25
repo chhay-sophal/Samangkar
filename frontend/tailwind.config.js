@@ -4,7 +4,11 @@ export default {
     './src/**/*.{html,js,ts,vue}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'custom-dark': '#16171d',
+      },
+    },
   },
   plugins: [],
 }

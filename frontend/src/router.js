@@ -11,7 +11,8 @@ const routes = [
     {
         name: 'loginPageRoute',
         path: '/login',
-        component: LoginView
+        component: LoginView,
+        meta: { requiresAuth: false, hideHeaderFooter: true } 
     },
 ];
 

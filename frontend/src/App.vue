@@ -5,9 +5,12 @@ import HomeView from './views/HomeView.vue';
 </script>
 
 <template>
-  <Header />
-  <div class="min-w-full relative m-10">
+  <Header v-if="!$route.meta.hideHeaderFooter" />
+    <router-view></router-view>
+  <Footer v-if="!$route.meta.hideHeaderFooter" />
+  <!-- <Header />
+  <div class="min-w-full relative my-10 col-span-2">
     <router-view></router-view>
   </div>
-  <Footer />
+  <Footer /> -->
 </template>
