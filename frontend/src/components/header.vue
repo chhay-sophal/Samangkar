@@ -8,16 +8,25 @@
                 <h1
                     class="text-left font-bold text-4xl text-primary hover:text-secondary"
                 >
-                    <router-link to="/">
+                    <router-link to="/" title="Homepage">
                         Samangkar
                     </router-link>
                 </h1>
             </div>
             <div class="justify-end">
-                <router-link to="/login">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
-                    </svg>
+                <router-link v-if="!isLoggedIn" to="/login" title="Login">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" />
+                        </svg>
+                    </div>
+                </router-link>
+                <router-link v-if="isLoggedIn" to="/logout" title="Logout">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                        </svg>
+                    </div>
                 </router-link>
             </div>
         </nav>
@@ -29,4 +38,30 @@ import { useDark, useToggle } from "@vueuse/core"
 
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
+</script>
+
+<script>
+export default {
+    data() {
+        return {
+            showTooltipText: false,
+        }
+    },
+    computed: {
+        isLoggedIn() {
+            // Implement logic to check if the user is logged in
+            // For example, check if a token exists in local storage
+            const token = localStorage.getItem('token');
+            return !!token; // Return true if token exists, otherwise false
+        }
+    },
+    methods: {
+        showTooltip(text) {
+           this.showTooltipText = true;
+        },
+        hideTooltip() {
+            this.showTooltipText = false;
+        },
+    }
+}
 </script>

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from './views/HomeView.vue'
 import LoginView from './views/LoginView.vue'
+import LogoutView from './views/LogoutView.vue'
 
 const routes = [
     {
@@ -13,6 +14,12 @@ const routes = [
         path: '/login',
         component: LoginView,
         meta: { requiresAuth: false, hideHeaderFooter: true } 
+    },
+    {
+        name: 'logoutPageRoute',
+        path: '/logout',
+        component: LogoutView,
+        meta: { requiresAuth: false, hideHeaderFooter: true}
     },
 ];
 

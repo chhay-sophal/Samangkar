@@ -19,12 +19,13 @@ a,
   padding: 3px;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+body {
+  display: flex;
+  place-items: center;
+  font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+}
 
+@media (min-width: 1024px) {
   #app {
     display: grid;
     grid-template-columns: 1fr 1fr;
