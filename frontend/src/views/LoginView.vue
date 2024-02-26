@@ -6,17 +6,11 @@
       </svg>
     </div>
     <div class="flex flex-col justify-center gap-5">
-      <!-- <form th:action="@{http://localhost:8080/login}" method="post">
-        <label>Login</label>
-        <div><label> User Name : <input type="text" name="username" class="border-2"/> </label></div>
-        <div><label> Password: <input type="password" name="password" class="border-2"/> </label></div>
-        <button type="submit">Sign In</button>
-      </form> -->
       <div class="flex flex-col justify-end">
         <h1 class="text-center text-5xl mb-5">Log In</h1>
       </div>
       <div class="text-3xl">
-        <div class="grid grid-cols-3 gap-5">
+        <form @submit.prevent="handleLogin" class="grid grid-cols-3 gap-5">
           <div class="flex flex-col justify-center">
             <label for="username">Username</label>
           </div>
@@ -37,13 +31,13 @@
           </div>
           <div class="col-span-3 flex justify-center">
             <button 
+              type="submit"
               class="border-2 rounded-lg p-3 hover:bg-slate-600 hover:text-gray-100"
-              @click="login()"
             >
               Log In
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>
@@ -51,27 +45,27 @@
 
 <script>
 import axios from 'axios';
+import { login } from '@/services/authService';
+
 export default {
   data() {
     return {
       username: null,
       password: null,
-      greeting: null,
     };
   },
   methods: {
-    login() {
-      axios.post('http://localhost:8080/login', { username: this.username, password: this.password })
-      .then(response => {
-        console.log(response.data);
-        // Handle the response accordingly
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        // Handle the error accordingly
-      });
-      console.log(this.username, this.password);
-    }
+    async handleLogin() {
+      try {
+        const token = await login(this.username, this.password);
+        console.log('Login successful! Token:', token);
+        // Redirect or perform any other action after successful login
+        this.$router.push({ name: 'homePageRoute' });
+      } catch (error) {
+        console.error('Login failed:', error.message);
+        // Handle login failure (e.g., show an error message)
+      }
+    },
   }
 };
 </script>
