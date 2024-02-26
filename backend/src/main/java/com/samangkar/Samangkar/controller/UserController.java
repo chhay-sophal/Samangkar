@@ -1,9 +1,9 @@
 package com.samangkar.Samangkar.controller;
 
-import com.samangkar.Samangkar.model.User;
-import com.samangkar.Samangkar.model.UserType;
+import com.samangkar.Samangkar.model.UserEntity;
+import com.samangkar.Samangkar.model.Role;
 import com.samangkar.Samangkar.repository.UserRepository;
-import com.samangkar.Samangkar.repository.UserTypeRepository;
+import com.samangkar.Samangkar.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +14,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private UserTypeRepository userTypeRepository;
+    private RoleRepository roleRepository;
 
     @PostMapping(path = "/add")
     public @ResponseBody String addNewUser (
@@ -23,22 +23,22 @@ public class UserController {
             @RequestParam String password,
             @RequestParam String type
     ) {
-        UserType userType = userTypeRepository.findFirstByName(type);
+        Role role = roleRepository.findFirstByName(type);
 
-        if (userType != null) {
+        if (role != null) {
             if (userRepository.findByUsername(username).isEmpty()) {
                 if (userRepository.findByEmail(email).isEmpty()) {
-                    User newUser = new User(username, email, password, userType);
+                    UserEntity newUser = new UserEntity(username, email, password, role);
                     userRepository.save(newUser);
-                    return "User added successfully!";
+                    return "UserEntity added successfully!";
                 } else {
-                    return "User with email " + email + " already exists!";
+                    return "UserEntity with email " + email + " already exists!";
                 }
             } else {
-                return "User with username " + username + " already exists!";
+                return "UserEntity with username " + username + " already exists!";
             }
         } else {
-            return "User type not found!";
+            return "UserEntity type not found!";
         }
     }
 

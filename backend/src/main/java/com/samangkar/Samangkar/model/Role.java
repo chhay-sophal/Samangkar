@@ -6,16 +6,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class UserType {
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
 
-    public UserType() {}
+    public Role() {}
 
-    public UserType(String name) {
+    public Role(String name) {
         this.name = name;
     }
 

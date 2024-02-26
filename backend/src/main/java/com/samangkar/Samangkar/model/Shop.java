@@ -17,7 +17,7 @@ public class Shop {
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
-    private User owner;
+    private UserEntity owner;
 
     private boolean activated;
     private boolean trending;
@@ -32,7 +32,7 @@ public class Shop {
     private List<ShopContact> shopContacts;
 
     public Shop() {}
-    public Shop(String name, String description, String shopImageUrl, User owner) {
+    public Shop(String name, String description, String shopImageUrl, UserEntity owner) {
         this.name = name;
         this.description = description;
         this.shopImageUrl = shopImageUrl;
@@ -71,11 +71,11 @@ public class Shop {
         this.shopImageUrl = shopImageUrl;
     }
 
-    public User getOwner() {
+    public UserEntity getOwner() {
         return owner;
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(UserEntity owner) {
         this.owner = owner;
     }
 

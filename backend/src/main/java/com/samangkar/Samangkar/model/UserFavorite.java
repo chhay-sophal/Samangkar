@@ -10,14 +10,14 @@ public class UserFavorite {
     private Long id;
 
     @ManyToOne
-    private User user;
+    private UserEntity user;
 
     @ManyToOne
     private Shop shop;
 
     public UserFavorite() {}
 
-    public UserFavorite(User user, Shop shop) {
+    public UserFavorite(UserEntity user, Shop shop) {
         this.user = user;
         this.shop = shop;
     }
@@ -30,11 +30,11 @@ public class UserFavorite {
         this.id = id;
     }
 
-    public User getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 

@@ -1,21 +1,24 @@
 package com.samangkar.Samangkar.repository;
 
-import com.samangkar.Samangkar.model.User;
+import com.samangkar.Samangkar.model.UserEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
+import java.util.Optional;
 
 @RepositoryRestResource(collectionResourceRel = "users", path = "users")
-public interface UserRepository extends PagingAndSortingRepository<User, Long>,
-        CrudRepository<User, Long> {
+public interface UserRepository extends PagingAndSortingRepository<UserEntity, Long>,
+        CrudRepository<UserEntity, Long> {
 
-    List<User> findByUsername(@Param("username") String username);
+    Optional<UserEntity> findByUsername(@Param("username") String username);
 
-    List<User> findByEmail(@Param("email") String email);
+    Optional<UserEntity> findByEmail(@Param("email") String email);
 
-    User findFirstByUsername(@Param("username") String username);
+    UserEntity findFirstByUsername(@Param("username") String username);
+
+    Boolean existsByUsername(String username);
 
 }

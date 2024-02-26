@@ -1,7 +1,7 @@
 package com.samangkar.Samangkar.repository;
 
 import com.samangkar.Samangkar.model.Shop;
-import com.samangkar.Samangkar.model.User;
+import com.samangkar.Samangkar.model.UserEntity;
 import com.samangkar.Samangkar.model.UserFavorite;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -14,9 +14,9 @@ import java.util.List;
 public interface UserFavoriteRepository extends PagingAndSortingRepository<UserFavorite, Long>,
         CrudRepository<UserFavorite, Long> {
 
-    List<UserFavorite> findByUser(@Param("user") User user);
+    List<UserFavorite> findByUser(@Param("user") UserEntity user);
 
     List<UserFavorite> findByShop(@Param("shop") Shop shop);
 
-    List<UserFavorite> findByUserAndShop(@Param("user") User user, @Param("shop") Shop shop);
+    List<UserFavorite> findByUserAndShop(@Param("user") UserEntity user, @Param("shop") Shop shop);
 }

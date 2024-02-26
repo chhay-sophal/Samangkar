@@ -10,7 +10,7 @@ public class UserCard {
     private Long id;
 
     @ManyToOne
-    private User user;
+    private UserEntity user;
 
     @ManyToOne
     private Shop shop;
@@ -24,7 +24,7 @@ public class UserCard {
 
     public UserCard() {}
 
-    public UserCard(User user, Shop shop, ServiceModel service, double total, int quantity) {
+    public UserCard(UserEntity user, Shop shop, ServiceModel service, double total, int quantity) {
         this.user = user;
         this.shop = shop;
         this.service = service;
@@ -40,11 +40,11 @@ public class UserCard {
         this.id = id;
     }
 
-    public User getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 

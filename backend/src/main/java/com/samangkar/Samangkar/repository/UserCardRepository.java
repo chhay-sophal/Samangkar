@@ -12,12 +12,12 @@ import java.util.List;
 public interface UserCardRepository extends PagingAndSortingRepository<UserCard, Long>,
         CrudRepository<UserCard, Long> {
 
-    List<UserCard> findByUser(@Param("user") User user);
+    List<UserCard> findByUser(@Param("user") UserEntity user);
 
     List<UserCard> findByShop(@Param("shop") Shop shop);
 
     List<UserCard> findByService(@Param("service") ServiceModel service);
 
-    List<UserCard> findByUserAndShopAndService(@Param("user") User user, @Param("shop") Shop shop, @Param("service") ServiceModel service);
+    List<UserCard> findByUserAndShopAndService(@Param("user") UserEntity user, @Param("shop") Shop shop, @Param("service") ServiceModel service);
 
 }

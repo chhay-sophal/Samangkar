@@ -10,7 +10,7 @@ public class UserReview {
     private Long id;
 
     @ManyToOne
-    private User user;
+    private UserEntity user;
 
     @ManyToOne
     private Shop shop;
@@ -21,7 +21,7 @@ public class UserReview {
 
     public UserReview() {}
 
-    public UserReview(User user, Shop shop, int stars, String title, String description) {
+    public UserReview(UserEntity user, Shop shop, int stars, String title, String description) {
         this.user = user;
         this.shop = shop;
         this.stars = stars;
@@ -37,11 +37,11 @@ public class UserReview {
         this.id = id;
     }
 
-    public User getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 

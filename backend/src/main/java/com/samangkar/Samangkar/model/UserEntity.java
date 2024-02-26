@@ -4,12 +4,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Use IDENTITY for auto-increment columns.
@@ -29,8 +29,8 @@ public class User {
     private String password; // Store the hashed password directly.
 
     @ManyToOne
-    @JoinColumn(name = "user_type_id") // Clarify the join column.
-    private UserType userType;
+    @JoinColumn(name = "user_role_id") // Clarify the join column.
+    private Role userRole;
 
     private String profileUrl;
 
@@ -46,14 +46,14 @@ public class User {
     private List<UserCard> cards;
 
     // Default constructor is required by JPA.
-    public User() {}
+    public UserEntity() {}
 
     // Custom constructor to handle new user creation.
-    public User(String username, String email, String plainPassword, UserType userType) {
+    public UserEntity(String username, String email, String plainPassword, Role userRole) {
         this.username = username;
         this.email = email;
         setPassword(plainPassword); // Use the setter to hash the password.
-        this.userType = userType;
+        this.userRole = userRole;
     }
 
     public long getUser_id() {
@@ -78,23 +78,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    // Set password and automatically hash it.
-    public void setPassword(String password) {
-        this.password = new BCryptPasswordEncoder().encode(password);
-    }
-
-    public UserType getUserType() {
-        return userType;
-    }
-
-    public void setUserType(UserType userType) {
-        this.userType = userType;
     }
 
     public String getProfileUrl() {
@@ -135,6 +118,30 @@ public class User {
 
     public void setCards(List<UserCard> cards) {
         this.cards = cards;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Role getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(Role userRole) {
+        this.userRole = userRole;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }

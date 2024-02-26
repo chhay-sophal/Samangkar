@@ -2,17 +2,24 @@ package com.samangkar.Samangkar.config;
 
 import com.samangkar.Samangkar.model.*;
 import com.samangkar.Samangkar.repository.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Configuration
 public class DatabaseSeederConfig {
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @Bean
     CommandLineRunner initDatabase(
-            UserTypeRepository userTypeRepository,
+            RoleRepository roleRepository,
             UserRepository userRepository,
             ContactTypeRepository contactTypeRepository,
             ShopRepository shopRepository,
@@ -25,19 +32,19 @@ public class DatabaseSeederConfig {
     ) {
         return args -> {
             // Seed user types
-            seedUserType(userTypeRepository, "admin");
-            seedUserType(userTypeRepository, "shop owner");
-            seedUserType(userTypeRepository, "user");
+            seedUserType(roleRepository, "ADMIN");
+            seedUserType(roleRepository, "SHOP_OWNER");
+            seedUserType(roleRepository, "USER");
 
             // Seed users
-            seedUser(userRepository, "admin1", "admin1@example.com", "admin1234", userTypeRepository.findFirstByName("admin"));
-            seedUser(userRepository, "admin2", "admin2@example.com", "admin5678", userTypeRepository.findFirstByName("admin"));
-            seedUser(userRepository, "shop_owner1", "shop_owner1@example.com", "shop1234", userTypeRepository.findFirstByName("shop owner"));
-            seedUser(userRepository, "shop_owner2", "shop_owner2@example.com", "shop5678", userTypeRepository.findFirstByName("shop owner"));
-            seedUser(userRepository, "shop_owner3", "shop_owner3@example.com", "shop8910", userTypeRepository.findFirstByName("shop owner"));
-            seedUser(userRepository, "user1", "user1@example.com", "user1234", userTypeRepository.findFirstByName("user"));
-            seedUser(userRepository, "user2", "user2@example.com", "user5678", userTypeRepository.findFirstByName("user"));
-            seedUser(userRepository, "user3", "user3@example.com", "user8910", userTypeRepository.findFirstByName("user"));
+            seedUser(userRepository, "admin1", "admin1@example.com", "admin1234", roleRepository.findFirstByName("ADMIN"));
+            seedUser(userRepository, "admin2", "admin2@example.com", "admin5678", roleRepository.findFirstByName("ADMIN"));
+            seedUser(userRepository, "shop_owner1", "shop_owner1@example.com", "shop1234", roleRepository.findFirstByName("SHOP_OWNER"));
+            seedUser(userRepository, "shop_owner2", "shop_owner2@example.com", "shop5678", roleRepository.findFirstByName("SHOP_OWNER"));
+            seedUser(userRepository, "shop_owner3", "shop_owner3@example.com", "shop8910", roleRepository.findFirstByName("SHOP_OWNER"));
+            seedUser(userRepository, "user1", "user1@example.com", "user1234", roleRepository.findFirstByName("USER"));
+            seedUser(userRepository, "user2", "user2@example.com", "user5678", roleRepository.findFirstByName("USER"));
+            seedUser(userRepository, "user3", "user3@example.com", "user8910", roleRepository.findFirstByName("USER"));
 
             // Seed contact types
             seedContactType(contactTypeRepository, "Phone Number");
@@ -149,19 +156,23 @@ public class DatabaseSeederConfig {
     }
 
     @Transactional
-    private void seedUserType(UserTypeRepository repository, String name) {
+    private void seedUserType(RoleRepository repository, String name) {
         if (repository.findByName(name).isEmpty()) {
-            UserType userType = new UserType();
-            userType.setName(name);
-            repository.save(userType);
+            Role role = new Role();
+            role.setName(name);
+            repository.save(role);
         }
     }
 
     @Transactional
-    private void seedUser(UserRepository userRepository, String username, String email, String password, UserType type) {
-//        UserType type = userTypeRepository.findFirstByName(userType);
+    private void seedUser(UserRepository userRepository, String username, String email, String password, Role role) {
+
         if (userRepository.findByUsername(username).isEmpty()) {
-            User user = new User(username, email, password, type);
+            UserEntity user = new UserEntity();
+            user.setUsername(username);
+            user.setEmail(email);
+            user.setPassword(passwordEncoder.encode(password));
+            user.setUserRole(role);
             userRepository.save(user);
         }
     }
@@ -176,7 +187,7 @@ public class DatabaseSeederConfig {
     }
 
     @Transactional
-    private void seedShop(ShopRepository repository, String name, String description, String shopImageUrl, User owner) {
+    private void seedShop(ShopRepository repository, String name, String description, String shopImageUrl, UserEntity owner) {
         if (repository.findByName(name).isEmpty()) {
             Shop shop = new Shop(name, description, shopImageUrl, owner);
             repository.save(shop);
@@ -208,7 +219,7 @@ public class DatabaseSeederConfig {
     }
 
     @Transactional
-    private void seedUserCard(UserCardRepository repository, User user, Shop shop, ServiceModel service, double total, int quantity) {
+    private void seedUserCard(UserCardRepository repository, UserEntity user, Shop shop, ServiceModel service, double total, int quantity) {
         if (repository.findByUserAndShopAndService(user, shop, service).isEmpty()) {
             UserCard userCard = new UserCard(user, shop, service, total, quantity);
             repository.save(userCard);
@@ -216,7 +227,7 @@ public class DatabaseSeederConfig {
     }
 
     @Transactional
-    private void seedUserFavorite(UserFavoriteRepository repository, User user, Shop shop) {
+    private void seedUserFavorite(UserFavoriteRepository repository, UserEntity user, Shop shop) {
         if (repository.findByUserAndShop(user, shop).isEmpty()) {
             UserFavorite userFavorite = new UserFavorite(user, shop);
             repository.save(userFavorite);
@@ -224,7 +235,7 @@ public class DatabaseSeederConfig {
     }
 
     @Transactional
-    private void seedUserReview(UserReviewRepository repository, User user, Shop shop, int stars, String title, String description) {
+    private void seedUserReview(UserReviewRepository repository, UserEntity user, Shop shop, int stars, String title, String description) {
 //        if (repository.findByUserAndShop(user, shop).isEmpty()) {
 //            UserReview userReview = new UserReview(user, shop, title, description);
 //            repository.save(userReview);
