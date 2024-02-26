@@ -1,4 +1,4 @@
-package com.samangkar.Samangkar.service;
+package com.samangkar.Samangkar.security;
 
 import com.samangkar.Samangkar.model.UserEntity;
 import com.samangkar.Samangkar.repository.UserRepository;
