@@ -1,11 +1,13 @@
 package com.samangkar.Samangkar.controller;
 
+import com.samangkar.Samangkar.dto.AuthResponseDto;
 import com.samangkar.Samangkar.dto.LoginDto;
 import com.samangkar.Samangkar.dto.RegisterDto;
 import com.samangkar.Samangkar.model.Role;
 import com.samangkar.Samangkar.model.UserEntity;
 import com.samangkar.Samangkar.repository.RoleRepository;
 import com.samangkar.Samangkar.repository.UserRepository;
+import com.samangkar.Samangkar.security.JwtGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,39 +29,37 @@ public class AuthController {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
+    private JwtGenerator jwtGenerator;
 
     @Autowired
     public AuthController(AuthenticationManager authenticationManager,
                           UserRepository userRepository,
                           RoleRepository roleRepository,
-                          PasswordEncoder passwordEncoder) {
+                          PasswordEncoder passwordEncoder,
+                          JwtGenerator jwtGenerator) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtGenerator = jwtGenerator;
     }
 
 
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
-        if (!userRepository.existsByUsername(loginDto.getUsername())) {
-            return new ResponseEntity<>("Username " + loginDto.getUsername() + " does not exist.", HttpStatus.BAD_REQUEST);
-        }
-
+    @PostMapping("login")
+    public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDto.getUsername(),
                         loginDto.getPassword()
                 )
         );
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return new ResponseEntity<>("User logged in success!", HttpStatus.OK);
+        String token = jwtGenerator.generateToken(authentication);
+        return new ResponseEntity<>(new AuthResponseDto(token), HttpStatus.OK);
     }
 
-    @PostMapping("/register")
+    @PostMapping("register")
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
         if (userRepository.existsByUsername(registerDto.getUsername())) {
             return new ResponseEntity<>("Username is taken!", HttpStatus.BAD_REQUEST);
