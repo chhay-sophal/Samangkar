@@ -1,8 +1,8 @@
 <template>
-  <div class="col-start-1 col-end-3 text-center text-5xl">
-    <!-- <button @click="fetchData">Fetch Greeting</button> -->
-    <h1 class="text-cyan-500">{{ greeting }} {{ user.username }}</h1>
-  </div>
+    <div class="bg-blue-300 flex items-center justify-center min-h-96 text-7xl">
+      <p class="">This is home page</p>
+      <h1 class="text-cyan-500">{{ greeting }} {{ user.username }}</h1>
+    </div>
 </template>
 
 <script setup>
