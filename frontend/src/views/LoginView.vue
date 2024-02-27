@@ -101,8 +101,7 @@
 </template>
 
 <script>
-import axios from 'axios';
-import { login } from '@/services/authService';
+import { login } from '@/services/authService'
 
 export default {
   data() {
@@ -114,13 +113,10 @@ export default {
   methods: {
     async handleLogin() {
       try {
-        const token = await login(this.username, this.password);
-        console.log('Login successful! Token:', token);
-        // Redirect or perform any other action after successful login
-        this.$router.push({ name: 'homePageRoute' });
+        await login(this.username, this.password)
+        this.$router.push({ name: 'homePageRoute' })
       } catch (error) {
-        console.error('Login failed:', error.message);
-        // Handle login failure (e.g., show an error message)
+        console.error('Login failed:', error.message)
       }
     },
   }

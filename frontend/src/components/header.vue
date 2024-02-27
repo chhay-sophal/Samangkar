@@ -35,9 +35,15 @@
 
 <script setup>
 import { useDark, useToggle } from "@vueuse/core"
+import { useUserStore } from '@/store/userStore';
+import { computed } from 'vue';
 
 const isDark = useDark();
-const toggleDark = useToggle(isDark);
+const toggleDark = useToggle(isDark)
+
+const userStore = useUserStore()
+const user = computed(() => userStore.user)
+const isLoggedIn = computed(() => userStore.isLoggedIn)
 </script>
 
 <script>
@@ -47,20 +53,12 @@ export default {
             showTooltipText: false,
         }
     },
-    computed: {
-        isLoggedIn() {
-            // Implement logic to check if the user is logged in
-            // For example, check if a token exists in local storage
-            const token = localStorage.getItem('token');
-            return !!token; // Return true if token exists, otherwise false
-        }
-    },
     methods: {
         showTooltip(text) {
-           this.showTooltipText = true;
+           this.showTooltipText = true
         },
         hideTooltip() {
-            this.showTooltipText = false;
+            this.showTooltipText = false
         },
     }
 }

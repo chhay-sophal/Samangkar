@@ -1,6 +1,6 @@
 // httpService.js
 import axios from 'axios';
-import { getToken, removeToken } from '@/services/authService';
+import { getToken, logout } from '@/services/authService';
 
 const instance = axios.create({
   baseURL: 'http://localhost:8080', // Your Spring Boot backend URL
@@ -33,7 +33,7 @@ instance.interceptors.response.use(
     if (status === 401) {
       console.error('Unauthorized request. Token might be expired or invalid.');
       // Optionally, redirect to the login page or refresh the token
-      removeToken(); // Clear the invalid token
+      logout(); // Clear the invalid token
       // Redirect or refresh token logic can be added here
     }
 

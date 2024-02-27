@@ -3,23 +3,27 @@ package com.samangkar.Samangkar.controller;
 import com.samangkar.Samangkar.dto.AuthResponseDto;
 import com.samangkar.Samangkar.dto.LoginDto;
 import com.samangkar.Samangkar.dto.RegisterDto;
+import com.samangkar.Samangkar.dto.UserDto;
 import com.samangkar.Samangkar.model.Role;
 import com.samangkar.Samangkar.model.UserEntity;
 import com.samangkar.Samangkar.repository.RoleRepository;
 import com.samangkar.Samangkar.repository.UserRepository;
 import com.samangkar.Samangkar.security.JwtGenerator;
+import com.samangkar.Samangkar.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -30,21 +34,29 @@ public class AuthController {
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
     private JwtGenerator jwtGenerator;
+    private UserService userService;
 
     @Autowired
     public AuthController(AuthenticationManager authenticationManager,
                           UserRepository userRepository,
                           RoleRepository roleRepository,
                           PasswordEncoder passwordEncoder,
-                          JwtGenerator jwtGenerator) {
+                          JwtGenerator jwtGenerator,
+                          UserService userService) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtGenerator = jwtGenerator;
+        this.userService = userService;
     }
 
-
+    @GetMapping("profile")
+    public ResponseEntity<UserDto> profile(HttpServletRequest request) {
+        String username = extractUsernameFromJWT(request);
+        UserDto userDto = userService.getUserDetails(username);
+        return ResponseEntity.ok(userDto);
+    }
 
     @PostMapping("login")
     public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDto loginDto) {
@@ -75,5 +87,10 @@ public class AuthController {
 
         userRepository.save(user);
         return new ResponseEntity<>("User registered success!", HttpStatus.OK);
+    }
+
+    private String extractUsernameFromJWT(HttpServletRequest request) {
+        String token = request.getHeader("Authorization").substring("Bearer ".length());
+        return jwtGenerator.getUsernameFromJWT(token);
     }
 }

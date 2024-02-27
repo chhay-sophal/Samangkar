@@ -18,7 +18,7 @@
                 Go back
             </button>
             <button 
-                @click="logOut"
+                @click="handleLogOut"
                 class="border rounded-xl p-5 py-2 border-red-700 bg-red-500 hover:bg-red-700 text-gray-100"
             >
                 Logout
@@ -28,13 +28,13 @@
 </template>
 
 <script>
-import { removeToken } from '@/services/authService';
+import { logout } from '@/services/authService';
 
 export default {
     methods: {
-        async logOut() {
+        async handleLogOut() {
             try {
-                removeToken();
+                logout();
                 // Redirect or perform any other action after successful logout
                 this.$router.push({ name: 'homePageRoute' });
             } catch (error) {
