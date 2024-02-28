@@ -21,6 +21,7 @@ export const login = async (username, password) => {
 
 export const logout = () => {
   localStorage.removeItem('token')
+  localStorage.removeItem('userStore')
 
   const userStore = useUserStore()
   userStore.clearUser()

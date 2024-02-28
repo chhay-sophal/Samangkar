@@ -1,6 +1,6 @@
 <template>
   <Header v-if="!$route.meta.hideHeaderFooter" />
-  <div class="2xl:w-5/6 pt-32 w-full px-8 mx-auto">
+  <div class="3xl:w-5/6 pt-32 w-full px-8 mx-auto">
     <router-view></router-view>
   </div>
   <Footer v-if="!$route.meta.hideHeaderFooter" />

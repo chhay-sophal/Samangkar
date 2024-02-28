@@ -1,7 +1,7 @@
 <template>
     <header class="fixed left-0 top-0 z-40 border-b w-full">
         <nav
-            class="mx-auto flex items-center justify-between px-8 2xl:w-5/6"
+            class="mx-auto flex items-center justify-between px-8 3xl:w-5/6"
             aria-label="Global"
         >
             <div class="flex lg:flex-1 items-center gap-10">
@@ -42,8 +42,10 @@
 
 <script>
 import { useDark, useToggle } from "@vueuse/core"
-import { useUserStore } from '@/store/userStore';
-import { computed } from 'vue';
+import { useUserStore } from '@/store/userStore'
+import { computed } from 'vue'
+import http from '@/services/httpService'
+import { login, logout } from "@/services/authService"
 
 export default {
     data() {
@@ -63,11 +65,15 @@ export default {
         }
     },
     mounted() {
-        // const isDark = useDark();
-        // const toggleDark = useToggle(isDark)
-
-        // const userStore = useUserStore()
-        // const user = userStore.user
+        http.get('')
+        .then (Response => {
+            console.log(Response)
+        })
+        .catch (Error => {
+            console.log(Error)
+            logout()
+            this.$router.push({ name: 'homePageRoute' })
+        })
 
         // Also check when the component is first mounted
         this.hideProfileIcon = this.$route.path === '/profile';
