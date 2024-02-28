@@ -10,6 +10,7 @@ export const login = async (username, password) => {
     const token = response.data.accessToken
     localStorage.setItem('token', token)
 
+    // Fetch user profile
     const userData = await http.get(`api/auth/profile`)
     const userStore = useUserStore()
     userStore.setUser(userData.data)
@@ -22,6 +23,7 @@ export const login = async (username, password) => {
 export const logout = () => {
   localStorage.removeItem('token')
   localStorage.removeItem('userStore')
+  localStorage.removeItem('favorites')
 
   const userStore = useUserStore()
   userStore.clearUser()

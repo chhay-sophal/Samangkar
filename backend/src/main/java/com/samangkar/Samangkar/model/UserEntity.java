@@ -3,11 +3,15 @@ package com.samangkar.Samangkar.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
+@Getter
 @Entity
 public class UserEntity {
 
@@ -54,86 +58,6 @@ public class UserEntity {
         this.email = email;
         setPassword(plainPassword); // Use the setter to hash the password.
         this.userRole = userRole;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getProfileUrl() {
-        return profileUrl;
-    }
-
-    public void setProfileUrl(String profileUrl) {
-        this.profileUrl = profileUrl;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public List<UserFavorite> getFavoriteShops() {
-        return favoriteShops;
-    }
-
-    public void setFavoriteShops(List<UserFavorite> favoriteShops) {
-        this.favoriteShops = favoriteShops;
-    }
-
-    public List<UserReview> getReviewShops() {
-        return reviewShops;
-    }
-
-    public void setReviewShops(List<UserReview> reviewShops) {
-        this.reviewShops = reviewShops;
-    }
-
-    public List<UserCard> getCards() {
-        return cards;
-    }
-
-    public void setCards(List<UserCard> cards) {
-        this.cards = cards;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Role getUserRole() {
-        return userRole;
-    }
-
-    public void setUserRole(Role userRole) {
-        this.userRole = userRole;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
 }

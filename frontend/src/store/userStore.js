@@ -5,6 +5,7 @@ export const useUserStore = defineStore({
     state: () => {
         return {
             user: JSON.parse(localStorage.getItem('userStore')),
+            favorites: JSON.parse(localStorage.getItem('favorites')),
         };
     },
     getters: {
@@ -15,10 +16,13 @@ export const useUserStore = defineStore({
     actions: {
         setUser(userData) {
             this.user = userData
-            this.isLoggedIn = true
         },
         clearUser() {
             this.user = null
         },
+        setFavorite(data) {
+            this.favorites = data
+            localStorage.setItem('favorites', JSON.stringify(this.favorites))
+        }
     }
 })

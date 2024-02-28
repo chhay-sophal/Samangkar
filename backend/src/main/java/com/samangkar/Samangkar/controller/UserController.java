@@ -1,11 +1,17 @@
 package com.samangkar.Samangkar.controller;
 
+import com.samangkar.Samangkar.dto.CardDto;
+import com.samangkar.Samangkar.dto.ShopDto;
 import com.samangkar.Samangkar.model.UserEntity;
 import com.samangkar.Samangkar.model.Role;
 import com.samangkar.Samangkar.repository.UserRepository;
 import com.samangkar.Samangkar.repository.RoleRepository;
+import com.samangkar.Samangkar.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -15,6 +21,9 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping(path = "/add")
     public @ResponseBody String addNewUser (
@@ -40,6 +49,18 @@ public class UserController {
         } else {
             return "UserEntity type not found!";
         }
+    }
+
+    @GetMapping("/{username}/favorite-shops")
+    public ResponseEntity<List<ShopDto>> getUserFavoriteShops(@PathVariable String username) {
+        List<ShopDto> favoriteShops = userService.getUserFavoriteShops(username);
+        return ResponseEntity.ok(favoriteShops);
+    }
+
+    @GetMapping("/{username}/cards")
+    public ResponseEntity<List<CardDto>> getUserCards(@PathVariable String username) {
+        List<CardDto> userCards = userService.getUserCards(username);
+        return ResponseEntity.ok(userCards);
     }
 
 }
