@@ -4,7 +4,7 @@ spring.datasource.username=YOUR_USERNAME
 spring.datasource.password=YOUR_PASSWORD
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
-jwt.secret=1X3c14HdvV1FLNRapBD94WC/Tu7SJPsYIEfyPDeVHHc53GahxOFnCEJxF2XHAD+u/jLBjocg/y0+dkdmNvYDSg==
+jwt.secret=YOUR_SECRET_KEY_HERE
 
 #spring.security.user.name=YOUR_USERNAME
 #spring.security.user.password=YOUR_FIXED_PASSWORD
