@@ -1,6 +1,7 @@
 package com.samangkar.Samangkar.controller;
 
 import com.samangkar.Samangkar.dto.CardDto;
+import com.samangkar.Samangkar.dto.ChangePasswordDto;
 import com.samangkar.Samangkar.dto.ModifyUserDto;
 import com.samangkar.Samangkar.dto.ShopDto;
 import com.samangkar.Samangkar.dto.UserDto;
@@ -13,6 +14,7 @@ import com.samangkar.Samangkar.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,11 +25,15 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private RoleRepository roleRepository;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping(path = "/add")
     public @ResponseBody String addNewUser (
@@ -97,4 +103,32 @@ public class UserController {
         }).orElse(new ResponseEntity<>("User not found!", HttpStatus.NOT_FOUND));
     }    
     
+    @PostMapping("/change-password/{userId}")
+    public ResponseEntity<String> changePassword(
+            @PathVariable Long userId,
+            @RequestBody ChangePasswordDto changePasswordDto) {
+
+        // Validate request payload
+        if (changePasswordDto.getOldPassword() == null || changePasswordDto.getNewPassword() == null) {
+            return new ResponseEntity<>("Old password and new password are required.", HttpStatus.BAD_REQUEST);
+        }
+
+        // Retrieve user from the database
+        UserEntity user = userRepository.findFirstById(userId);
+
+        if (user == null) {
+            return new ResponseEntity<>("User not found.", HttpStatus.NOT_FOUND);
+        }
+
+        // Check if the old password matches
+        if (!passwordEncoder.matches(changePasswordDto.getOldPassword(), user.getPassword())) {
+            return new ResponseEntity<>("Old password is incorrect.", HttpStatus.UNAUTHORIZED);
+        }
+
+        // Update the user's password with the new one
+        user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+        userRepository.save(user);
+
+        return new ResponseEntity<>("Password changed successfully.", HttpStatus.OK);
+    }
 }
