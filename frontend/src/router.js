@@ -3,6 +3,8 @@ import HomeView from './views/HomeView.vue'
 import LoginView from './views/LoginView.vue'
 import LogoutView from './views/LogoutView.vue'
 import ProfileView from './views/ProfileView.vue'
+import FavoriteShopsView from './views/FavoriteShopsView.vue'
+import CardsView from './views/CardsView.vue'
 
 const routes = [
     {
@@ -26,6 +28,16 @@ const routes = [
         name: 'profilePageRoute',
         path: '/profile',
         component: ProfileView,
+    },
+    {
+        name: 'favoritePageRoute',
+        path: '/profile/favorite',
+        component: FavoriteShopsView,
+    },
+    {
+        name: 'cardsPageRoute',
+        path: '/profile/cards',
+        component: CardsView,
     },
 ];
 

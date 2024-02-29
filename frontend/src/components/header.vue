@@ -40,6 +40,14 @@
     </header>
 </template>
 
+<script setup>
+import { useUserStore } from '@/store/userStore'
+import http from '@/services/httpService'
+
+const userStore = useUserStore()
+const user = userStore.getUser
+</script>
+
 <script>
 import { useDark, useToggle } from "@vueuse/core"
 import { useUserStore } from '@/store/userStore'
@@ -65,23 +73,19 @@ export default {
         }
     },
     mounted() {
-        http.get('')
-        .then (Response => {
-            console.log(Response)
-        })
-        .catch (Error => {
-            console.log(Error)
-            logout()
-            this.$router.push({ name: 'homePageRoute' })
-        })
+        // http.get('')
+        // .then (Response => {
+        //     console.log(Response)
+        // })
+        // .catch (Error => {
+        //     console.log(Error)
+        //     logout()
+        //     this.$router.push({ name: 'homePageRoute' })
+        // })
 
         // Also check when the component is first mounted
         this.hideProfileIcon = this.$route.path === '/profile';
         this.hideLogOutIcon = this.$route.path !== '/profile';
-    },
-    created() {
-        const userStore = useUserStore();
-        this.user = userStore.getUser;
     }
 }
 </script>
