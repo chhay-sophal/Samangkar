@@ -6,8 +6,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-import javax.swing.text.html.Option;
-import java.util.List;
 import java.util.Optional;
 
 // This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository

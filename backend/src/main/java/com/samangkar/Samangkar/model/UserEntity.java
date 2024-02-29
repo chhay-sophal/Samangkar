@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Setter

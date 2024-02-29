@@ -17,17 +17,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private JwtAuthEntryPoint authEntryPoint;
-    private CustomUserDetailsService userDetailsService;
-
     @Autowired
-    public SecurityConfig(
-            CustomUserDetailsService userDetailsService,
-            JwtAuthEntryPoint authEntryPoint)
-    {
-        this.userDetailsService = userDetailsService;
-        this.authEntryPoint = authEntryPoint;
-    }
+    private JwtAuthEntryPoint authEntryPoint;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -49,22 +40,6 @@ public class SecurityConfig {
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        UserDetails admin = User.builder()
-//                .username("admin")
-//                .password("password")
-//                .roles("ADMIN")
-//                .build();
-//        UserDetails user = User.builder()
-//                .username("user")
-//                .password("password")
-//                .roles("USER")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(user);
-//    }
 
     @Bean
     public AuthenticationManager authenticationManager(
