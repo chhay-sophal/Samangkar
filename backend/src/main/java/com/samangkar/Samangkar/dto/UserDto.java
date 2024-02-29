@@ -10,6 +10,10 @@ public class UserDto {
     private String email;
     private String profile;
 
+    // public UserDto(String profile) {
+    //     this.profile = profile;
+    // }
+
     public UserDto(Long id, String username, String email, String profile) {
         this.id = id.toString();
         this.username = username;

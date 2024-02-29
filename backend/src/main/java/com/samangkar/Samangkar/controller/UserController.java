@@ -1,13 +1,19 @@
 package com.samangkar.Samangkar.controller;
 
 import com.samangkar.Samangkar.dto.CardDto;
+import com.samangkar.Samangkar.dto.ModifyUserDto;
 import com.samangkar.Samangkar.dto.ShopDto;
+import com.samangkar.Samangkar.dto.UserDto;
 import com.samangkar.Samangkar.model.UserEntity;
 import com.samangkar.Samangkar.model.Role;
 import com.samangkar.Samangkar.repository.UserRepository;
 import com.samangkar.Samangkar.repository.RoleRepository;
 import com.samangkar.Samangkar.service.UserService;
+
+import jakarta.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,4 +69,31 @@ public class UserController {
         return ResponseEntity.ok(userCards);
     }
 
+    @PatchMapping("/update/{userId}")
+    public ResponseEntity<?> updateUser(@PathVariable @NotNull Long userId, @RequestBody ModifyUserDto modifyUserDto) {
+        String username = modifyUserDto.getUsername();
+        String email = modifyUserDto.getEmail();
+    
+        return userRepository.findById(userId).map(user -> {
+            if (username != null && !username.isEmpty()) {
+                if (!userRepository.existsByUsername(username) || user.getUsername().equalsIgnoreCase(username)) {
+                    user.setUsername(username);
+                } else {
+                    return new ResponseEntity<>("Username already exists!", HttpStatus.BAD_REQUEST);
+                }
+            }
+    
+            if (email != null && !email.isEmpty()) {
+                if (!userRepository.existsByEmail(email) || user.getEmail().equalsIgnoreCase(email)) {
+                    user.setEmail(email);
+                } else {
+                    return new ResponseEntity<>("Email already exists!", HttpStatus.BAD_REQUEST);
+                }
+            }
+    
+            userRepository.save(user);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }).orElse(new ResponseEntity<>("User not found!", HttpStatus.NOT_FOUND));
+    }    
+    
 }
