@@ -10,14 +10,13 @@ import com.samangkar.Samangkar.repository.UserRepository;
 import com.samangkar.Samangkar.repository.RoleRepository;
 import com.samangkar.Samangkar.service.UserService;
 
-import jakarta.validation.constraints.NotNull;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -70,13 +69,13 @@ public class UserController {
     }
 
     @PatchMapping("/update/{userId}")
-    public ResponseEntity<?> updateUser(@PathVariable @NotNull Long userId, @RequestBody ModifyUserDto modifyUserDto) {
+    public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody ModifyUserDto modifyUserDto) {
         String username = modifyUserDto.getUsername();
         String email = modifyUserDto.getEmail();
-    
+
         return userRepository.findById(userId).map(user -> {
             if (username != null && !username.isEmpty()) {
-                if (!userRepository.existsByUsername(username) || user.getUsername().equalsIgnoreCase(username)) {
+                if (!userRepository.existsByUsername(username) || user.getUsername().equals(username)) {
                     user.setUsername(username);
                 } else {
                     return new ResponseEntity<>("Username already exists!", HttpStatus.BAD_REQUEST);
@@ -92,7 +91,10 @@ public class UserController {
             }
     
             userRepository.save(user);
-            return new ResponseEntity<>(user, HttpStatus.OK);
+
+            UserDto userDto = new UserDto(userId, user.getUsername(), user.getEmail(), user.getProfileUrl());
+
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
         }).orElse(new ResponseEntity<>("User not found!", HttpStatus.NOT_FOUND));
     }    
     
