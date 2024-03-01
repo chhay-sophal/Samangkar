@@ -1,6 +1,8 @@
 package com.samangkar.Samangkar.repository;
 
 import com.samangkar.Samangkar.model.Shop;
+
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -15,4 +17,6 @@ public interface ShopRepository extends PagingAndSortingRepository<Shop, Long>,
     List<Shop> findByName(@Param("shopName") String shopName);
 
     Shop findFirstByName(@Param("shopName") String shopName);
+
+
 }

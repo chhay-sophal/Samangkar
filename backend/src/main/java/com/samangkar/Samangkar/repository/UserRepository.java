@@ -22,3 +22,5 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, L
     Boolean existsByUsername(String username);
 
 }
+
+

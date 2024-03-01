@@ -6,6 +6,12 @@ import com.samangkar.Samangkar.repository.UserRepository;
 import com.samangkar.Samangkar.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
 
 @RestController
 @RequestMapping("/api/users")
@@ -41,5 +47,10 @@ public class UserController {
             return "UserEntity type not found!";
         }
     }
+
+
+    
+   
+    
 
 }

@@ -1,5 +1,6 @@
 package com.samangkar.Samangkar.dto;
 
+
 public class LoginDto {
 
     private String username;
