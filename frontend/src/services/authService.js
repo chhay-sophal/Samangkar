@@ -22,7 +22,8 @@ export const login = async (username, password) => {
 
 export const logout = () => {
   localStorage.removeItem('token')
-  localStorage.removeItem('favorites')
+  sessionStorage.removeItem('favorites')
+  sessionStorage.removeItem('cards')
 
   const userStore = useUserStore()
   userStore.clearUser()

@@ -268,7 +268,7 @@
             <div class="text-3xl text-center pb-1">
                 Change Password
             </div>
-            <form action="" class="block sm:hidden w-full px-10 pb-10">
+            <div action="" class="block sm:hidden w-full px-10 pb-10">
                 <table class="w-full text-xl">
                     <tr>
                         <td>
@@ -334,8 +334,8 @@
                         </td>
                     </tr>
                 </table>
-            </form>
-            <form action="" class="hidden sm:block w-full px-10 pb-10">
+            </div>
+            <div action="" class="hidden sm:block w-full px-10 pb-10">
                 <table class="w-full text-xl">
                     <tr>
                         <td>
@@ -377,7 +377,7 @@
                             id="confirm-new-password"
                             name="confirm-new-password"
                             placeholder="Confirm new password"
-                            v-model=userInput.newPassword
+                            v-model=userInput.confirmNewPassword
                             class="mt-1 p-2 block w-full border border-slate-300 rounded-md"
                             >
                         </td>
@@ -395,14 +395,14 @@
                         </td>
                     </tr>
                 </table>
-            </form>
+            </div>
         </div>
 
         <div 
             v-if="showAlert"
             class="bg-red-500 text-stone-100 text-xl font-medium flex justify-center fixed left-1/2 p-3 rounded-lg"
         >
-            Change info failed!
+            {{ alertInfo }}
         </div>
     </div>
 </template>
@@ -410,7 +410,7 @@
 <script setup>
 import { useUserStore } from '@/store/userStore'
 import http from '@/services/httpService'
-import { login } from '@/services/authService'
+import { login, logout } from '@/services/authService'
 import { ref } from 'vue'
 
 const userStore = useUserStore()
@@ -430,6 +430,7 @@ export default {
                 confirmNewPassword: ref(null),
             },
             showAlert: false,
+            alertInfo: '',
         }
     },
     methods: {
@@ -456,19 +457,20 @@ export default {
             try {
                 const userStore = useUserStore()
                 const userId = userStore.getUser.id
-                console.log(userId)
                 const oldUsername = userStore.getUser.username
                 const newUsername = this.userInput.username
                 const newEmail = this.userInput.email
                 const confirmPassword = this.userInput.oldPassword
 
                 const passwordMatched = await http.post(`api/auth/check-password`, { "username": oldUsername, "password": confirmPassword })
+
                 if (passwordMatched.data == true) {
                     await http.post(`/api/users/update/${userId}`, { "username": newUsername, "email": newEmail })
                     await login(newUsername, confirmPassword)
                     this.handleHideChangeInfoPanel()
                 } else {
                     this.showAlert = true
+                    this.alerInfo = 'Change info failed!'
                     this.handleHideChangeInfoPanel()
 
                     setTimeout(() => {
@@ -479,8 +481,64 @@ export default {
                 throw error;
             }
         },
-        changePassword() {
+        async changePassword() {
+            try {
+                const userStore = useUserStore()
+                const userId = userStore.getUser.id
+                const oldUsername = userStore.getUser.username
+                const inputOldPassword = this.userInput.oldPassword
+                const inputNewPassword = this.userInput.newPassword
+                const inputConfirmNewPassword = this.userInput.confirmNewPassword
 
+                if (inputOldPassword && inputNewPassword && inputConfirmNewPassword) {
+                    if (inputNewPassword == inputConfirmNewPassword) {
+                        const passwordMatched = await http.post(`api/auth/check-password`, { "username": oldUsername, "password": inputOldPassword })
+
+                        console.log(passwordMatched.data)
+                        if (passwordMatched.data == true) {
+                            await http.post(`/api/users/change-password/${userId}`, { "oldPassword": inputOldPassword, "newPassword": inputNewPassword })
+                            logout()
+                            this.handleHideChangePasswordPanel()
+                            this.$router.push({ name: 'loginPageRoute' });
+                        } else {
+                            this.showAlert = true
+                            this.alertInfo = 'Old password incorrect!'
+
+                            this.userInput.oldPassword = null
+                            this.userInput.newPassword = null
+                            this.userInput.confirmNewPassword = null
+
+                            setTimeout(() => {
+                            this.showAlert = false;
+                            }, 2000);
+                        }
+                    } else {
+                        this.showAlert = true
+                        this.alertInfo = 'New passwords are not matched!'
+                        
+                        this.userInput.oldPassword = null
+                        this.userInput.newPassword = null
+                        this.userInput.confirmNewPassword = null
+
+                        setTimeout(() => {
+                        this.showAlert = false;
+                        }, 3000);
+                    }
+                } else {
+                    this.showAlert = true
+                    this.alertInfo = 'Please input all fields!'
+
+                    this.userInput.oldPassword = null
+                    this.userInput.newPassword = null
+                    this.userInput.confirmNewPassword = null
+
+                    setTimeout(() => {
+                    this.showAlert = false;
+                    }, 2000);
+                }
+            } catch {
+                throw error;
+            }
         },
     },
     mounted() {
