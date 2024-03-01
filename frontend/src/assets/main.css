@@ -4,35 +4,91 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* General styles */
+body {
   font-weight: normal;
+  background-color: #fff;
+  color: #16171d;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
-a,
+.navbar {
+  background-color: #921010;
+  color: #181515;
+  padding: 10px 0;
+  text-align: center;
+  display: flex;
+}
+/* a,
 .green {
   text-decoration: none;
   color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
+  transition: color 0.4s;
   padding: 3px;
+} */
+
+
+
+/* Layout styles */
+#app {
+  max-width: 1280px;
+  /* margin: 0 auto; */
+  /* padding: 2rem; */
 }
 
 @media (min-width: 1024px) {
-  body {
+  /* body {
     display: flex;
-    place-items: center;
-  }
+    justify-content: center;
+  } */
 
-  #app {
+  /* #app {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: 2rem; 
     padding: 0 2rem;
-  }
+  } */
 }
 
+/* Dark mode */
 .dark {
   background: #16171d;
   color: #fff;
+}
+
+/* Footer */
+.footer {
+  background-color: #363535;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%; /* Set width to 100% */
+}
+
+/* Removed max-width from .footer-content */
+
+.footer p {
+  margin: 0;
+}
+
+.footer-links {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  display: inline;
+  margin-right: 10px;
+}
+
+.footer-links li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.footer-links li a:hover {
+  text-decoration: underline;
 }

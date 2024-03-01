@@ -1,5 +1,25 @@
 <template>
-    <footer class="w-full col-span-full text-center text-5xl">
-        This is footer
-    </footer>
+  <footer class="footer">
+    <div class="footer-content">
+      <p>© 2024 Your Website. All rights reserved.</p>
+      <ul class="footer-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
 </template>
+  
+<script>
+export default {
+  name: 'Footer'
+}
+</script>
+  
+  <!-- Scoped styles (if necessary) -->
+  <style scoped>
+  /* Scoped styles specific to this component */
+  </style>
+  
