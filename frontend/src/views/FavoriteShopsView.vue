@@ -68,7 +68,7 @@ const userFavorites = ref(userStore.favorites)
 
 const fetchUserFavorites = async () => {
     try {
-        const response = await http.get(`/api/users/${username}/favorite-shops`)
+        const response = await http.get(`api/favorites/get/${userStore.id}`)
         userFavorites.value = response.data
         userStore.setFavorites(response.data) // Update the store with the new data
     } catch (error) {

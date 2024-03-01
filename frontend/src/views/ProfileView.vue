@@ -422,7 +422,7 @@ const userCards = ref(userStore.cards)
 
 const fetchUserFavorites = async () => {
     try {
-        const response = await http.get(`api/users/${userStore.id}/favorite-shops`)
+        const response = await http.get(`api/favorites/get/${userStore.id}`)
         userStore.setFavorites(response.data)
     } catch (error) {
         console.error(error)
