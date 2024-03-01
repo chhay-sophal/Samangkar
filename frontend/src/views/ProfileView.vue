@@ -110,7 +110,7 @@
             v-if="showChangeInfoPanel"
             class="top-1/2 left-1/2 bg-green-100 xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl sm:h-1/3 h-2/5 -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
         >
-            <div class="flex justify-end items-center pr-5">
+            <div class="flex justify-end items-center pr-5 dark:text-stone-600">
                 <button 
                     @click="handleHideChangeInfoPanel()"
                 >
@@ -119,10 +119,10 @@
                     </svg>
                 </button>
             </div>
-            <div class="text-3xl text-center pb-10">
+            <div class="text-3xl text-center pb-10 dark:text-stone-600">
                 User Information
             </div>
-            <div action="" class="block sm:hidden w-full px-10 pb-10">
+            <div action="" class="block sm:hidden w-full px-10 pb-10 dark:text-stone-600">
                 <table class="w-full text-xl block sm:hidden px-10 pb-10">
                     <tr>
                         <td>
@@ -188,7 +188,7 @@
                     </tr>
                 </table>
             </div>
-            <div action="" class="hidden sm:block w-full px-10 pb-10">
+            <div action="" class="hidden sm:block w-full px-10 pb-10 dark:text-stone-600">
                 <table class="w-full text-xl">
                     <tr>
                         <td>
@@ -256,7 +256,7 @@
             v-if="showChangePasswordPanel"
             class="top-1/2 left-1/2 bg-green-100 2xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl sm:h-1/3 h-2/5 -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
         >
-            <div class="flex justify-end items-center pr-5">
+            <div class="flex justify-end items-center pr-5 dark:text-stone-600">
                 <button 
                     @click="handleHideChangePasswordPanel()"
                 >
@@ -265,10 +265,10 @@
                     </svg>
                 </button>
             </div>
-            <div class="text-3xl text-center pb-1">
+            <div class="text-3xl text-center pb-1 dark:text-stone-600">
                 Change Password
             </div>
-            <div action="" class="block sm:hidden w-full px-10 pb-10">
+            <div action="" class="block sm:hidden w-full px-10 pb-10 dark:text-stone-600">
                 <table class="w-full text-xl">
                     <tr>
                         <td>
@@ -335,7 +335,7 @@
                     </tr>
                 </table>
             </div>
-            <div action="" class="hidden sm:block w-full px-10 pb-10">
+            <div action="" class="hidden sm:block w-full px-10 pb-10 dark:text-stone-600">
                 <table class="w-full text-xl">
                     <tr>
                         <td>
@@ -411,9 +411,42 @@
 import { useUserStore } from '@/store/userStore'
 import http from '@/services/httpService'
 import { login, logout } from '@/services/authService'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const userStore = useUserStore()
+const username = userStore.user.username
+console.log(userStore.favorites)
+
+const userFavorites = ref(userStore.favorites)
+const userCards = ref(userStore.cards)
+
+const fetchUserFavorites = async () => {
+    try {
+        const response = await http.get(`api/users/${userStore.id}/favorite-shops`)
+        userStore.setFavorites(response.data)
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+const fetchUserCards = async () => {
+    try {
+        const response = await http.get(`api/users/${username}/cards`)
+        userStore.setCards(response.data)
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+// Fetch data when the component is mounted
+onMounted(() => {
+    if (!userFavorites.value.length) {
+        fetchUserFavorites();
+    }
+    if (!userCards.value.length) {
+        fetchUserCards();
+    }
+});
 </script>
 
 <script>

@@ -23,20 +23,20 @@
             <div class="h-5/6 overflow-x-auto relative pb-3 mt-10 w-full">
                 <!-- Shop Cards Container -->
                 <div class="grid lg:grid-cols-3 sm:grid-cols-2 gap-4 h-full text-2xl">
-                        <!-- Loop through your shop cards -->
-                        <div v-for="card in userCards" :key="card.serviceName" class="flex-none w-auto bg-green-400 flex justify-center items-center rounded-lg h-96">
-                            {{ card.serviceName }}
-                        </div>
-                        <div v-for="card in userCards" :key="card.serviceName" class="flex-none w-auto bg-green-400 flex justify-center items-center rounded-lg h-96">
-                            {{ card.serviceName }}
-                        </div>
-                        <div v-for="card in userCards" :key="card.serviceName" class="flex-none w-auto bg-green-400 flex justify-center items-center rounded-lg h-96">
-                            {{ card.serviceName }}
-                        </div>
-                        <div v-for="card in userCards" :key="card.serviceName" class="flex-none w-auto bg-green-400 flex justify-center items-center rounded-lg h-96">
-                            {{ card.serviceName }}
-                        </div>
+                    <!-- Loop through your shop cards -->
+                    <div v-for="card in userCards" :key="card.serviceName" class="flex-none w-auto bg-green-400 flex justify-center items-center rounded-lg h-96">
+                        {{ card.serviceName }}
                     </div>
+                    <div v-for="card in userCards" :key="card.serviceName" class="flex-none w-auto bg-green-400 flex justify-center items-center rounded-lg h-96">
+                        {{ card.serviceName }}
+                    </div>
+                    <div v-for="card in userCards" :key="card.serviceName" class="flex-none w-auto bg-green-400 flex justify-center items-center rounded-lg h-96">
+                        {{ card.serviceName }}
+                    </div>
+                    <div v-for="card in userCards" :key="card.serviceName" class="flex-none w-auto bg-green-400 flex justify-center items-center rounded-lg h-96">
+                        {{ card.serviceName }}
+                    </div>
+                </div>
             </div>
         </div>
         <div class="2xl:w-1/4 lg:w-1/6 w-1/12">

@@ -23,20 +23,30 @@
             <div class="h-5/6 overflow-x-auto relative pb-3 mt-10 w-full">
                 <!-- Shop Cards Container -->
                 <div class="grid lg:grid-cols-3 sm:grid-cols-2 gap-4 h-full text-2xl">
-                        <!-- Loop through your shop cards -->
-                        <div v-for="shop in userFavorites" :key="shop.name" class="flex-none w-auto bg-green-400 flex justify-center items-center rounded-lg h-96">
-                            {{ shop.name }}
-                        </div>
-                        <div v-for="shop in userFavorites" :key="shop.name" class="flex-none w-auto bg-green-400 flex justify-center items-center rounded-lg h-96">
-                            {{ shop.name }}
-                        </div>
-                        <div v-for="shop in userFavorites" :key="shop.name" class="flex-none w-auto bg-green-400 flex justify-center items-center rounded-lg h-96">
-                            {{ shop.name }}
-                        </div>
-                        <div v-for="shop in userFavorites" :key="shop.name" class="flex-none w-auto bg-green-400 flex justify-center items-center rounded-lg h-96">
-                            {{ shop.name }}
-                        </div>
+                    <!-- Loop through your shop cards -->
+                    <!-- <Cards v-for="shop in userFavorites" :key="shop.name" :shop="shop" :isFavorite="true" @toggle-favorite="toggleFavorite(shop)" /> -->
+                    <div v-for="shop in userFavorites" :key="shop.name" :shop="shop" class="flex-none w-auto bg-green-400 flex justify-center items-center rounded-lg h-96 relative">
+                        <button 
+                            @click="removeFavorite(shop)"
+                            class="absolute top-2 right-2 flex items-center gap-1 border py-1 px-2 rounded-lg hover:bg-red-500 text-red-400 hover:text-stone-100 border-red-400"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                            </svg>
+                            <p class="text-xl font-semibold">Remove</p>
+                        </button>
+                        {{ shop.name }}
                     </div>
+                    <div v-for="shop in userFavorites" :key="shop.name" class="flex-none w-auto bg-green-400 flex justify-center items-center rounded-lg h-96">
+                        {{ shop.name }}
+                    </div>
+                    <div v-for="shop in userFavorites" :key="shop.name" class="flex-none w-auto bg-green-400 flex justify-center items-center rounded-lg h-96">
+                        {{ shop.name }}
+                    </div>
+                    <div v-for="shop in userFavorites" :key="shop.name" class="flex-none w-auto bg-green-400 flex justify-center items-center rounded-lg h-96">
+                        {{ shop.name }}
+                    </div>
+                </div>
             </div>
         </div>
         <div class="2xl:w-1/4 lg:w-1/6 w-1/12">
@@ -72,4 +82,19 @@ onMounted(() => {
         fetchUserFavorites()
     }
 });
+</script>
+
+<script>
+export default {
+    data() {
+        return {
+            
+        }
+    },
+    methods: {
+        removeFavorite(shop) {
+            http.post(``)
+        },
+    },
+}
 </script>

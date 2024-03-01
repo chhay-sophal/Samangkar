@@ -32,8 +32,8 @@ public class UserService {
         return new UserDto(userId, username, email, profileUrl);
     }
 
-    public List<ShopDto> getUserFavoriteShops(String username) {
-        UserEntity user = userRepository.findByUsername(username)
+    public List<ShopDto> getUserFavoriteShops(Long id) {
+        UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         List<ShopDto> favoriteShops = user.getFavoriteShops().stream()
@@ -58,4 +58,26 @@ public class UserService {
                 ))
                 .collect(Collectors.toList());
     }
+
+    public List<ShopDto> removeUserFavoriteShop(Long userId, Long shopId) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        // Remove the favorite shop with the specified ID
+        user.getFavoriteShops().removeIf(favorite -> favorite.getShop().getId() == shopId);
+
+        userRepository.save(user); // Save the updated user
+
+        // Return the updated list of favorite shops
+        List<ShopDto> favoriteShops = user.getFavoriteShops().stream()
+                .map(favorite -> new ShopDto(
+                        favorite.getShop().getName(),
+                        favorite.getShop().getShopImageUrl(),
+                        favorite.getShop().getOwner().getUsername()
+                ))
+                .collect(Collectors.toList());
+
+        return favoriteShops;
+    }
+    
 }

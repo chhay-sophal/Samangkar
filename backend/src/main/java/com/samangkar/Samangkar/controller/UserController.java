@@ -62,9 +62,9 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{username}/favorite-shops")
-    public ResponseEntity<List<ShopDto>> getUserFavoriteShops(@PathVariable String username) {
-        List<ShopDto> favoriteShops = userService.getUserFavoriteShops(username);
+    @GetMapping("/{id}/favorite-shops")
+    public ResponseEntity<List<ShopDto>> getUserFavoriteShops(@PathVariable String id) {
+        List<ShopDto> favoriteShops = userService.getUserFavoriteShops(Long.parseLong(id));
         return ResponseEntity.ok(favoriteShops);
     }
 
