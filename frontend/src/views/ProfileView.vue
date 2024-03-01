@@ -470,8 +470,8 @@ export default {
                     this.handleHideChangeInfoPanel()
                 } else {
                     this.showAlert = true
-                    this.alerInfo = 'Change info failed!'
-                    this.handleHideChangeInfoPanel()
+                    this.alertInfo = 'Password incorrect!'
+                    this.userInput.oldPassword = null
 
                     setTimeout(() => {
                     this.showAlert = false;
@@ -515,7 +515,7 @@ export default {
                     } else {
                         this.showAlert = true
                         this.alertInfo = 'New passwords are not matched!'
-                        
+
                         this.userInput.oldPassword = null
                         this.userInput.newPassword = null
                         this.userInput.confirmNewPassword = null
