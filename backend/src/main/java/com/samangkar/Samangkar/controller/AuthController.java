@@ -18,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +46,18 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
         this.jwtGenerator = jwtGenerator;
         this.userService = userService;
+    }
+
+    @PostMapping("/check-password")
+    public ResponseEntity<?> checkPassword(@RequestBody LoginDto loginDto) {
+        UserEntity user = userRepository.findFirstByUsername(loginDto.getUsername());
+        if (user != null) {
+            String hashedPassword = user.getPassword();
+            boolean isPasswordMatch = passwordEncoder.matches(loginDto.getPassword(), hashedPassword);
+            return ResponseEntity.ok(isPasswordMatch);
+        } else {
+            return ResponseEntity.ok("User not found!");
+        }
     }
 
     @GetMapping("profile")

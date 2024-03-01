@@ -14,7 +14,7 @@ export const login = async (username, password) => {
     const userData = await http.get(`api/auth/profile`)
     const userStore = useUserStore()
     userStore.setUser(userData.data)
-    localStorage.setItem('userStore', JSON.stringify(userStore.$state.user))
+    console.log(userStore.getUser)
   } catch (error) {
     throw error;
   }
@@ -22,7 +22,6 @@ export const login = async (username, password) => {
 
 export const logout = () => {
   localStorage.removeItem('token')
-  localStorage.removeItem('userStore')
   localStorage.removeItem('favorites')
 
   const userStore = useUserStore()

@@ -54,22 +54,22 @@ const userStore = useUserStore()
 const user = userStore.getUser
 const username = user.username;
 
-const userFavorites = ref([]);
-const userCards = ref([]);
+const userFavorites = ref(userStore.favorites)
 
 const fetchUserFavorites = async () => {
     try {
-        const response = await http.get(`api/users/${username}/favorite-shops`);
-        userFavorites.value = response.data;
-        console.log(userFavorites.value)
+        const response = await http.get(`/api/users/${username}/favorite-shops`)
+        userFavorites.value = response.data
+        userStore.setFavorites(response.data) // Update the store with the new data
     } catch (error) {
-        console.error(error);
+        console.error(error)
     }
 }
 
 // Fetch data when the component is mounted
 onMounted(() => {
-    fetchUserFavorites();
+    if (!userFavorites.value.length) { // Only fetch if userFavorites is empty, adjust logic as needed.
+        fetchUserFavorites()
+    }
 });
-
 </script>

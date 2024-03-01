@@ -1,33 +1,36 @@
 import { defineStore } from "pinia"
+import http from "@/services/httpService"
 
 export const useUserStore = defineStore({
     id: 'userStore',
     state: () => {
         return {
-            user: JSON.parse(localStorage.getItem('userStore')),
-            favorites: JSON.parse(localStorage.getItem('favorites')),
-            cards: JSON.parse(localStorage.getItem('cards')),
+            user: JSON.parse(localStorage.getItem('userStore') || '{}'),
+            favorites: JSON.parse(sessionStorage.getItem('favorites') || '[]'),
+            cards: JSON.parse(sessionStorage.getItem('cards') || '[]'),
         };
     },
     getters: {
-        getUser() {
-            return this.user
+        getUser(state) {
+            return state.user
         }
     },
     actions: {
         setUser(userData) {
             this.user = userData
+            localStorage.setItem('userStore', JSON.stringify(userData))
         },
         clearUser() {
-            this.user = null
+            this.user = {}
+            localStorage.removeItem('userStore')
         },
-        setFavorite(data) {
+        setFavorites(data) {
             this.favorites = data
-            localStorage.setItem('favorites', JSON.stringify(this.favorites))
+            sessionStorage.setItem('favorites', JSON.stringify(this.favorites))
         },
         setCards(data) {
             this.cards = data
-            localStorage.setItem('cards', JSON.stringify(this.cards))
-        }
+            sessionStorage.setItem('cards', JSON.stringify(this.cards))
+        },
     }
 })

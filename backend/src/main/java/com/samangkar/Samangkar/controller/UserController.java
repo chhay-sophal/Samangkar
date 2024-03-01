@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -73,7 +74,7 @@ public class UserController {
         return ResponseEntity.ok(userCards);
     }
 
-    @PatchMapping("/update/{userId}")
+    @PostMapping("/update/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody ModifyUserDto modifyUserDto) {
         String username = modifyUserDto.getUsername();
         String email = modifyUserDto.getEmail();

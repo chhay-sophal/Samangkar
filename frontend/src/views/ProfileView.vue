@@ -11,11 +11,13 @@
                 </div>
             </div>
             <div class="flex justify-center text-4xl p-3">
-                {{ user.username }}
+                {{ userStore.getUser.username }}
             </div>
             <div class="flex flex-col items-center gap-2 text-2xl">
                 <div class="flex gap-3">
-                    <div class="">{{ user.email }}</div>
+                    <div class="">    
+                        {{ userStore.getUser.email }}
+                    </div>
                 </div>
                 <div class="flex flex-col gap-2">
                     <div 
@@ -53,16 +55,16 @@
                     <div class="px-4 h-full">
                         <div class="flex space-x-4 h-full text-2xl">
                             <!-- Loop through your shop cards -->
-                            <div v-for="shop in userFavorites" :key="shop.name" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
+                            <div v-for="shop in userStore.favorites" :key="shop.name" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
                                 {{ shop.name }}
                             </div>
-                            <div v-for="shop in userFavorites" :key="shop.name" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
+                            <div v-for="shop in userStore.favorites" :key="shop.name" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
                                 {{ shop.name }}
                             </div>
-                            <div v-for="shop in userFavorites" :key="shop.name" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
+                            <div v-for="shop in userStore.favorites" :key="shop.name" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
                                 {{ shop.name }}
                             </div>
-                            <div v-for="shop in userFavorites" :key="shop.name" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
+                            <div v-for="shop in userStore.favorites" :key="shop.name" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
                                 {{ shop.name }}
                             </div>
                         </div>
@@ -85,16 +87,16 @@
                         <div class="px-4 h-full">
                         <div class="flex space-x-4 h-full text-2xl">
                             <!-- Loop through your shop cards -->
-                            <div v-for="card in userCards" :key="card.serviceName" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
+                            <div v-for="card in userStore.cards" :key="card.serviceName" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
                                 {{ card.serviceName }}
                             </div>
-                            <div v-for="card in userCards" :key="card.serviceName" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
+                            <div v-for="card in userStore.cards" :key="card.serviceName" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
                                 {{ card.serviceName }}
                             </div>
-                            <div v-for="card in userCards" :key="card.serviceName" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
+                            <div v-for="card in userStore.cards" :key="card.serviceName" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
                                 {{ card.serviceName }}
                             </div>
-                            <div v-for="card in userCards" :key="card.serviceName" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
+                            <div v-for="card in userStore.cards" :key="card.serviceName" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
                                 {{ card.serviceName }}
                             </div>
                         </div>
@@ -133,6 +135,7 @@
                             type="text"
                             id="username"
                             name="username"
+                            required
                             v-model=userInput.username
                             class="mt-1 p-2 block w-full border border-slate-300 rounded-md"
                             >
@@ -149,7 +152,24 @@
                             type="email"
                             id="email"
                             name="email"
+                            required
                             v-model=userInput.email
+                            class="mt-1 p-2 block w-full border border-slate-300 rounded-md"
+                            >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="password" class="block font-medium text-slate-600">Password</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            v-model=userInput.oldPassword
                             class="mt-1 p-2 block w-full border border-slate-300 rounded-md"
                             >
                         </td>
@@ -179,6 +199,7 @@
                             type="text"
                             id="username"
                             name="username"
+                            required
                             v-model=userInput.username
                             class="mt-1 p-2 block w-full border border-slate-300 rounded-md"
                             >
@@ -193,7 +214,23 @@
                             type="email"
                             id="email"
                             name="email"
+                            required
                             v-model=userInput.email
+                            class="mt-1 p-2 block w-full border border-slate-300 rounded-md"
+                            >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="password" class="block font-medium text-slate-600">Password</label>
+                        </td>
+                        <td>
+                            <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            required
+                            v-model=userInput.oldPassword
                             class="mt-1 p-2 block w-full border border-slate-300 rounded-md"
                             >
                         </td>
@@ -360,82 +397,54 @@
                 </table>
             </form>
         </div>
+
+        <div 
+            v-if="showAlert"
+            class="bg-red-500 text-stone-100 text-xl font-medium flex justify-center fixed left-1/2 p-3 rounded-lg"
+        >
+            Change info failed!
+        </div>
     </div>
 </template>
 
 <script setup>
 import { useUserStore } from '@/store/userStore'
-import { ref } from 'vue'
 import http from '@/services/httpService'
-import { onMounted } from 'vue'
+import { login } from '@/services/authService'
+import { ref } from 'vue'
 
 const userStore = useUserStore()
-const user = userStore.getUser
-const username = user.username
-
-const userFavorites = ref([]);
-const userCards = ref([]);
-
-const fetchUserFavorites = async () => {
-    try {
-        const response = await http.get(`api/users/${username}/favorite-shops`);
-        userFavorites.value = response.data;
-        console.log(userFavorites.value)
-    } catch (error) {
-        console.error(error);
-    }
-}
-
-const fetchUserCards = async () => {
-    try {
-        const response = await http.get(`api/users/${username}/cards`);
-        userCards.value = response.data;
-        console.log(userCards.value)
-    } catch (error) {
-        console.error(error);
-    }
-}
-
-// Fetch data when the component is mounted
-onMounted(() => {
-    fetchUserFavorites();
-    fetchUserCards();
-});
-
 </script>
 
 <script>
-import http from '@/services/httpService'
-
 export default {
     data() {
         return {
             showChangeInfoPanel: false,
             showChangePasswordPanel: false,
-            userInfo: {
-                userid: null,
-                username: null,
-                email: null,
-            },
             userInput: {
-                username: null,
-                email: null,
-                oldPassword: null,
-                newPassword: null,
-                confirmNewPassword: null,
+                username: ref(null),
+                email: ref(null),
+                oldPassword: ref(null),
+                newPassword: ref(null),
+                confirmNewPassword: ref(null),
             },
+            showAlert: false,
         }
     },
     methods: {
         handleShowChangeInfoPanel() {
+            const userStore = useUserStore()
+
             this.showChangeInfoPanel = true
-            this.userInput.username = this.userInfo.username
-            this.userInput.email = this.userInfo.email
+            this.userInput.username = userStore.getUser.username
+            this.userInput.email = userStore.getUser.email
         },
         handleHideChangeInfoPanel() {
             this.showChangeInfoPanel = false
             this.userInput.username = null
             this.userInput.email = null
+            this.userInput.oldPassword = null
         },
         handleHideChangePasswordPanel() {
             this.showChangePasswordPanel = false
@@ -443,33 +452,40 @@ export default {
             this.userInput.newPassword = null
             this.userInput.confirmNewPassword = null
         },
-        changeInfo() {
-            console.log(this.userInfo.username)
-            console.log(this.userInfo.email)
-            const newUsername = this.userInput.username
-            const newEmail = this.userInput.email
+        async changeInfo() {
+            try {
+                const userStore = useUserStore()
+                const userId = userStore.getUser.id
+                console.log(userId)
+                const oldUsername = userStore.getUser.username
+                const newUsername = this.userInput.username
+                const newEmail = this.userInput.email
+                const confirmPassword = this.userInput.oldPassword
 
-            // console.log(localStorage.getItem('token'))
-            http.patch(`/api/users/update/${userInfo.userId}`, { newUsername, newEmail })
-            .then(Response => {
+                const passwordMatched = await http.post(`api/auth/check-password`, { "username": oldUsername, "password": confirmPassword })
+                if (passwordMatched.data == true) {
+                    await http.post(`/api/users/update/${userId}`, { "username": newUsername, "email": newEmail })
+                    await login(newUsername, confirmPassword)
+                    this.handleHideChangeInfoPanel()
+                } else {
+                    this.showAlert = true
+                    this.handleHideChangeInfoPanel()
 
-            })
+                    setTimeout(() => {
+                    this.showAlert = false;
+                    }, 2000);
+                }
+            } catch {
+                throw error;
+            }
         },
         changePassword() {
 
         },
     },
     mounted() {
-        const userStore = useUserStore()
-        const user = userStore.getUser
-
-        this.userInfo.userId = user.id
-        console.log(user.id)
-        this.userInfo.username = user.username
-        this.userInfo.email = user.email
     },
     computed() {
-
     },
 }
 </script>

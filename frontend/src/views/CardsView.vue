@@ -52,24 +52,24 @@ import { onMounted } from 'vue'
 
 const userStore = useUserStore()
 const user = userStore.getUser
-const username = user.username;
+const username = user.username
 
-const userFavorites = ref([]);
-const userCards = ref([]);
+const userCards = ref(userStore.cards)
 
 const fetchUserCards = async () => {
     try {
-        const response = await http.get(`api/users/${username}/cards`);
-        userCards.value = response.data;
+        const response = await http.get(`api/users/${username}/cards`)
+        userCards.value = response.data
         console.log(userCards.value)
     } catch (error) {
-        console.error(error);
+        console.error(error)
     }
 }
 
 // Fetch data when the component is mounted
 onMounted(() => {
-    fetchUserCards();
+    if (!userCards.value.length) {
+        fetchUserCards()
+    }
 });
-
 </script>

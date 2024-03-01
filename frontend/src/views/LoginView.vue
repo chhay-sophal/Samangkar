@@ -100,6 +100,12 @@
       </div>
     </div>
   </div>
+  <div 
+    v-if="showAlert"
+    class="bg-red-500 text-stone-100 text-xl font-medium flex justify-center fixed top-14 left-1/2 p-3 rounded-lg"
+  >
+    Login failed!
+  </div>
 </template>
 
 <script>
@@ -110,6 +116,7 @@ export default {
     return {
       username: null,
       password: null,
+      showAlert: false,
     };
   },
   methods: {
@@ -118,7 +125,14 @@ export default {
         await login(this.username, this.password)
         this.$router.push({ name: 'homePageRoute' })
       } catch (error) {
+        this.showAlert = true
+        this.username = null
+        this.password = null
         console.error('Login failed:', error.message)
+
+        setTimeout(() => {
+          this.showAlert = false;
+        }, 2000);
       }
     },
   }
