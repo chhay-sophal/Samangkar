@@ -15,4 +15,6 @@ public interface ShopRepository extends PagingAndSortingRepository<Shop, Long>,
     List<Shop> findByName(@Param("shopName") String shopName);
 
     Shop findFirstByName(@Param("shopName") String shopName);
+
+    Shop findFirstById(Long Id);
 }
