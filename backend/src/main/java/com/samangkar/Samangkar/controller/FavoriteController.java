@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.samangkar.Samangkar.dto.FavoriteDto;
 import com.samangkar.Samangkar.dto.ShopDto;
-import com.samangkar.Samangkar.service.ShopService;
+import com.samangkar.Samangkar.service.FavoriteShopService;
 
 import java.util.List;
 
@@ -22,11 +22,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class FavoriteController {
 
     @Autowired
-    private ShopService shopService;
+    private FavoriteShopService shopService;
 
-    @GetMapping("get/{id}")
-    public ResponseEntity<List<ShopDto>> getUserFavoriteShops(@PathVariable String id) {
-        List<ShopDto> favoriteShops = shopService.getUserFavoriteShops(Long.parseLong(id));
+    @GetMapping("get/{userId}")
+    public ResponseEntity<List<ShopDto>> getUserFavoriteShops(@PathVariable String userId) {
+        List<ShopDto> favoriteShops = shopService.getUserFavoriteShops(Long.parseLong(userId));
         return ResponseEntity.ok(favoriteShops);
     }
     

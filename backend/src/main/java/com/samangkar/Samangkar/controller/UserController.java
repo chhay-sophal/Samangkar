@@ -62,12 +62,6 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{username}/cards")
-    public ResponseEntity<List<CardDto>> getUserCards(@PathVariable String username) {
-        List<CardDto> userCards = userService.getUserCards(username);
-        return ResponseEntity.ok(userCards);
-    }
-
     @PostMapping("/update/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody ModifyUserDto modifyUserDto) {
         String username = modifyUserDto.getUsername();

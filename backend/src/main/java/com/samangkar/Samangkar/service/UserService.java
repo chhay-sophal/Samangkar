@@ -1,17 +1,11 @@
 package com.samangkar.Samangkar.service;
 
 import com.samangkar.Samangkar.dto.CardDto;
-import com.samangkar.Samangkar.dto.ShopDto;
 import com.samangkar.Samangkar.dto.UserDto;
-import com.samangkar.Samangkar.model.Shop;
 import com.samangkar.Samangkar.model.UserCard;
 import com.samangkar.Samangkar.model.UserEntity;
-import com.samangkar.Samangkar.model.UserFavorite;
-import com.samangkar.Samangkar.repository.ShopRepository;
 import com.samangkar.Samangkar.repository.UserCardRepository;
-import com.samangkar.Samangkar.repository.UserFavoriteRepository;
 import com.samangkar.Samangkar.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +17,6 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-    
-    @Autowired
-    private UserCardRepository userCardRepository;
 
     public UserDto getUserDetails(String username) {
         UserEntity user = userRepository.findFirstByUsername(username);
@@ -35,20 +26,6 @@ public class UserService {
 
         return new UserDto(userId, username, email, profileUrl);
     }
-
-    public List<CardDto> getUserCards(String username) {
-        List<UserCard> userCards = userCardRepository.findByUser_Username(username);
-        return userCards.stream()
-                .map(card -> new CardDto(
-                        card.getService().getName(),
-                        card.getService().getDescription(),
-                        card.getShop().getName(),
-                        card.getShop().getOwner().getUsername(),
-                        card.isPaid(),
-                        card.getQuantity(),
-                        card.getTotal()
-                ))
-                .collect(Collectors.toList());
-    }
     
+
 }

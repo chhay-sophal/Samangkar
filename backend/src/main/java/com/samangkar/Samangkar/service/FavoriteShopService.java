@@ -17,7 +17,7 @@ import com.samangkar.Samangkar.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
-public class ShopService {
+public class FavoriteShopService {
     
     @Autowired
     private UserRepository userRepository;
