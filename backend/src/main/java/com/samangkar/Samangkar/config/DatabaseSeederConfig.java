@@ -220,8 +220,8 @@ public class DatabaseSeederConfig {
 
     @Transactional
     private void seedUserCard(UserCardRepository repository, UserEntity user, Shop shop, ServiceModel service, double total, int quantity) {
-        if (repository.findByUserAndShopAndService(user, shop, service).isEmpty()) {
-            UserCard userCard = new UserCard(user, shop, service, total, quantity);
+        if (repository.findByUserAndService(user, service).isEmpty()) {
+            UserCard userCard = new UserCard(user, service, total, quantity);
             repository.save(userCard);
         }
     }

@@ -16,8 +16,8 @@ public class UserCard {
     @ManyToOne
     private UserEntity user;
 
-    @ManyToOne
-    private Shop shop;
+    // @ManyToOne
+    // private Shop shop;
 
     @ManyToOne
     private ServiceModel service;
@@ -28,9 +28,9 @@ public class UserCard {
 
     public UserCard() {}
 
-    public UserCard(UserEntity user, Shop shop, ServiceModel service, double total, int quantity) {
+    public UserCard(UserEntity user, ServiceModel service, double total, int quantity) {
         this.user = user;
-        this.shop = shop;
+        // this.shop = shop;
         this.service = service;
         this.total = total;
         this.quantity = quantity;

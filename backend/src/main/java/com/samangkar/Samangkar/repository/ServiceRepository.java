@@ -18,6 +18,9 @@ public interface ServiceRepository extends PagingAndSortingRepository<ServiceMod
     List<ServiceModel> findByShop(@Param("shop") Shop shop);
 
     List<ServiceModel> findByNameAndShop(@Param("name") String name, @Param("shop") Shop shop);
+
     ServiceModel findFirstByNameAndShop(@Param("name") String name, @Param("shop") Shop shop);
+
+    ServiceModel findFirstById(Long id);
 
 }

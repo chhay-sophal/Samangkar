@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CardDto {
+    private Long cardId;
     private String serviceName;
     private String description;
     private String shopName;
@@ -16,7 +17,8 @@ public class CardDto {
     private int quantity;
     private double total;
 
-    public CardDto(String serviceName, String description, String shopName, String shopOwner, boolean paid, int quantity, double total) {
+    public CardDto(Long cardId, String serviceName, String description, String shopName, String shopOwner, boolean paid, int quantity, double total) {
+        this.cardId = cardId;
         this.serviceName = serviceName;
         this.description = description;
         this.shopName = shopName;

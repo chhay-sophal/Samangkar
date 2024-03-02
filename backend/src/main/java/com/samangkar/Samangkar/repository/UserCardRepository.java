@@ -14,12 +14,15 @@ public interface UserCardRepository extends PagingAndSortingRepository<UserCard,
 
     List<UserCard> findByUser(@Param("user") UserEntity user);
 
-    List<UserCard> findByShop(@Param("shop") Shop shop);
+    // List<UserCard> findByShop(@Param("shop") Shop shop);
 
     List<UserCard> findByService(@Param("service") ServiceModel service);
 
-    List<UserCard> findByUserAndShopAndService(@Param("user") UserEntity user, @Param("shop") Shop shop, @Param("service") ServiceModel service);
+    // List<UserCard> findByUserAndShopAndService(@Param("user") UserEntity user, @Param("shop") Shop shop, @Param("service") ServiceModel service);
+    List<UserCard> findByUserAndService(@Param("user") UserEntity user, @Param("service") ServiceModel service);
 
     List<UserCard> findByUser_Username(String username);
+
+    List<UserCard> findByUser_Id(Long id);
 
 }

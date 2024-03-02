@@ -29,10 +29,7 @@ public class UserController {
 
     @Autowired
     private RoleRepository roleRepository;
-
-    @Autowired
-    private UserService userService;
-
+    
     @Autowired
     private PasswordEncoder passwordEncoder;
 

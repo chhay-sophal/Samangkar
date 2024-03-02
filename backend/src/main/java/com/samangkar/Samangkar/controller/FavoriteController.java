@@ -39,7 +39,6 @@ public class FavoriteController {
     @PostMapping("add")
     public ResponseEntity<List<ShopDto>> AddFavoriteShop(@RequestBody FavoriteDto request) {
         List<ShopDto> favoriteShops = shopService.addUserFavoriteShop(request.getUserId(), request.getShopId());
-        
         return ResponseEntity.ok(favoriteShops);
     }
     
