@@ -32,4 +32,10 @@ public class ContactTypeService {
 
         return getAllContactTypes();
     }
+
+    public List<ContactTypeDto> removeContactType(Long id) {
+        contactTypeRepository.deleteById(id);
+
+        return getAllContactTypes();
+    }
 }

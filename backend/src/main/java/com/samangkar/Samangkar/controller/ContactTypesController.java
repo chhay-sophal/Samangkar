@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.samangkar.Samangkar.dto.ContactTypeDto;
 import com.samangkar.Samangkar.service.ContactTypeService;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @RestController
@@ -28,8 +30,15 @@ public class ContactTypesController {
     }
 
     @PostMapping("add/{platform}")
-    public ResponseEntity<List<ContactTypeDto>> postMethodName(@PathVariable String platform) {
+    public ResponseEntity<List<ContactTypeDto>> addContactType(@PathVariable String platform) {
         List<ContactTypeDto> contactTypes = contactTypeService.addContactType(platform);
+        
+        return ResponseEntity.ok(contactTypes);
+    }
+    
+    @PostMapping("remove/{id}")
+    public ResponseEntity<List<ContactTypeDto>> removeContactType(@PathVariable Long id) {
+        List<ContactTypeDto> contactTypes = contactTypeService.removeContactType(id);
         
         return ResponseEntity.ok(contactTypes);
     }
