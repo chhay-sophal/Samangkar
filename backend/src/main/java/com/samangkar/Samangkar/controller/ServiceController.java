@@ -6,11 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.samangkar.Samangkar.dto.AddServiceDto;
 import com.samangkar.Samangkar.dto.RemoveServiceDto;
 import com.samangkar.Samangkar.dto.ServiceDto;
-import com.samangkar.Samangkar.dto.ShopContactDto;
-import com.samangkar.Samangkar.model.ContactType;
 import com.samangkar.Samangkar.model.ServiceModel;
 import com.samangkar.Samangkar.model.Shop;
-import com.samangkar.Samangkar.model.ShopContact;
 import com.samangkar.Samangkar.repository.ServiceRepository;
 import com.samangkar.Samangkar.repository.ShopRepository;
 import com.samangkar.Samangkar.service.ServiceService;
@@ -24,8 +21,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-
 
 @RestController
 @RequestMapping("/api/services")
