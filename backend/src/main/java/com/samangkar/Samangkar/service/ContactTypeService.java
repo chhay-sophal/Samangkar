@@ -24,4 +24,12 @@ public class ContactTypeService {
             .map(contactType -> new ContactTypeDto(contactType.getId(), contactType.getPlatform()))
             .collect(Collectors.toList());
     }
+
+    public List<ContactTypeDto> addContactType(String platForm) {
+        ContactType newContactType = new ContactType(platForm);
+
+        contactTypeRepository.save(newContactType);
+
+        return getAllContactTypes();
+    }
 }
