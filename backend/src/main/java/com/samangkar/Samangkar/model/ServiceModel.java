@@ -1,9 +1,15 @@
 package com.samangkar.Samangkar.model;
 
+import java.util.Set;
+
 import jakarta.persistence.*;
 
 @Entity
 public class ServiceModel {
+
+    private String name;
+    private String description;
+    private double unitPrice;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -13,9 +19,8 @@ public class ServiceModel {
     @JoinColumn(name = "shop_id")
     private Shop shop;
 
-    private String name;
-    private String description;
-    private double unitPrice;
+    @ManyToMany(mappedBy = "services")
+    private Set<PackageModel> packages;
 
     public ServiceModel() {}
 

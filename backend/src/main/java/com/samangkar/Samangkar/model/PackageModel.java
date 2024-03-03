@@ -1,20 +1,30 @@
 package com.samangkar.Samangkar.model;
 
+import java.util.Set;
+
 import jakarta.persistence.*;
 
 @Entity
 public class PackageModel {
 
+    private String name;
+    private String description;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String name;
-    private String description;
-
     @ManyToOne
     @JoinColumn(name = "shop_id")
     private Shop shop;
+
+    @ManyToMany
+    @JoinTable(
+            name = "package_service",
+            joinColumns = @JoinColumn(name = "package_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id")
+    )
+    private Set<ServiceModel> services;
 
     public PackageModel() {}
     public PackageModel(String name, String description, Shop shop) {
