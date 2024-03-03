@@ -22,6 +22,9 @@ public class ServiceModel {
     @ManyToMany(mappedBy = "services")
     private Set<PackageModel> packages;
 
+    @OneToMany(mappedBy = "service", cascade = CascadeType.REMOVE)
+    private Set<UserCard> userCards;
+
     public ServiceModel() {}
 
     public ServiceModel(String name, String description, Shop shop, double unitPrice) {
