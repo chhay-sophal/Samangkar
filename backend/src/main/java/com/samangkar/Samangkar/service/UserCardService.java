@@ -7,16 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.samangkar.Samangkar.dto.CardDto;
-import com.samangkar.Samangkar.dto.ShopDto;
 import com.samangkar.Samangkar.model.ServiceModel;
-import com.samangkar.Samangkar.model.Shop;
 import com.samangkar.Samangkar.model.UserCard;
 import com.samangkar.Samangkar.model.UserEntity;
-import com.samangkar.Samangkar.model.UserFavorite;
 import com.samangkar.Samangkar.repository.ServiceRepository;
-import com.samangkar.Samangkar.repository.ShopRepository;
 import com.samangkar.Samangkar.repository.UserCardRepository;
-import com.samangkar.Samangkar.repository.UserFavoriteRepository;
 import com.samangkar.Samangkar.repository.UserRepository;
 
 import jakarta.persistence.EntityNotFoundException;

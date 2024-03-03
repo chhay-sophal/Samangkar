@@ -1,23 +1,18 @@
 package com.samangkar.Samangkar.controller;
 
-import com.samangkar.Samangkar.dto.CardDto;
 import com.samangkar.Samangkar.dto.ChangePasswordDto;
 import com.samangkar.Samangkar.dto.ModifyUserDto;
-import com.samangkar.Samangkar.dto.ShopDto;
 import com.samangkar.Samangkar.dto.UserDto;
 import com.samangkar.Samangkar.model.UserEntity;
 import com.samangkar.Samangkar.model.Role;
 import com.samangkar.Samangkar.repository.UserRepository;
 import com.samangkar.Samangkar.repository.RoleRepository;
-import com.samangkar.Samangkar.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
