@@ -27,11 +27,15 @@ public class ContactTypeService {
     }
 
     public List<ContactTypeDto> addContactType(String platform) {
-        ContactType newContactType = new ContactType(platform);
+        if (contactTypeRepository.findByPlatform(platform).isEmpty()) {
+            ContactType newContactType = new ContactType(platform);
 
-        contactTypeRepository.save(newContactType);
-
-        return getAllContactTypes();
+            contactTypeRepository.save(newContactType);
+    
+            return getAllContactTypes();
+        } else {
+            throw new ContactTypeExistsException("Contact type with platform " + platform + " already exists.");
+        }
     }
 
     public List<ContactTypeDto> removeContactType(Long id) {
@@ -46,4 +50,11 @@ public class ContactTypeService {
 
         return getAllContactTypes();
     }
+
+    public class ContactTypeExistsException extends RuntimeException {
+        public ContactTypeExistsException(String message) {
+            super(message);
+        }
+    }
+
 }

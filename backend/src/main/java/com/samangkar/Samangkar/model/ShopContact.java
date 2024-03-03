@@ -13,11 +13,11 @@ public class ShopContact {
     @JoinColumn(name = "contact_type_id")
     private ContactType contactType;
 
-    private String url;
-
     @ManyToOne
     @JoinColumn(name = "shop_id")
     private Shop shop;
+
+    private String url;
 
     public Long getId() {
         return id;

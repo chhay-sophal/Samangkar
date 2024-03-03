@@ -11,6 +11,7 @@ import com.samangkar.Samangkar.repository.UserRepository;
 import com.samangkar.Samangkar.security.JwtGenerator;
 import com.samangkar.Samangkar.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,14 +26,19 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class AuthController {
 
+    @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private RoleRepository roleRepository;
+    @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
     private JwtGenerator jwtGenerator;
+    @Autowired
     private UserService userService;
 
-    @Autowired
     public AuthController(AuthenticationManager authenticationManager,
                           UserRepository userRepository,
                           RoleRepository roleRepository,

@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.samangkar.Samangkar.dto.ContactTypeDto;
 import com.samangkar.Samangkar.service.ContactTypeService;
+import com.samangkar.Samangkar.service.ContactTypeService.ContactTypeExistsException;
+
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 
@@ -30,10 +31,14 @@ public class ContactTypesController {
     }
 
     @PostMapping("add/{platform}")
-    public ResponseEntity<List<ContactTypeDto>> addContactType(@PathVariable String platform) {
-        List<ContactTypeDto> contactTypes = contactTypeService.addContactType(platform);
+    public ResponseEntity<?> addContactType(@PathVariable String platform) {
+        try {
+            List<ContactTypeDto> contactTypes = contactTypeService.addContactType(platform);
         
-        return ResponseEntity.ok(contactTypes);
+            return ResponseEntity.ok(contactTypes);
+        } catch (ContactTypeExistsException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
     
     @PostMapping("remove/{id}")
