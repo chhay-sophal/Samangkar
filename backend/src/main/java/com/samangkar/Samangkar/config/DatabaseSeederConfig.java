@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Configuration
 public class DatabaseSeederConfig {
 
@@ -80,13 +78,13 @@ public class DatabaseSeederConfig {
             seedPackage(packageRepository, "Luxury", "Luxury package", shopRepository.findFirstByName("shop3"));
 
             // Seed service
-            seedService(serviceRepository, "Make up", "Make the groom and bride look beautiful", shopRepository.findFirstByName("shop1"));
-            seedService(serviceRepository, "Place", "Where to put your wedding", shopRepository.findFirstByName("shop1"));
-            seedService(serviceRepository, "Sound", "Sound make magic", shopRepository.findFirstByName("shop1"));
-            seedService(serviceRepository, "Food", "Delicious with every bit", shopRepository.findFirstByName("shop2"));
-            seedService(serviceRepository, "Make up", "Make the groom and bride look beautiful", shopRepository.findFirstByName("shop2"));
-            seedService(serviceRepository, "Make up", "Make the groom and bride look beautiful", shopRepository.findFirstByName("shop3"));
-            seedService(serviceRepository, "Environment", "Keep the atmosphere cool and relaxed", shopRepository.findFirstByName("shop3"));
+            seedService(serviceRepository, "Make up", "Make the groom and bride look beautiful", shopRepository.findFirstByName("shop1"), 100.00);
+            seedService(serviceRepository, "Place", "Where to put your wedding", shopRepository.findFirstByName("shop1"), 150.50);
+            seedService(serviceRepository, "Sound", "Sound make magic", shopRepository.findFirstByName("shop1"), 65.93);
+            seedService(serviceRepository, "Food", "Delicious with every bit", shopRepository.findFirstByName("shop2"), 93.04);
+            seedService(serviceRepository, "Make up", "Make the groom and bride look beautiful", shopRepository.findFirstByName("shop2"), 100.00);
+            seedService(serviceRepository, "Make up", "Make the groom and bride look beautiful", shopRepository.findFirstByName("shop3"), 500.00);
+            seedService(serviceRepository, "Environment", "Keep the atmosphere cool and relaxed", shopRepository.findFirstByName("shop3"), 335.03);
 
             // Seed user card
             seedUserCard(
@@ -94,14 +92,12 @@ public class DatabaseSeederConfig {
                     userRepository.findFirstByUsername("user1"),
                     shopRepository.findFirstByName("shop1"),
                     serviceRepository.findFirstByNameAndShop("Make up", shopRepository.findFirstByName("shop1")),
-                    2000.00,
                     1);
             seedUserCard(
                     userCardRepository,
                     userRepository.findFirstByUsername("user2"),
                     shopRepository.findFirstByName("shop3"),
                     serviceRepository.findFirstByNameAndShop("Environment", shopRepository.findFirstByName("shop3")),
-                    2030.00,
                     3
                     );
             seedUserCard(
@@ -109,14 +105,12 @@ public class DatabaseSeederConfig {
                     userRepository.findFirstByUsername("user3"),
                     shopRepository.findFirstByName("shop2"),
                     serviceRepository.findFirstByNameAndShop("Food", shopRepository.findFirstByName("shop2")),
-                    5000.00,
                     1);
             seedUserCard(
                     userCardRepository,
                     userRepository.findFirstByUsername("user1"),
                     shopRepository.findFirstByName("shop2"),
                     serviceRepository.findFirstByNameAndShop("Make up", shopRepository.findFirstByName("shop2")),
-                    2000.00,
                     1);
 
             // Seed user favorites
@@ -211,16 +205,17 @@ public class DatabaseSeederConfig {
     }
 
     @Transactional
-    private void seedService(ServiceRepository repository, String name, String description, Shop shop) {
+    private void seedService(ServiceRepository repository, String name, String description, Shop shop, double unitPrice) {
         if (repository.findByNameAndShop(name, shop).isEmpty()) {
-            ServiceModel serviceModel = new ServiceModel(name, description, shop);
+            ServiceModel serviceModel = new ServiceModel(name, description, shop, unitPrice);
             repository.save(serviceModel);
         }
     }
 
     @Transactional
-    private void seedUserCard(UserCardRepository repository, UserEntity user, Shop shop, ServiceModel service, double total, int quantity) {
+    private void seedUserCard(UserCardRepository repository, UserEntity user, Shop shop, ServiceModel service, int quantity) {
         if (repository.findByUserAndService(user, service).isEmpty()) {
+            double total = service.getUnitPrice() * quantity;
             UserCard userCard = new UserCard(user, service, total, quantity);
             repository.save(userCard);
         }

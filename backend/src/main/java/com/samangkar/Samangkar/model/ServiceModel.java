@@ -9,19 +9,21 @@ public class ServiceModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String name;
-    private String description;
-
     @ManyToOne
     @JoinColumn(name = "shop_id")
     private Shop shop;
 
+    private String name;
+    private String description;
+    private double unitPrice;
+
     public ServiceModel() {}
 
-    public ServiceModel(String name, String description, Shop shop) {
+    public ServiceModel(String name, String description, Shop shop, double unitPrice) {
         this.name = name;
         this.description = description;
         this.shop = shop;
+        this.unitPrice = unitPrice;
     }
 
     public Long getId() {
@@ -55,4 +57,13 @@ public class ServiceModel {
     public void setShop(Shop shop) {
         this.shop = shop;
     }
+
+    public double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
 }
