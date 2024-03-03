@@ -42,5 +42,12 @@ public class ContactTypesController {
         
         return ResponseEntity.ok(contactTypes);
     }
+
+    @PostMapping("modify/{id}/{newPlatform}")
+    public ResponseEntity<List<ContactTypeDto>> postMethodName(@PathVariable Long id, @PathVariable String newPlatform) {
+        List<ContactTypeDto> contactTypes = contactTypeService.modifyContactType(id, newPlatform);
+        
+        return ResponseEntity.ok(contactTypes);
+    }
     
 }

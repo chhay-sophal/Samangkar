@@ -16,4 +16,5 @@ public interface ContactTypeRepository extends PagingAndSortingRepository<Contac
 
     ContactType findFirstByPlatform(@Param("platform") String platform);
 
+    ContactType findFirstById(Long id);
 }

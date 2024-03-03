@@ -1,6 +1,7 @@
 package com.samangkar.Samangkar.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -25,8 +26,8 @@ public class ContactTypeService {
             .collect(Collectors.toList());
     }
 
-    public List<ContactTypeDto> addContactType(String platForm) {
-        ContactType newContactType = new ContactType(platForm);
+    public List<ContactTypeDto> addContactType(String platform) {
+        ContactType newContactType = new ContactType(platform);
 
         contactTypeRepository.save(newContactType);
 
@@ -35,6 +36,13 @@ public class ContactTypeService {
 
     public List<ContactTypeDto> removeContactType(Long id) {
         contactTypeRepository.deleteById(id);
+
+        return getAllContactTypes();
+    }
+
+    public List<ContactTypeDto> modifyContactType(Long id, String platform) {
+        ContactType modifyContactType = contactTypeRepository.findFirstById(id);
+        modifyContactType.setPlatform(platform);
 
         return getAllContactTypes();
     }
