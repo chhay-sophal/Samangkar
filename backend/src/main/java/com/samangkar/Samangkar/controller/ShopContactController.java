@@ -1,6 +1,7 @@
 package com.samangkar.Samangkar.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.samangkar.Samangkar.dto.AddShopContactDto;
+import com.samangkar.Samangkar.dto.RemoveShopContactDto;
 import com.samangkar.Samangkar.dto.ShopContactDto;
 import com.samangkar.Samangkar.model.ContactType;
 import com.samangkar.Samangkar.model.Shop;
@@ -55,10 +57,27 @@ public class ShopContactController {
             if (shopContactRepository.findByUrl(url).isEmpty()) {
                 ShopContact shopContact = new ShopContact(contactType, url, shop);
                 shopContactRepository.save(shopContact);
-                List<ShopContactDto> shopContacts = shopContactService.getAllShopContact(shop.getId());
+                List<ShopContactDto> shopContacts = shopContactService.getAllShopContact(addShopContactDto.getShopId());
                 return ResponseEntity.ok(shopContacts);
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Shop contact with url " + url + " already exists.");
+            }
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
+        }
+    }
+    
+    @PostMapping("remove")
+    public ResponseEntity<?> removeShopContact(@RequestBody RemoveShopContactDto removeShopContactDto) {
+        try {
+            Long contactId = removeShopContactDto.getContactId();
+            Long shopId = removeShopContactDto.getShopId();
+            if (shopContactRepository.findById(contactId).isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Shop contact with url " + contactId + " does not exists.");
+            } else {
+                shopContactRepository.deleteById(contactId);
+                List<ShopContactDto> shopContacts = shopContactService.getAllShopContact(shopId);
+                return ResponseEntity.ok(shopContacts);
             }
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
