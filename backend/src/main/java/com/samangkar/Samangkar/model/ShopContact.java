@@ -1,5 +1,10 @@
 package com.samangkar.Samangkar.model;
 
+import java.util.Date;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -18,6 +23,30 @@ public class ShopContact {
     private Shop shop;
 
     private String url;
+
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+
+    @Column(name = "deleted_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = new Date();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = new Date();
+    }
 
     public Long getId() {
         return id;

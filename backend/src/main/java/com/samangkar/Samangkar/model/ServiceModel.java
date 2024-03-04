@@ -1,6 +1,10 @@
 package com.samangkar.Samangkar.model;
 
+import java.util.Date;
 import java.util.Set;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import jakarta.persistence.*;
 
@@ -24,6 +28,30 @@ public class ServiceModel {
 
     @OneToMany(mappedBy = "service", cascade = CascadeType.REMOVE)
     private Set<UserCard> userCards;
+
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+
+    @Column(name = "deleted_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = new Date();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = new Date();
+    }
 
     public ServiceModel() {}
 
@@ -72,6 +100,46 @@ public class ServiceModel {
 
     public void setUnitPrice(double unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public Set<PackageModel> getPackages() {
+        return packages;
+    }
+
+    public void setPackages(Set<PackageModel> packages) {
+        this.packages = packages;
+    }
+
+    public Set<UserCard> getUserCards() {
+        return userCards;
+    }
+
+    public void setUserCards(Set<UserCard> userCards) {
+        this.userCards = userCards;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Date getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(Date deletedAt) {
+        this.deletedAt = deletedAt;
     }
 
 }

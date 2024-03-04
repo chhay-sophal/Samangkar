@@ -3,7 +3,6 @@ package com.samangkar.Samangkar.repository;
 import com.samangkar.Samangkar.model.PackageModel;
 import com.samangkar.Samangkar.model.Shop;
 
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;

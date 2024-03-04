@@ -7,6 +7,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
+import java.util.Date;
+
 
 @RepositoryRestResource(collectionResourceRel = "contact-types", path = "contact-types")
 public interface ContactTypeRepository extends PagingAndSortingRepository<ContactType, Long>,
@@ -17,4 +19,6 @@ public interface ContactTypeRepository extends PagingAndSortingRepository<Contac
     ContactType findFirstByPlatform(@Param("platform") String platform);
 
     ContactType findFirstById(Long id);
+
+    List<ContactType> findByDeletedAtIsNull();
 }

@@ -24,7 +24,7 @@ public class ContactTypesController {
     @Autowired
     private ContactTypeService contactTypeService;
 
-    @GetMapping("get")
+    @GetMapping("get-all")
     public ResponseEntity<List<ContactTypeDto>> getContactTypes() {
         List<ContactTypeDto> contactTypes = contactTypeService.getAllContactTypes();
         return ResponseEntity.ok(contactTypes);

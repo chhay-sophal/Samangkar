@@ -19,7 +19,7 @@ public class ContactTypeService {
     private ContactTypeRepository contactTypeRepository;
 
     public List<ContactTypeDto> getAllContactTypes() {
-        Iterable<ContactType> contactTypes = contactTypeRepository.findAll();
+        Iterable<ContactType> contactTypes = contactTypeRepository.findByDeletedAtIsNull();
 
         return StreamSupport.stream(contactTypes.spliterator(), false)
             .map(contactType -> new ContactTypeDto(contactType.getId(), contactType.getPlatform()))
