@@ -6,6 +6,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import java.util.List;
 import java.util.Optional;
 
 // This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
@@ -19,4 +20,5 @@ public interface RoleRepository extends PagingAndSortingRepository<Role, Long>,
 
     Role findFirstByName(@Param("typeName") String typeName);
 
+    List<Role> findByDeletedAtIsNull();
 }

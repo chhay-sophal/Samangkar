@@ -31,7 +31,8 @@ public class PackageService {
                     pkg.getId(), 
                     pkg.getName(), 
                     pkg.getDescription(), 
-                    shopId, services, 
+                    shopId, 
+                    services, 
                     pkg.getCreatedAt().toString(), 
                     pkg.getUpdatedAt() != null ? pkg.getUpdatedAt().toString() : null
                 ))
