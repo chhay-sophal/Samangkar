@@ -55,17 +55,8 @@
                     <div class="px-4 h-full">
                         <div class="flex space-x-4 h-full text-2xl">
                             <!-- Loop through your shop cards -->
-                            <div v-for="shop in userStore.favorites" :key="shop.name" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
-                                {{ shop.name }}
-                            </div>
-                            <div v-for="shop in userStore.favorites" :key="shop.name" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
-                                {{ shop.name }}
-                            </div>
-                            <div v-for="shop in userStore.favorites" :key="shop.name" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
-                                {{ shop.name }}
-                            </div>
-                            <div v-for="shop in userStore.favorites" :key="shop.name" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
-                                {{ shop.name }}
+                            <div v-for="favorite in userStore.favorites" :key="favorite.id" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
+                                {{ favorite.shop.name }}
                             </div>
                         </div>
                     </div>
@@ -87,17 +78,13 @@
                         <div class="px-4 h-full">
                         <div class="flex space-x-4 h-full text-2xl">
                             <!-- Loop through your shop cards -->
-                            <div v-for="card in userStore.cards" :key="card.serviceName" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
-                                {{ card.serviceName }}
-                            </div>
-                            <div v-for="card in userStore.cards" :key="card.serviceName" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
-                                {{ card.serviceName }}
-                            </div>
-                            <div v-for="card in userStore.cards" :key="card.serviceName" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
-                                {{ card.serviceName }}
-                            </div>
-                            <div v-for="card in userStore.cards" :key="card.serviceName" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
-                                {{ card.serviceName }}
+                            <div v-for="card in userStore.cards" :key="card.id" class="flex-col w-64 bg-green-400 flex justify-center items-center rounded-lg">
+                                <div class="">
+                                    {{ card.service.name }}
+                                </div>
+                                <div class="">
+                                    {{ card.service.description }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -414,7 +401,8 @@ import { login, logout } from '@/services/authService'
 import { ref, onMounted } from 'vue'
 
 const userStore = useUserStore()
-const username = userStore.user.username
+const user = userStore.getUser
+
 console.log(userStore.favorites)
 
 const userFavorites = ref(userStore.favorites)
@@ -422,7 +410,7 @@ const userCards = ref(userStore.cards)
 
 const fetchUserFavorites = async () => {
     try {
-        const response = await http.get(`api/favorites/get/${userStore.id}`)
+        const response = await http.get(`api/favorites/get-all/${user.id}`)
         userStore.setFavorites(response.data)
     } catch (error) {
         console.error(error)
@@ -431,7 +419,7 @@ const fetchUserFavorites = async () => {
 
 const fetchUserCards = async () => {
     try {
-        const response = await http.get(`api/users/${username}/cards`)
+        const response = await http.get(`api/cards/get-all/${user.id}`)
         userStore.setCards(response.data)
     } catch (error) {
         console.error(error)

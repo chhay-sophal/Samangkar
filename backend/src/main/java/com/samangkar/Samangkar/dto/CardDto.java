@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CardDto {
-    private Long cardId;
+    private Long id;
     private ServiceDto service;
     private UserDto user;
     private int quantity;
@@ -19,9 +19,9 @@ public class CardDto {
     private Date createdAt;
     private Date updatedAt;
 
-    public CardDto(Long cardId, ServiceDto service, UserDto user, int quantity,
+    public CardDto(Long id, ServiceDto service, UserDto user, int quantity,
             double total, boolean paid, Date createdAt, Date updatedAt) {
-        this.cardId = cardId;
+        this.id = id;
         this.service = service;
         this.user = user;
         this.quantity = quantity;

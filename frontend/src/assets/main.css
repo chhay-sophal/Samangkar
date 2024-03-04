@@ -55,11 +55,11 @@ body {
 
 /* Footer */
 .footer {
-  background-color: #363535;
-  color: #fff;
+  /* background-color: #363535; */
+  /* color: #fff; */
   padding: 20px;
   text-align: center;
-  position: fixed;
+  /* position: fixed; */
   bottom: 0;
   width: 100%; /* Set width to 100% */
 }
@@ -82,7 +82,7 @@ body {
 }
 
 .footer-links li a {
-  color: #fff;
+  /* color: #fff; */
   text-decoration: none;
 }
 

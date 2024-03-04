@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class UserDto {
 
-    private Long userId;
+    private Long id;
     private String username;
     private String email;
     private String profile;
@@ -15,8 +15,8 @@ public class UserDto {
     private Date createdAt;
     private Date updatedAt;
 
-    public UserDto(Long userId, String username, String email, String profile, String role, Date createdAt, Date updatedAt) {
-        this.userId = userId;
+    public UserDto(Long id, String username, String email, String profile, String role, Date createdAt, Date updatedAt) {
+        this.id = id;
         this.username = username;
         this.email = email;
         this.profile = profile;

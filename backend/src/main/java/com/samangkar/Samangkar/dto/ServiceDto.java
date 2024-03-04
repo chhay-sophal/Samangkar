@@ -7,18 +7,18 @@ import lombok.Data;
 @Data
 public class ServiceDto {
     
-    private Long serviceId;
-    private String serviceName;
+    private Long id;
+    private String name;
     private String description;
     private double unitPrice;
     private ShopDto shop;
     private Date createdAt;
     private Date updatedAt;
 
-    public ServiceDto(Long serviceId, String serviceName, String description, double unitPrice, ShopDto shop,
+    public ServiceDto(Long id, String name, String description, double unitPrice, ShopDto shop,
             Date createdAt, Date updatedAt) {
-        this.serviceId = serviceId;
-        this.serviceName = serviceName;
+        this.id = id;
+        this.name = name;
         this.description = description;
         this.unitPrice = unitPrice;
         this.shop = shop;

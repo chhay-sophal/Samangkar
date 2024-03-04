@@ -110,6 +110,7 @@
 
 <script>
 import { login } from '@/services/authService'
+import { useUserStore } from '@/store/userStore';
 
 export default {
   data() {
@@ -123,7 +124,7 @@ export default {
     async handleLogin() {
       try {
         await login(this.username, this.password)
-        this.$router.push({ name: 'homePageRoute' })
+        this.$router.push({ name: 'profilePageRoute' })
       } catch (error) {
         this.showAlert = true
         this.username = null
@@ -135,6 +136,12 @@ export default {
         }, 2000);
       }
     },
+  },
+  mounted() {
+    const userStore = useUserStore()
+    if (userStore.user.username) {
+      this.$router.push({ name: 'homePageRoute' })
+    }
   }
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer">
+  <footer class="footer bg-slate-200 dark:bg-stone-800 text-stone-800 dark:text-slate-200">
     <div class="footer-content">
       <p>© 2024 Your Website. All rights reserved.</p>
       <ul class="footer-links">

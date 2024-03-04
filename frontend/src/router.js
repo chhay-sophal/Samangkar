@@ -22,7 +22,7 @@ import ReviewView from './views/admin/ReviewView.vue'
 
 const routes = [
     {
-        name: 'HomePageRoute',
+        name: 'homePageRoute',
         path: '/',
         component: HomeView
     },
@@ -123,12 +123,27 @@ const routes = [
         path: '/package',
         component: PackageView,
         meta: { requiresAuth: false, hideHeaderFooter: true } 
-    } ,{
+    },
+    {
         name: 'ReviewView',
         path: '/review',
-        component: ReviewView,
-        meta: { requiresAuth: false, hideHeaderFooter: true } 
-    }
+        component: ReviewView
+    },
+    {
+        name: 'aboutPageRout',
+        path: '/about',
+        component: ReviewView
+    },
+    {
+        name: 'contactPageRout',
+        path: '/contact',
+        component: ReviewView
+    },
+    {
+        name: 'servicesPageRout',
+        path: '/services',
+        component: ReviewView
+    },
 ];
 
 const router = createRouter({
