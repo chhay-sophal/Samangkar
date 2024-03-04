@@ -6,13 +6,17 @@ import com.samangkar.Samangkar.dto.UserDto;
 import com.samangkar.Samangkar.model.UserEntity;
 import com.samangkar.Samangkar.model.Role;
 import com.samangkar.Samangkar.repository.UserRepository;
+import com.samangkar.Samangkar.service.UserService;
 import com.samangkar.Samangkar.repository.RoleRepository;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -28,6 +32,19 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserService userService;
+
+    @GetMapping("get-all")
+    public ResponseEntity<?> getAllUsers() {
+        try {
+            List<UserDto> users = userService.getAllUsers();
+            return ResponseEntity.ok(users);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
+        }
+    }
+    
     @PostMapping(path = "/add")
     public @ResponseBody String addNewUser (
             @RequestParam String username,
@@ -79,7 +96,15 @@ public class UserController {
     
             userRepository.save(user);
 
-            UserDto userDto = new UserDto(userId, user.getUsername(), user.getEmail(), user.getProfileUrl(), user.getCreatedAt(), user.getUpdatedAt());
+            UserDto userDto = new UserDto(
+                userId, 
+                user.getUsername(), 
+                user.getEmail(), 
+                user.getProfileUrl(), 
+                user.getUserRole().getName(),
+                user.getCreatedAt(), 
+                user.getUpdatedAt()
+            );
 
             return new ResponseEntity<>(userDto, HttpStatus.OK);
         }).orElse(new ResponseEntity<>("User not found!", HttpStatus.NOT_FOUND));

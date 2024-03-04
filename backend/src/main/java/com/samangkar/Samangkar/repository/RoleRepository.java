@@ -16,9 +16,9 @@ import java.util.Optional;
 public interface RoleRepository extends PagingAndSortingRepository<Role, Long>,
         CrudRepository<Role, Long> {
 
-    Optional<Role> findByName(@Param("typeName") String typeName);
+    Optional<Role> findByName(@Param("role") String role);
 
-    Role findFirstByName(@Param("typeName") String typeName);
+    Role findFirstByName(@Param("role") String role);
 
     List<Role> findByDeletedAtIsNull();
 }
