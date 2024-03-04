@@ -2,6 +2,7 @@ package com.samangkar.Samangkar.controller;
 
 import com.samangkar.Samangkar.dto.ChangePasswordDto;
 import com.samangkar.Samangkar.dto.ModifyUserDto;
+import com.samangkar.Samangkar.dto.RegisterDto;
 import com.samangkar.Samangkar.dto.UserDto;
 import com.samangkar.Samangkar.model.UserEntity;
 import com.samangkar.Samangkar.model.Role;
@@ -44,32 +45,65 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
         }
     }
-    
-    @PostMapping(path = "/add")
-    public @ResponseBody String addNewUser (
-            @RequestParam String username,
-            @RequestParam String email,
-            @RequestParam String password,
-            @RequestParam String type
-    ) {
-        Role role = roleRepository.findFirstByName(type);
 
-        if (role != null) {
-            if (userRepository.findByUsername(username).isEmpty()) {
-                if (userRepository.findByEmail(email).isEmpty()) {
-                    UserEntity newUser = new UserEntity(username, email, password, role);
-                    userRepository.save(newUser);
-                    return "UserEntity added successfully!";
-                } else {
-                    return "UserEntity with email " + email + " already exists!";
-                }
-            } else {
-                return "UserEntity with username " + username + " already exists!";
-            }
-        } else {
-            return "UserEntity type not found!";
+    @GetMapping("get-all/{userRole}")
+    public ResponseEntity<?> getAllUsersByRole(@PathVariable String userRole) {
+        try {
+            List<UserDto> userDto = userService.getAllUsersByRole(userRole);
+            return ResponseEntity.ok(userDto);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
         }
     }
+
+    @PostMapping("register/{userRole}")
+    public ResponseEntity<?> registerNewAdminOrShopOwner(@RequestBody RegisterDto registerDto, @PathVariable String userRole) {
+        try {
+            if (userRepository.findByUsername(registerDto.getUsername()).isEmpty()) {
+                Role role = roleRepository.findFirstByName(userRole);
+                UserEntity user = new UserEntity(
+                    registerDto.getUsername(),
+                    registerDto.getEmail(),
+                    registerDto.getPassword(),
+                    role
+                    );
+                userRepository.save(user);
+
+                UserDto userDto = userService.getUserDetails(registerDto.getUsername());
+                return ResponseEntity.ok(userDto);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username " + registerDto.getUsername() + " is taken.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
+        }
+    }
+    
+    // @PostMapping(path = "/add")
+    // public @ResponseBody String addNewUser (
+    //         @RequestParam String username,
+    //         @RequestParam String email,
+    //         @RequestParam String password,
+    //         @RequestParam String type
+    // ) {
+    //     Role role = roleRepository.findFirstByName(type);
+
+    //     if (role != null) {
+    //         if (userRepository.findByUsername(username).isEmpty()) {
+    //             if (userRepository.findByEmail(email).isEmpty()) {
+    //                 UserEntity newUser = new UserEntity(username, email, password, role);
+    //                 userRepository.save(newUser);
+    //                 return "UserEntity added successfully!";
+    //             } else {
+    //                 return "UserEntity with email " + email + " already exists!";
+    //             }
+    //         } else {
+    //             return "UserEntity with username " + username + " already exists!";
+    //         }
+    //     } else {
+    //         return "UserEntity type not found!";
+    //     }
+    // }
 
     @SuppressWarnings("null")
     @PostMapping("/update/{userId}")

@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class CardController {
     
     @Autowired
-    private CardService userCardService;
+    private CardService cardService;
 
     @Autowired
     private UserCardRepository userCardRepository;
@@ -46,7 +46,7 @@ public class CardController {
 
     @GetMapping("get-all/{userId}")
     public ResponseEntity<List<CardDto>> getUserCards(@PathVariable Long userId) {
-        List<CardDto> userCards = userCardService.getUserCards(userId);
+        List<CardDto> userCards = cardService.getUserCards(userId);
         return ResponseEntity.ok(userCards);
     }
 
@@ -59,7 +59,7 @@ public class CardController {
             userCard.setDeletedAt(new Date());
             userCardRepository.save(userCard);
 
-            List<CardDto> userCards = userCardService.getUserCards(request.getUserId());
+            List<CardDto> userCards = cardService.getUserCards(request.getUserId());
             return ResponseEntity.ok(userCards);
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
@@ -77,7 +77,7 @@ public class CardController {
             UserCard userCard = new UserCard(user, serviceModel, total, request.getQuantity());
             userCardRepository.save(userCard);
 
-            List<CardDto> userCards = userCardService.getUserCards(request.getUserId());
+            List<CardDto> userCards = cardService.getUserCards(request.getUserId());
             return ResponseEntity.ok(userCards);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");

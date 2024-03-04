@@ -17,7 +17,7 @@ public class CardService {
     private UserCardRepository userCardRepository;
 
     @Autowired
-    private ServiceService servicesService;
+    private ServiceService serviceService;
 
     @Autowired
     private UserService userService;
@@ -28,7 +28,7 @@ public class CardService {
                 .map(card -> new CardDto(
                         card.getId(),
                         (
-                            servicesService.getServiceById(card.getService().getId())
+                            serviceService.getServiceById(card.getService().getId())
                         ),
                         (
                             userService.getUserById(userId)
