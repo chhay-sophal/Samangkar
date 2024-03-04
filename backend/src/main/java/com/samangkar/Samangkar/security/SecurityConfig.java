@@ -31,22 +31,27 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http
+//                .csrf().disable()
+//                .cors()
+//                .and()
+//                .exceptionHandling()
+//                .authenticationEntryPoint(authEntryPoint)
+//                .and()
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+//                .authorizeRequests()
+//                .requestMatchers("/api/shop/all").permitAll()
+////                .anyRequest().authenticated()
+//                .and()
+//                .httpBasic();
+//        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+//        return http.build();
         http
-                .csrf().disable()
-                .cors()
-                .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(authEntryPoint)
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                .csrf().disable() // Disable CSRF protection
                 .authorizeRequests()
-                .requestMatchers("/api/auth/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic();
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .anyRequest().permitAll(); // Allow all requests
         return http.build();
     }
 

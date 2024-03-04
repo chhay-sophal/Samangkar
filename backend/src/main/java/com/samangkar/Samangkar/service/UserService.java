@@ -21,4 +21,9 @@ public class UserService {
         return new UserDto(userId, username, email, profileUrl);
     }
 
+    //CHECK IF A CERTAIN OWNER_ID EXIST
+//    public boolean doesUserRole2Exist() {
+//        return userRepository.existsByUserRole_Id(2L);
+//    }
+
 }
