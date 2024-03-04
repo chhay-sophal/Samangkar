@@ -23,18 +23,10 @@ public class RoleService {
                 .map(role -> new RoleDto(
                     role.getId(), 
                     role.getName(), 
-                    role.getCreatedAt().toString(), 
-                    role.getUpdatedAt() != null ? role.getUpdatedAt().toString() : null
+                    role.getCreatedAt(), 
+                    role.getUpdatedAt()
                 ))
                 .collect(Collectors.toList());
-        // List<RoleDto> roleDtos = roles.stream()
-        //     .map(role -> new RoleDto(
-        //         role.getId(), 
-        //         role.getName(), 
-        //         role.getCreatedAt().toString(), 
-        //         role.getUpdatedAt() != null ? role.getUpdatedAt().toString() : null
-        //     ))
-        //     .collect(Collectors.toList());
         return roleDtos;
     }
 }

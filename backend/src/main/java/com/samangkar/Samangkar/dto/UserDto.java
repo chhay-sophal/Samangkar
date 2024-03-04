@@ -1,23 +1,26 @@
 package com.samangkar.Samangkar.dto;
 
+import java.util.Date;
+
 import lombok.Data;
 
 @Data
 public class UserDto {
 
-    private String id;
+    private Long userId;
     private String username;
     private String email;
     private String profile;
+    private Date createdAt;
+    private Date updatedAt;
 
-    // public UserDto(String profile) {
-    //     this.profile = profile;
-    // }
-
-    public UserDto(Long id, String username, String email, String profile) {
-        this.id = id.toString();
+    public UserDto(Long userId, String username, String email, String profile, Date createdAt, Date updatedAt) {
+        this.userId = userId;
         this.username = username;
         this.email = email;
         this.profile = profile;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
+
 }

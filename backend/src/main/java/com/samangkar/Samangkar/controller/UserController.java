@@ -54,6 +54,7 @@ public class UserController {
         }
     }
 
+    @SuppressWarnings("null")
     @PostMapping("/update/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody ModifyUserDto modifyUserDto) {
         String username = modifyUserDto.getUsername();
@@ -78,7 +79,7 @@ public class UserController {
     
             userRepository.save(user);
 
-            UserDto userDto = new UserDto(userId, user.getUsername(), user.getEmail(), user.getProfileUrl());
+            UserDto userDto = new UserDto(userId, user.getUsername(), user.getEmail(), user.getProfileUrl(), user.getCreatedAt(), user.getUpdatedAt());
 
             return new ResponseEntity<>(userDto, HttpStatus.OK);
         }).orElse(new ResponseEntity<>("User not found!", HttpStatus.NOT_FOUND));

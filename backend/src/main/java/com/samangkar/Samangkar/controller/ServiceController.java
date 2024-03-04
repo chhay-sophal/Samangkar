@@ -12,6 +12,7 @@ import com.samangkar.Samangkar.repository.ServiceRepository;
 import com.samangkar.Samangkar.repository.ShopRepository;
 import com.samangkar.Samangkar.service.ServiceService;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,9 @@ public class ServiceController {
             if (shopRepository.findById(request.getShopId()).isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Service with id " + request.getShopId() + " does not exists.");
             } else {
-                serviceRepository.deleteById(request.getServiceId());
+                ServiceModel service = serviceRepository.findFirstById(request.getServiceId());
+                service.setDeletedAt(new Date());
+                serviceRepository.save(service);
                 List<ServiceDto> shopContacts = serviceService.getAllShopServices(request.getShopId());
                 return ResponseEntity.ok(shopContacts);
             }

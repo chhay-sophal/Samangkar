@@ -21,9 +21,12 @@ public class ServiceService {
     @Autowired
     private ShopRepository shopRepository;
 
+    @Autowired
+    private ShopService shopService;
+
     public List<ServiceDto> getAllShopServices(Long shopId) {
         Shop shop = shopRepository.findFirstById(shopId);
-        List<ServiceModel> services = serviceRepository.findByShop(shop);
+        List<ServiceModel> services = serviceRepository.findByShopAndDeletedAtIsNull(shop);
 
         return services.stream()
                 .map(service -> new ServiceDto(
@@ -31,8 +34,25 @@ public class ServiceService {
                     service.getName(),
                     service.getDescription(),
                     service.getUnitPrice(),
-                    service.getShop().getId()
+                    (
+                        shopService.getShopById(service.getShop().getId())
+                    ),
+                    service.getCreatedAt(), 
+                    service.getUpdatedAt()
                 ))
                 .collect(Collectors.toList());
+    }
+
+    public ServiceDto getServiceById(Long serviceId) {
+        ServiceModel service = serviceRepository.findFirstById(serviceId);
+        return new ServiceDto(
+            serviceId, 
+            service.getName(), 
+            service.getDescription(), 
+            service.getUnitPrice(), 
+            shopService.getShopById(service.getShop().getId()),
+            service.getCreatedAt(), 
+            service.getUpdatedAt()
+        );
     }
 }

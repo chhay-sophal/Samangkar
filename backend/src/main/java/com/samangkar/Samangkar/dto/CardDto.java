@@ -1,5 +1,7 @@
 package com.samangkar.Samangkar.dto;
 
+import java.util.Date;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,22 +11,24 @@ import lombok.Setter;
 @Setter
 public class CardDto {
     private Long cardId;
-    private String serviceName;
-    private String description;
-    private String shopName;
-    private String shopOwner;
-    private boolean paid;
+    private ServiceDto service;
+    private UserDto user;
     private int quantity;
     private double total;
+    private boolean paid;
+    private Date createdAt;
+    private Date updatedAt;
 
-    public CardDto(Long cardId, String serviceName, String description, String shopName, String shopOwner, boolean paid, int quantity, double total) {
+    public CardDto(Long cardId, ServiceDto service, UserDto user, int quantity,
+            double total, boolean paid, Date createdAt, Date updatedAt) {
         this.cardId = cardId;
-        this.serviceName = serviceName;
-        this.description = description;
-        this.shopName = shopName;
-        this.shopOwner = shopOwner;
-        this.paid = paid;
+        this.service = service;
+        this.user = user;
         this.quantity = quantity;
         this.total = total;
+        this.paid = paid;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
+
 }

@@ -56,6 +56,7 @@ public class PackageController {
         }
     }
     
+    @SuppressWarnings("null")
     @PostMapping("add")
     public ResponseEntity<?> addPackage(@RequestBody AddOrModifyPackageDto request) {
         try {
@@ -77,6 +78,7 @@ public class PackageController {
         }
     }
 
+    @SuppressWarnings("null")
     @PostMapping("modify/{packageId}")
     public ResponseEntity<?> modifyPackage(@PathVariable Long packageId, @RequestBody AddOrModifyPackageDto request) {
         try {
@@ -107,6 +109,7 @@ public class PackageController {
         }
     }
     
+    @SuppressWarnings("null")
     @PostMapping("delete/{packageId}")
     public ResponseEntity<?> deletePackage(@PathVariable Long packageId) {
         try {

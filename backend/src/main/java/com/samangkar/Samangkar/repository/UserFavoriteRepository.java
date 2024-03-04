@@ -16,6 +16,8 @@ public interface UserFavoriteRepository extends PagingAndSortingRepository<UserF
 
     List<UserFavorite> findByUser(@Param("user") UserEntity user);
 
+    List<UserFavorite> findByUserAndDeletedAtIsNull(UserEntity user);
+
     List<UserFavorite> findByShop(@Param("shop") Shop shop);
 
     List<UserFavorite> findByUserAndShop(@Param("user") UserEntity user, @Param("shop") Shop shop);

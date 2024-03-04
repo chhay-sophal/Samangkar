@@ -23,4 +23,5 @@ public interface ServiceRepository extends PagingAndSortingRepository<ServiceMod
 
     ServiceModel findFirstById(Long id);
 
+    List<ServiceModel> findByShopAndDeletedAtIsNull(@Param("shop") Shop shop);
 }

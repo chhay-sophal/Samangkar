@@ -17,19 +17,25 @@ public class ShopContactService {
     
     @Autowired
     private ShopRepository shopRepository;
+
     @Autowired
     private ShopContactRepository shopContactRepository;
 
+    @Autowired
+    private ShopService shopService;
+
     public List<ShopContactDto> getAllShopContact(Long shopId) {
         Shop shop = shopRepository.findFirstById(shopId);
-        List<ShopContact> shopContact = shopContactRepository.findByShop(shop);
+        List<ShopContact> shopContact = shopContactRepository.findByShopAndDeletedAtIsNull(shop);
 
         return shopContact.stream()
                 .map(contact -> new ShopContactDto(
                     contact.getId(), 
                     contact.getContactType().getPlatform(), 
-                    contact.getUrl(), 
-                    contact.getShop().getName()
+                    contact.getUrl(),
+                    shopService.getShopById(contact.getShop().getId()),
+                    contact.getCreatedAt(),
+                    contact.getUpdatedAt()
                 ))
                 .collect(Collectors.toList());
     } 

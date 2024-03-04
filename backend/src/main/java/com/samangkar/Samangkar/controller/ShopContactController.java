@@ -1,5 +1,6 @@
 package com.samangkar.Samangkar.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.samangkar.Samangkar.dto.AddShopContactDto;
-import com.samangkar.Samangkar.dto.RemoveShopContactDto;
 import com.samangkar.Samangkar.dto.ShopContactDto;
 import com.samangkar.Samangkar.model.ContactType;
 import com.samangkar.Samangkar.model.Shop;
@@ -66,15 +66,16 @@ public class ShopContactController {
         }
     }
     
-    @PostMapping("remove")
-    public ResponseEntity<?> removeShopContact(@RequestBody RemoveShopContactDto removeShopContactDto) {
+    @SuppressWarnings("null")
+    @PostMapping("remove/{contactId}/{shopId}")
+    public ResponseEntity<?> removeShopContact(@PathVariable Long contactId, @PathVariable Long shopId) {
         try {
-            Long contactId = removeShopContactDto.getContactId();
-            Long shopId = removeShopContactDto.getShopId();
             if (shopContactRepository.findById(contactId).isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Shop contact with url " + contactId + " does not exists.");
             } else {
-                shopContactRepository.deleteById(contactId);
+                ShopContact shopContact = shopContactRepository.findFirstById(contactId);
+                shopContact.setDeletedAt(new Date());
+                shopContactRepository.save(shopContact);
                 List<ShopContactDto> shopContacts = shopContactService.getAllShopContact(shopId);
                 return ResponseEntity.ok(shopContacts);
             }

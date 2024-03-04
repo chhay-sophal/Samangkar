@@ -56,6 +56,7 @@ public class RoleController {
         }
     }
     
+    @SuppressWarnings("null")
     @PostMapping("modify/{roleId}/{newRoleName}")
     public ResponseEntity<?> changeRoleName(@PathVariable Long roleId, @PathVariable String newRoleName) {
         try {
@@ -73,6 +74,7 @@ public class RoleController {
         }
     }
     
+    @SuppressWarnings("null")
     @PostMapping("delete/{roleId}")
     public ResponseEntity<?> deleteRole(@PathVariable Long roleId) {
         try {
