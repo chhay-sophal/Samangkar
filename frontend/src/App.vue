@@ -1,16 +1,17 @@
-<script setup>
-import Header from './components/header.vue';
-import Footer from './components/footer.vue';
-import HomeView from './views/HomeView.vue';
-</script>
-
 <template>
   <Header v-if="!$route.meta.hideHeaderFooter" />
-    <router-view></router-view>
-  <Footer v-if="!$route.meta.hideHeaderFooter" />
-  <!-- <Header />
-  <div class="min-w-full relative my-10 col-span-2">
+  <div class="3xl:w-5/6 pt-32 w-full px-8 mx-auto">
     <router-view></router-view>
   </div>
-  <Footer /> -->
+  <Footer v-if="!$route.meta.hideHeaderFooter" />
 </template>
+
+<script>
+import Header from './components/header.vue'
+import Footer from './components/footer.vue'
+
+export default {
+  name: 'App',
+  components: { Header, Footer },
+}
+</script>

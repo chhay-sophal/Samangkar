@@ -16,5 +16,9 @@ public interface ShopContactRepository extends PagingAndSortingRepository<ShopCo
     List<ShopContact> findByUrl(@Param("url") String url);
 
     List<ShopContact> findByShop(@Param("shop") Shop shop);
+    
+    List<ShopContact> findByShopAndDeletedAtIsNull(@Param("shop") Shop shop);
+
+    ShopContact findFirstById(Long id);
 
 }

@@ -1,6 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from './views/user/homeView.vue'
 import LoginView from './views/LoginView.vue'
+import LogoutView from './views/LogoutView.vue'
+import ProfileView from './views/ProfileView.vue'
+import FavoriteShopsView from './views/FavoriteShopsView.vue'
+import CardsView from './views/CardsView.vue'
 import AdminView from './views/admin/homeView.vue'
 import SideBarView from './components/sideBar.vue'
 import AddUserView from './views/admin/AddUserView.vue'
@@ -27,6 +31,27 @@ const routes = [
         path: '/login',
         component: LoginView,
         meta: { requiresAuth: false, hideHeaderFooter: true } 
+    },
+    {
+        name: 'logoutPageRoute',
+        path: '/logout',
+        component: LogoutView,
+        meta: { requiresAuth: false, hideHeaderFooter: true}
+    },
+    {
+        name: 'profilePageRoute',
+        path: '/profile',
+        component: ProfileView,
+    },
+    {
+        name: 'favoritePageRoute',
+        path: '/profile/favorite',
+        component: FavoriteShopsView,
+    },
+    {
+        name: 'cardsPageRoute',
+        path: '/profile/cards',
+        component: CardsView,
     },
     {
         name: 'DashboardPageRoute',

@@ -1,29 +1,21 @@
 <template>
-    <div class="col-start-1 col-end-3 text-center text-5xl">
-      <button @click="fetchGreeting">Fetch Greeting</button>
-      <h1 class="text-cyan-500">{{ greeting }}</h1>
+    <div class="bg-blue-300 flex items-center justify-center min-h-96 text-7xl">
+      <p class="">This is home page</p>
+      <h1 v-if="user" class="text-cyan-500">{{ user.username }}</h1>
     </div>
-  </template>
+</template>
 
 <script>
-import axios from 'axios';
+  import { useUserStore } from '@/store/userStore'
 
-export default {
-  data() {
-    return {
-      greeting: ''
-    };
-  },
-  methods: {
-    fetchGreeting() {
-      axios.get('http://localhost:8080/greeting')
-        .then(response => {
-          this.greeting = response.data;
-        })
-        .catch(error => {
-          console.error("There was an error fetching the greeting:", error);
-        });
+  export default {
+    data() {
+      return {
+      };
+    },
+    created() {
+      const userStore = useUserStore();
+      this.user = userStore.getUser;
     }
-  }
-};
+  };
 </script>

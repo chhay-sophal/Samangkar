@@ -6,7 +6,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,8 +16,9 @@ import java.util.Optional;
 public interface RoleRepository extends PagingAndSortingRepository<Role, Long>,
         CrudRepository<Role, Long> {
 
-    Optional<Role> findByName(@Param("typeName") String typeName);
+    Optional<Role> findByName(@Param("role") String role);
 
-    Role findFirstByName(@Param("typeName") String typeName);
+    Role findFirstByName(@Param("role") String role);
 
+    List<Role> findByDeletedAtIsNull();
 }

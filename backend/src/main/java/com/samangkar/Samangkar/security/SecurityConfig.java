@@ -13,59 +13,35 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private JwtAuthEntryPoint authEntryPoint;
-    private CustomUserDetailsService userDetailsService;
-
     @Autowired
-    public SecurityConfig(
-            CustomUserDetailsService userDetailsService,
-            JwtAuthEntryPoint authEntryPoint)
-    {
-        this.userDetailsService = userDetailsService;
-        this.authEntryPoint = authEntryPoint;
-    }
+    private JwtAuthEntryPoint authEntryPoint;
 
+    @SuppressWarnings("deprecation")
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .exceptionHandling()
-                .authenticationEntryPoint(authEntryPoint)
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                .requestMatchers("/api/auth/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic();
+                .csrf(csrf -> csrf.disable())
+                .cors(withDefaults())
+                .exceptionHandling(handling -> handling
+                        .authenticationEntryPoint(authEntryPoint))
+                .sessionManagement(management -> management
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeRequests(requests -> requests
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .anyRequest().authenticated())
+                .httpBasic(withDefaults());
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        UserDetails admin = User.builder()
-//                .username("admin")
-//                .password("password")
-//                .roles("ADMIN")
-//                .build();
-//        UserDetails user = User.builder()
-//                .username("user")
-//                .password("password")
-//                .roles("USER")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(user);
-//    }
-
     @Bean
-    public AuthenticationManager authenticationManager(
+    AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration
     ) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -77,7 +53,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+    JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter();
     }
 }
