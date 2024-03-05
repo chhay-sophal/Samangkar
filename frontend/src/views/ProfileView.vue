@@ -3,11 +3,11 @@
         <!-- User detail on the left -->
         <div class="2xl:w-1/5 xl:w-1/4 w-full">
             <div class="p-5 pb-0 flex justify-center">
-                <div class="dark:bg-slate-600 bg-gray-100 overflow-hidden p-5 flex items-center rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full">
+                <div class="dark:bg-slate-600 bg-gray-100 overflow-hidden flex items-center rounded-full aspect-square">
+                    <img v-if="userStore.getUser.profile" class="w-full" :src="getUserImageUrl(userStore.getUser.profile)" alt="">
+                    <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                     </svg>
-                    <!-- <img class="w-full" src="../components/pictures/default-profile.png" alt=""> -->
                 </div>
             </div>
             <div class="flex justify-center text-4xl p-3">
@@ -20,6 +20,13 @@
                     </div>
                 </div>
                 <div class="flex flex-col gap-2">
+                    <div 
+                        @click="openFileInput()"
+                        class="text-green-400 hover:text-stone-100 border border-green-400 hover:bg-green-400 p-2 rounded-xl text-center"
+                    >
+                        <input type="file" ref="fileInput" style="display: none" @change="handleFileChange">
+                        <button>Choose Picture</button>
+                    </div>
                     <div 
                         @click="handleShowChangeInfoPanel()"
                         class="text-green-400 hover:text-stone-100 border border-green-400 hover:bg-green-400 p-2 rounded-xl text-center"
@@ -90,6 +97,26 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Choose profile picture -->
+        <div
+            v-if="selectedImage"
+            class="top-1/2 left-1/2 dark:bg-stone-700 xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl sm:h-1/2 h-2/5 -translate-x-1/2 -translate-y-1/2 fixed flex flex-col gap-5 justify-center items-center"
+        >
+            <div class="flex w-full justify-end items-center pr-5 dark:text-stone-600">
+                <button 
+                    @click="this.selectedImage = null"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="w-3/4 rounded-md overflow-hidden">
+                <img class="w-full" :src="selectedImage" alt="Profile Picture">
+            </div>
+            <button @click="uploadImage" class="w-1/4 rounded-md text-xl text-stone-800 hover:text-stone-200 bg-pink-300 hover:bg-pink-600">Save</button>
         </div>
 
         <!-- Change User Information Box -->
@@ -385,6 +412,7 @@
             </div>
         </div>
 
+        <!-- Alert box -->
         <div 
             v-if="showAlert"
             class="bg-red-500 text-stone-100 text-xl font-medium flex justify-center fixed left-1/2 p-3 rounded-lg"
@@ -452,6 +480,8 @@ export default {
             },
             showAlert: false,
             alertInfo: '',
+            selectedImage: null,
+            imageUrl: null,
         }
     },
     methods: {
@@ -561,8 +591,84 @@ export default {
                 throw error;
             }
         },
+        openFileInput() {
+            this.selectedImage = null
+            this.$refs.fileInput.value = null
+            this.$refs.fileInput.click()
+        },
+        handleFileChange(event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = (e) => {
+                    this.selectedImage = e.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            }
+        },
+        uploadImage() {
+            const userStore = useUserStore()
+            const user = userStore.getUser
+            if (!this.selectedImage) {
+                console.error('No image selected')
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', this.dataURItoBlob(this.selectedImage), 'image.jpg')
+
+            http.post(`api/users/${user.id}/image/upload`, formData)
+                .then(response => {
+                    userStore.clearUser()
+                    userStore.setUser(response.data)
+                    const imageData = userStore.getUser.profile
+
+                    this.getUserImageUrl(imageData)
+
+                    console.log('Image uploaded successfully:', response.data)
+                    this.selectedImage = null
+                })
+                .catch(error => {
+                    console.error('Error uploading image:', error)
+                });
+        },
+        dataURItoBlob(dataURI) {
+            // Convert a data URI to a Blob
+            const byteString = atob(dataURI.split(',')[1]);
+            const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+            const arrayBuffer = new ArrayBuffer(byteString.length);
+            const uint8Array = new Uint8Array(arrayBuffer);
+
+            for (let i = 0; i < byteString.length; i++) {
+                uint8Array[i] = byteString.charCodeAt(i);
+            }
+
+            return new Blob([arrayBuffer], { type: mimeString });
+        },
+        getUserImageUrl(imageData) {
+            try {
+                const byteString = atob(imageData);
+                const mimeString = "image/jpg"; // Adjust mime type as needed
+                const arrayBuffer = new ArrayBuffer(byteString.length);
+                const intArray = new Uint8Array(arrayBuffer);
+                for (let i = 0; i < byteString.length; i++) {
+                    intArray[i] = byteString.charCodeAt(i);
+                }
+                const blob = new Blob([arrayBuffer], { type: mimeString });
+                return URL.createObjectURL(blob);
+            } catch (error) {
+                console.error('Error getting image data:', error)
+            }
+        },
     },
     mounted() {
+        const userStore = useUserStore()
+        if (!userStore.user.username) {
+            this.$router.push({ name: 'homePageRoute' })
+        }
     },
     computed() {
     },

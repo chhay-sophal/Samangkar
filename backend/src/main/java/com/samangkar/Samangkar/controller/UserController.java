@@ -8,15 +8,21 @@ import com.samangkar.Samangkar.model.UserEntity;
 import com.samangkar.Samangkar.model.Role;
 import com.samangkar.Samangkar.repository.UserRepository;
 import com.samangkar.Samangkar.service.UserService;
+
 import com.samangkar.Samangkar.repository.RoleRepository;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -35,6 +41,12 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @GetMapping("get-user/{userId}")
+    public ResponseEntity<?> getUserById(@PathVariable Long userId) {
+        UserDto userDto = userService.getUserById(userId);
+        return ResponseEntity.ok(userDto);
+    }
 
     @GetMapping("get-all")
     public ResponseEntity<?> getAllUsers() {
@@ -130,15 +142,7 @@ public class UserController {
     
             userRepository.save(user);
 
-            UserDto userDto = new UserDto(
-                userId, 
-                user.getUsername(), 
-                user.getEmail(), 
-                user.getProfileUrl(), 
-                user.getUserRole().getName(),
-                user.getCreatedAt(), 
-                user.getUpdatedAt()
-            );
+            UserDto userDto = userService.getUserById(userId);
 
             return new ResponseEntity<>(userDto, HttpStatus.OK);
         }).orElse(new ResponseEntity<>("User not found!", HttpStatus.NOT_FOUND));
@@ -172,4 +176,42 @@ public class UserController {
 
         return new ResponseEntity<>("Password changed successfully.", HttpStatus.OK);
     }
+
+    @SuppressWarnings("null")
+    @PostMapping("{userId}/image/upload")
+    public ResponseEntity<?> handleFileUpload(@PathVariable Long userId, @RequestParam("file") MultipartFile file) {
+        try {
+            Path uploadDirectory = Path.of("src/main/resources/images");
+
+            // Ensure the directory exists, create it if not
+            Files.createDirectories(uploadDirectory);
+
+            UserEntity user = userRepository.findFirstById(userId);
+
+            // Delete the existing profile image if it exists
+            if (user.getProfileUrl() != null) {
+                Path existingImagePath = uploadDirectory.resolve(user.getProfileUrl());
+                Files.deleteIfExists(existingImagePath);
+            }
+
+            // Append a unique identifier to the filename
+            String originalFilename = file.getOriginalFilename();
+            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            String uniqueFilename = UUID.randomUUID().toString() + "." + fileExtension;
+            Path targetPath = uploadDirectory.resolve(uniqueFilename);
+
+            // Save the file to the server
+            Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+
+            // Update the user's profileUrl
+            user.setProfileUrl(uniqueFilename);
+            userRepository.save(user);
+
+            UserDto userDto = userService.getUserById(userId);
+            return ResponseEntity.ok(userDto);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error uploading file: " + e.getMessage());
+        }
+    }
+
 }
