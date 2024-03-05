@@ -24,7 +24,7 @@
 
 <script>
 // i
-import Sidebar from '../../components/sideBar.vue'
+import Sidebar from '../../components/AdminSidebar.vue'
 export default {
   name:'Package',
   components: {

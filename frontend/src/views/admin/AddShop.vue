@@ -29,7 +29,7 @@
   </template>
   
   <script>
-import Sidebar from "./../../components/sideBar.vue"; // Adjust the path as per your project structure
+import Sidebar from "./../../components/AdminSidebar.vue"; // Adjust the path as per your project structure
   
   export default {
     name: 'AdminDashboard',
@@ -133,4 +133,3 @@ import Sidebar from "./../../components/sideBar.vue"; // Adjust the path as per 
     background-color: #0056b3;
   }
   </style>
-  
