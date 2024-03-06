@@ -33,6 +33,10 @@ public class Shop {
     @OneToMany(mappedBy = "shop")
     private List<ShopContact> shopContacts;
 
+    @ManyToOne
+    @JoinColumn(name = "create_by")
+    private UserEntity create_by;
+
     public Shop() {}
     public Shop(String name, String description, String shopImageUrl, UserEntity owner) {
         this.name = name;
@@ -119,5 +123,13 @@ public class Shop {
 
     public void setShopContacts(List<ShopContact> shopContacts) {
         this.shopContacts = shopContacts;
+    }
+
+    public UserEntity getCreate_by() {
+        return create_by;
+    }
+
+    public void setCreate_by(UserEntity create_by) {
+        this.create_by = create_by;
     }
 }

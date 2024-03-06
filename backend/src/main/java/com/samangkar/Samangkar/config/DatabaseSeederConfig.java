@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Configuration
@@ -45,6 +46,14 @@ public class DatabaseSeederConfig {
             seedUser(userRepository, "user1", "user1@example.com", "user1234", roleRepository.findFirstByName("USER"));
             seedUser(userRepository, "user2", "user2@example.com", "user5678", roleRepository.findFirstByName("USER"));
             seedUser(userRepository, "user3", "user3@example.com", "user8910", roleRepository.findFirstByName("USER"));
+            // Seed More users
+            seedUser(userRepository, "shop_owner1a", "shop_owner1a@example.com", "admin1234", roleRepository.findFirstByName("SHOP_OWNER"));
+            seedUser(userRepository, "shop_owner1b", "shop_owner1b@example.com", "admin5678", roleRepository.findFirstByName("SHOP_OWNER"));
+            seedUser(userRepository, "shop_owner2d", "shop_owner2d@example.com", "shop5678", roleRepository.findFirstByName("SHOP_OWNER"));
+            seedUser(userRepository, "shop_owner3c", "shop_owner3c@example.com", "shop8910", roleRepository.findFirstByName("SHOP_OWNER"));
+            seedUser(userRepository, "shop_owner1q", "shop_owner1q@example.com", "user1234", roleRepository.findFirstByName("SHOP_OWNER"));
+            seedUser(userRepository, "shop_owner1e", "shop_owner1e@example.com", "user5678", roleRepository.findFirstByName("SHOP_OWNER"));
+            seedUser(userRepository, "shop_owner1f", "shop_owner1f@example.com", "user8910", roleRepository.findFirstByName("SHOP_OWNER"));
 
             // Seed contact types
             seedContactType(contactTypeRepository, "Phone Number");
@@ -133,21 +142,37 @@ public class DatabaseSeederConfig {
                     shopRepository.findFirstByName("shop1"),
                     5,
                     "This shop is good",
-                    "Description of this review.");
+                    "Description of this review.",
+                    false,
+                    false,
+                    new Date(),
+                    new Date()
+            );
+            ;
             seedUserReview(
                     userReviewRepository,
                     userRepository.findFirstByUsername("user1"),
                     shopRepository.findFirstByName("shop2"),
                     3,
                     "This shop is not good",
-                    "Description of this review.");
+                    "Description of this review.",
+                    false,
+                    false,
+                    new Date(),
+                    new Date()
+            );
             seedUserReview(
                     userReviewRepository,
                     userRepository.findFirstByUsername("user2"),
                     shopRepository.findFirstByName("shop2"),
                     4,
                     "This shop is almost good",
-                    "Description of this review.");
+                    "Description of this review.",
+                    false,
+                    false,
+                    new Date(),
+                    new Date()
+            );
 
             // After seeding data, display this message
             System.out.println("Data Seeding: Data seeded successfully!");
@@ -235,13 +260,13 @@ public class DatabaseSeederConfig {
     }
 
     @Transactional
-    private void seedUserReview(UserReviewRepository repository, UserEntity user, Shop shop, int stars, String title, String description) {
+    private void seedUserReview(UserReviewRepository repository, UserEntity user, Shop shop, int stars, String title, String description, Boolean is_deleted, Boolean is_updated, Date create_date, Date last_modified_date) {
 //        if (repository.findByUserAndShop(user, shop).isEmpty()) {
 //            UserReview userReview = new UserReview(user, shop, title, description);
 //            repository.save(userReview);
 //        }
 
-        UserReview userReview = new UserReview(user, shop, stars, title, description);
+        UserReview userReview = new UserReview(user, shop, stars, title, description, is_deleted, is_updated,create_date, last_modified_date);
         repository.save(userReview);
 
     }

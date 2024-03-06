@@ -61,7 +61,8 @@ public class ShopController {
     @PostMapping("/insert")
     public ResponseEntity<?> createShop(@RequestBody ShopDto shopDTO) {
         try{
-            shopService.createShop(shopDTO);
+//            shopService.createShop(shopDTO);
+            System.out.println(shopDTO);
             return ResponseEntity.ok("Shop created successfully");
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

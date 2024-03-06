@@ -8,12 +8,14 @@ import lombok.Setter;
 @Setter
 public class ShopDto {
 
+    private Long id;
     private String name;
     private String description;
     private String shopImageUrl;
     private Long ownerId;
     private Boolean trending;
     private Boolean activate;
+    private Long create_by;
 
 
     public Shop toEntity() {

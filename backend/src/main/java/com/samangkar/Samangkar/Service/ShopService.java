@@ -74,6 +74,9 @@ public class ShopService {
                     System.out.println(owner);
                     Shop shop = shopDTO.toEntity();
                     shop.setOwner(owner);
+                    shop.setName(shopDTO.getName());
+                    shop.setDescription(shopDTO.getDescription());
+//                    shop.setShopImageUrl(sh);
                     shopRepository.save(shop);
                 }
 
@@ -105,16 +108,39 @@ public class ShopService {
             if(updateDto.getOwnerId()!=null){
                 UserEntity owner = userRepository.findById(updateDto.getOwnerId())
                         .orElseThrow(() -> new ResourceNotFoundException("Owner not found with ID " + updateDto.getOwnerId()));
+                //PRINT
+                System.out.println(updateDto.getOwnerId());
+                System.out.println(owner.getUserRole().getId());
                 if (owner.getUserRole() == null || owner.getUserRole().getId() != 2) {
                     throw new IllegalStateException("User with ID " + owner.getId() + " does not have the required role (role_id = 2)");
+                }else{
+                    Optional<Shop> existingShopOwner = shopRepository.findByOwnerId(updateDto.getOwnerId());
+                    System.out.println(existingShopOwner);
+                    if(existingShopOwner.isPresent()){
+                        throw new IllegalStateException("User with ID " + updateDto.getOwnerId() + " already owns a shop.");
+                    }else{
+                        shopToUpdate.setOwner(owner);
+                    }
+
                 }
-                Optional<Shop> existingShopOwner = shopRepository.findByOwnerId(updateDto.getOwnerId());
-                if(existingShop.isPresent()){
-                    throw new IllegalStateException("User with ID " + updateDto.getOwnerId() + " already owns a shop.");
-                }
-                shopToUpdate.setOwner(owner);
+
             }
             shopRepository.save(shopToUpdate);
+        } else {
+            throw new ResourceNotFoundException("Shop with ID " + shopId + " not found");
+        }
+
+    }
+
+    //DELETE
+    public void DeleteShop(Long shopId){
+        Optional<Shop> existingShop = shopRepository.findById(shopId);
+        if (existingShop.isPresent()) {
+            Shop shop = existingShop.get();
+            //PRINT
+            System.out.println(shop);
+            shop.setActivated(false);
+            shopRepository.save(shop);
         } else {
             throw new ResourceNotFoundException("Shop with ID " + shopId + " not found");
         }
