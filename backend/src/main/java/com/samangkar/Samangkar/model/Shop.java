@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -24,6 +25,8 @@ public class Shop {
     private boolean activated;
     private boolean trending;
 
+    private Date last_modified_date;
+
     @OneToMany(mappedBy = "shop")
     private List<PackageModel> packageModels;
 
@@ -37,12 +40,15 @@ public class Shop {
     @JoinColumn(name = "create_by")
     private UserEntity create_by;
 
+
+
     public Shop() {}
-    public Shop(String name, String description, String shopImageUrl, UserEntity owner) {
+    public Shop(String name, String description, String shopImageUrl, UserEntity owner, Date last_modified_date) {
         this.name = name;
         this.description = description;
         this.shopImageUrl = shopImageUrl;
         this.owner = owner;
+        this.last_modified_date = last_modified_date;
     }
 
     public long getId() {
@@ -131,5 +137,13 @@ public class Shop {
 
     public void setCreate_by(UserEntity create_by) {
         this.create_by = create_by;
+    }
+
+    public Date getLast_modified_date() {
+        return last_modified_date;
+    }
+
+    public void setLast_modified_date(Date last_modified_date) {
+        this.last_modified_date = last_modified_date;
     }
 }

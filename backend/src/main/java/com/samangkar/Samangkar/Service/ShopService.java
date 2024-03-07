@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service;
 import com.samangkar.Samangkar.model.Shop;
 import com.samangkar.Samangkar.repository.ShopRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -42,6 +40,14 @@ public class ShopService {
         return dto;
     }
 
+    private AllShopDto convertToDtoFiltered(Shop shop) {
+        //FILTER OUT SHOP THAT ACTIVATE, TRENDING = FALSE
+        if (!shop.isActivated() || !shop.isTrending()) {
+            return null;
+        }
+        return convertToDto(shop);
+    }
+
     //GET ACTIVE SHOP
     public List<AllShopDto> getActiveShops() {
         List<AllShopDto> activeShops =  shopRepository.findByActivatedTrue();
@@ -64,7 +70,37 @@ public class ShopService {
 
     //INSERT
     public void createShop(ShopDto shopDTO) {
+        Shop shop = new Shop();
+        if(shopDTO.getName() != null || shopDTO.getDescription() != null){
+            shop.setName(shopDTO.getName());
+            shop.setDescription(shopDTO.getDescription());
+            System.out.println(shopDTO.getName());
+            System.out.println(shopDTO.getDescription());
+        }else{
+            throw new IllegalStateException("Shop name & description can not be null");
+        }
 
+        if(shopDTO.getShopImageUrl() != null){
+            shop.setShopImageUrl(shopDTO.getShopImageUrl());
+        }else{
+            shop.setShopImageUrl("defaultImage.jpg");
+        }
+        if(shopDTO.getActivate() != null || shopDTO.getTrending() != null){
+            shop.setActivated(Boolean.TRUE.equals(shopDTO.getActivate()));
+            shop.setTrending(shopDTO.getTrending());
+        }else{
+            shop.setActivated(false);
+            shop.setTrending(false);
+        }
+
+        //VALIDATE CREATE BY => USER TYPE = 1 ONLY
+        UserEntity create_by = userRepository.findById(shopDTO.getCreate_by()).get();
+        if(create_by.getUserRole() != null && create_by.getUserRole().getId() == 1){
+            shop.setCreate_by(create_by);
+        }else{
+            throw new IllegalStateException("create_by must be an id and can not be null");
+        }
+        //VALIDATE OWNER => TYPE = 2
         UserEntity owner = userRepository.findById(shopDTO.getOwnerId()).get();
         if (owner.getUserRole() != null && owner.getUserRole().getId() == 2) {
             Optional<Shop> existingShop = shopRepository.findByOwnerId(shopDTO.getOwnerId());
@@ -72,17 +108,21 @@ public class ShopService {
                     throw new IllegalStateException("User with ID " + shopDTO.getOwnerId() + " already owns a shop.");
                 }else{
                     System.out.println(owner);
-                    Shop shop = shopDTO.toEntity();
                     shop.setOwner(owner);
-                    shop.setName(shopDTO.getName());
-                    shop.setDescription(shopDTO.getDescription());
-//                    shop.setShopImageUrl(sh);
-                    shopRepository.save(shop);
                 }
 
         } else {
             throw new IllegalStateException("User with role_id = 2 & id =" + shopDTO.getOwnerId() + "does not exist");
         }
+        //VALIDATE LAST MODIFIED DATE
+        if(shopDTO.getLast_modified_date() != null){
+            shop.setLast_modified_date(shopDTO.getLast_modified_date());
+        }else{
+            shop.setLast_modified_date(new Date());
+        }
+
+        //SAVE THE SHOP
+        shopRepository.save(shop);
     }
 
     //UPDATE
@@ -133,7 +173,7 @@ public class ShopService {
     }
 
     //DELETE
-    public void DeleteShop(Long shopId){
+    public void deleteShop(Long shopId){
         Optional<Shop> existingShop = shopRepository.findById(shopId);
         if (existingShop.isPresent()) {
             Shop shop = existingShop.get();
@@ -145,4 +185,17 @@ public class ShopService {
             throw new ResourceNotFoundException("Shop with ID " + shopId + " not found");
         }
     }
+
+    //SEARCH SHOP BY NAME OR DESCRIPTION
+    public List<AllShopDto> searchShops(String keyword) {
+        List<Shop> shops = shopRepository.findByKeyword(keyword);
+
+        // Convert to DTOs, filtering out shops where activated = false and trending = false
+        List<AllShopDto> dtos = shops.stream()
+                .map(this::convertToDtoFiltered)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        return dtos;
+    }
+
 }
