@@ -1,7 +1,6 @@
 package com.samangkar.Samangkar.controller;
-import com.samangkar.Samangkar.dto.AllShopDto;
+import com.samangkar.Samangkar.dto.AddOrUpdateShopDto;
 import com.samangkar.Samangkar.dto.ShopDto;
-import com.samangkar.Samangkar.model.Shop;
 import com.samangkar.Samangkar.service.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,20 +18,14 @@ import static org.hibernate.sql.ast.SqlTreeCreationLogger.LOGGER;
 @CrossOrigin
 public class ShopController {
 
-    private ShopService shopService;
-
     @Autowired
-    ShopController(ShopService shopService)
-    {
-        this.shopService = shopService;
-
-    }
+    private ShopService shopService;
 
     //GET ALL SHOP (SPECIFIC COLUMNS)
     @GetMapping("/all")
-    public ResponseEntity<List<AllShopDto>> getAllShops() {
+    public ResponseEntity<List<ShopDto>> getAllShops() {
         try{
-            List<AllShopDto> shopDTOs = shopService.getAllShops();
+            List<ShopDto> shopDTOs = shopService.getAllShops();
             return new ResponseEntity<>(shopDTOs, HttpStatus.OK);
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
@@ -41,9 +34,9 @@ public class ShopController {
 
     //GET ACTIVE SHOP
     @GetMapping("/active")
-    public ResponseEntity<List<AllShopDto>> getAllActiveShops() {
+    public ResponseEntity<List<ShopDto>> getAllActiveShops() {
         try{
-            List<AllShopDto> shopDTOs = shopService.getActiveShops();
+            List<ShopDto> shopDTOs = shopService.getActiveShops();
             return new ResponseEntity<>(shopDTOs, HttpStatus.OK);
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
@@ -53,9 +46,9 @@ public class ShopController {
 
     //GET TRENDING SHOP
     @GetMapping("/trending")
-    public ResponseEntity<List<AllShopDto>> getTrendingShops() {
+    public ResponseEntity<List<ShopDto>> getTrendingShops() {
         try {
-            List<AllShopDto> trendingShops = shopService.getTrendingShops();
+            List<ShopDto> trendingShops = shopService.getTrendingShops();
             return ResponseEntity.ok(trendingShops);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList() );
@@ -64,11 +57,13 @@ public class ShopController {
 
     //INSERT
     @PostMapping("/insert")
-    public ResponseEntity<?> createShop(@RequestBody ShopDto shopDTO) {
+    public ResponseEntity<?> createShop(@RequestBody AddOrUpdateShopDto addShopDto) {
         try{
-            shopService.createShop(shopDTO);
-            System.out.println(shopDTO);
-            return ResponseEntity.ok("Shop created successfully");
+            shopService.createShop(addShopDto);
+            System.out.println(addShopDto);
+            System.out.println("Shop created successfully");
+            List<ShopDto> shopDTOs = shopService.getShopByUserId(addShopDto.getShopOwnerId());
+            return new ResponseEntity<>(shopDTOs, HttpStatus.OK);
         }catch(Exception e){
             LOGGER.error("An error occurred while creating the shop: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -78,10 +73,12 @@ public class ShopController {
 
     //UPDATE SHOP
     @PutMapping("/update")
-    public ResponseEntity<?> updateShop(@RequestParam(required = true) Long shopId, @RequestBody ShopDto updateDto){
+    public ResponseEntity<?> updateShop(@RequestParam(required = true) Long shopId, @RequestBody AddOrUpdateShopDto updateDto){
         try{
             shopService.updateShop(shopId, updateDto);
-            return ResponseEntity.ok("Shop updated successfully");
+            System.out.println("Shop updated successfully");
+            List<ShopDto> shopDTOs = shopService.getShopByUserId(updateDto.getShopOwnerId());
+            return new ResponseEntity<>(shopDTOs, HttpStatus.OK);
         }catch(Exception e){
             LOGGER.error("An error occurred while updating the shop: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -94,8 +91,11 @@ public class ShopController {
     @PostMapping("/delete")
     public ResponseEntity<?> deleteShop(@RequestParam(required = true) Long shopId){
         try{
+            Long ownerId = shopService.getShopById(shopId).getShopOwner().getId();
             shopService.deleteShop(shopId);
-            return ResponseEntity.ok("Shop delete successfully");
+            System.out.println("Shop deleted successfully");
+            List<ShopDto> shopDTOs = shopService.getShopByUserId(ownerId);
+            return new ResponseEntity<>(shopDTOs, HttpStatus.OK);
         }catch(Exception e){
             LOGGER.error("An error occurred while delete the shop: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -107,7 +107,7 @@ public class ShopController {
     @GetMapping("/search")
     public ResponseEntity<?> searchShop(@RequestParam(required = true) String keyword){
         try{
-            List<AllShopDto> results = shopService.searchShops(keyword);
+            List<ShopDto> results = shopService.searchShops(keyword);
             return new ResponseEntity<>(results, HttpStatus.OK);
         }catch(Exception e){
             LOGGER.error("An error occurred while updating the shop: {}", e.getMessage(), e);

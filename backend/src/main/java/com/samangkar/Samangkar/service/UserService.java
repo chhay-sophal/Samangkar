@@ -6,7 +6,6 @@ import com.samangkar.Samangkar.model.UserEntity;
 import com.samangkar.Samangkar.repository.RoleRepository;
 import com.samangkar.Samangkar.repository.UserRepository;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,7 +15,6 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -53,7 +51,12 @@ public class UserService {
     private UserDto createUserDto(UserEntity user) {
         // Check if the resource is not null before creating UserDto
         try {
-            Path imagePath = Paths.get("src/main/resources/images/" + user.getProfileUrl());
+            Path imagePath;
+            if (user.getProfileUrl() != null) {
+                imagePath = Paths.get("src/main/resources/images/" + user.getProfileUrl());
+            } else {
+                imagePath = Paths.get("src/main/resources/images/default-profile.png");
+            }
             // Read the image file into a byte array
             byte[] imageBytes = Files.readAllBytes(imagePath);
             String base64Image = Base64.getEncoder().encodeToString(imageBytes);

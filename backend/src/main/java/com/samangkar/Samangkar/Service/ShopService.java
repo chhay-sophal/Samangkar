@@ -1,6 +1,6 @@
 package com.samangkar.Samangkar.service;
 
-import com.samangkar.Samangkar.dto.AllShopDto;
+import com.samangkar.Samangkar.dto.AddOrUpdateShopDto;
 import com.samangkar.Samangkar.dto.ShopDto;
 import com.samangkar.Samangkar.model.UserEntity;
 import com.samangkar.Samangkar.repository.UserRepository;
@@ -13,6 +13,7 @@ import com.samangkar.Samangkar.repository.ShopRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 
 @Service
@@ -20,105 +21,111 @@ public class ShopService {
 
     @Autowired
     private ShopRepository shopRepository;
+
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserService userService;
 
-    //GET ALL
-    public List<AllShopDto> getAllShops() {
-        List<Shop> shops = (List<Shop>) shopRepository.findAll();
+    public ShopDto getShopById(Long shopId) {
+        Shop shop = shopRepository.findFirstById(shopId);
+
+        return convertToDto(shop);
+    }
+
+    public List<ShopDto> getShopByUserId(Long UserId) {
+        List<Shop> shops = shopRepository.findAllByOwnerIdAndDeletedAtIsNull(UserId);
         return shops.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
-    private AllShopDto convertToDto(Shop shop) {
-        AllShopDto dto = new AllShopDto();
-        dto.setName(shop.getName());
-        dto.setDescription(shop.getDescription());
-        dto.setShopImageUrl(shop.getShopImageUrl());
-        dto.setActivated(shop.isActivated());
-        dto.setTrending(shop.isTrending());
-        return dto;
+    //GET ALL
+    public List<ShopDto> getAllShops() {
+        List<Shop> shops = shopRepository.findAllByDeletedAtIsNull();
+        return shops.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
-    private AllShopDto convertToDtoFiltered(Shop shop) {
+    private ShopDto convertToDto(Shop shop) {
+        // ShopDto dto = new ShopDto();
+        // dto.setId(shop.getId());
+        // dto.setName(shop.getName());
+        // dto.setDescription(shop.getDescription());
+        // dto.setShopImageUrl(shop.getShopImageUrl());
+        // dto.setActivated(shop.isActive());
+        // dto.setTrending(shop.isTrending());
+        return new ShopDto(
+            shop.getId(), 
+            shop.getName(), 
+            shop.getShopImageUrl(), 
+            userService.getUserById(shop.getOwner().getId()),
+            shop.getDescription(),
+            shop.isTrending(),
+            shop.isActive(),
+            shop.getCreatedAt(),
+            shop.getUpdatedAt()
+        );
+    }
+
+    // Helper method to create a list of DTO from an Iterable of UserEntity
+    private List<ShopDto> createToDtoList(List<Shop> shops) {
+        return StreamSupport.stream(shops.spliterator(), false)
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    private ShopDto convertToDtoFiltered(Shop shop) {
         //FILTER OUT SHOP THAT ACTIVATE, TRENDING = FALSE
-        if (!shop.isActivated() || !shop.isTrending()) {
+        if (!shop.isActive() || !shop.isTrending()) {
             return null;
         }
         return convertToDto(shop);
     }
 
     //GET ACTIVE SHOP
-    public List<AllShopDto> getActiveShops() {
-        List<AllShopDto> activeShops =  shopRepository.findByActivatedTrue();
+    public List<ShopDto> getActiveShops() {
+        List<Shop> activeShops =  shopRepository.findAllByIsActiveIsTrue();
         if(activeShops.isEmpty()){
             throw new RuntimeException("No active shops found.");
         }
-        return activeShops;
+        return createToDtoList(activeShops);
     }
 
     //GET TRENDING SHOP
-    public List<AllShopDto> getTrendingShops() {
-        List<AllShopDto> trendingShops = shopRepository.findByTrendingTrue();
+    public List<ShopDto> getTrendingShops() {
+        List<Shop> trendingShops = shopRepository.findAllByIsTrendingIsTrue();
 
         if (trendingShops.isEmpty()) {
 
             throw new RuntimeException("No trending shops found.");
         }
-        return trendingShops;
+        return createToDtoList(trendingShops);
     }
 
     //INSERT
-    public void createShop(ShopDto shopDTO) {
+    @SuppressWarnings("null")
+    public void createShop(AddOrUpdateShopDto addShopDto) {
         Shop shop = new Shop();
-        if(shopDTO.getName() != null || shopDTO.getDescription() != null){
-            shop.setName(shopDTO.getName());
-            shop.setDescription(shopDTO.getDescription());
-            System.out.println(shopDTO.getName());
-            System.out.println(shopDTO.getDescription());
+        if(addShopDto.getShopName() != null || addShopDto.getDescription() != null){
+            shop.setName(addShopDto.getShopName());
+            shop.setDescription(addShopDto.getDescription());
+            System.out.println(addShopDto.getShopName());
+            System.out.println(addShopDto.getDescription());
         }else{
             throw new IllegalStateException("Shop name & description can not be null");
         }
 
-        if(shopDTO.getShopImageUrl() != null){
-            shop.setShopImageUrl(shopDTO.getShopImageUrl());
+        if(addShopDto.getShopImageUrl() != null){
+            shop.setShopImageUrl(addShopDto.getShopImageUrl());
         }else{
-            shop.setShopImageUrl("defaultImage.jpg");
-        }
-        if(shopDTO.getActivate() != null || shopDTO.getTrending() != null){
-            shop.setActivated(Boolean.TRUE.equals(shopDTO.getActivate()));
-            shop.setTrending(shopDTO.getTrending());
-        }else{
-            shop.setActivated(false);
-            shop.setTrending(false);
+            shop.setShopImageUrl(null);
         }
 
-        //VALIDATE CREATE BY => USER TYPE = 1 ONLY
-        UserEntity create_by = userRepository.findById(shopDTO.getCreate_by()).get();
-        if(create_by.getUserRole() != null && create_by.getUserRole().getId() == 1){
-            shop.setCreate_by(create_by);
-        }else{
-            throw new IllegalStateException("create_by must be an id and can not be null");
-        }
         //VALIDATE OWNER => TYPE = 2
-        UserEntity owner = userRepository.findById(shopDTO.getOwnerId()).get();
-        if (owner.getUserRole() != null && owner.getUserRole().getId() == 2) {
-            Optional<Shop> existingShop = shopRepository.findByOwnerId(shopDTO.getOwnerId());
-                if(existingShop.isPresent()){
-                    throw new IllegalStateException("User with ID " + shopDTO.getOwnerId() + " already owns a shop.");
-                }else{
-                    System.out.println(owner);
-                    shop.setOwner(owner);
-                }
-
+        UserEntity owner = userRepository.findById(addShopDto.getShopOwnerId()).get();
+        if (owner.getUserRole().getId() == 2) {
+            shop.setOwner(owner);
         } else {
-            throw new IllegalStateException("User with role_id = 2 & id =" + shopDTO.getOwnerId() + "does not exist");
-        }
-        //VALIDATE LAST MODIFIED DATE
-        if(shopDTO.getLast_modified_date() != null){
-            shop.setLast_modified_date(shopDTO.getLast_modified_date());
-        }else{
-            shop.setLast_modified_date(new Date());
+            throw new IllegalStateException("User with role_id = 2 & id =" + addShopDto.getShopOwnerId() + "does not exist");
         }
 
         //SAVE THE SHOP
@@ -126,42 +133,36 @@ public class ShopService {
     }
 
     //UPDATE
-    public void updateShop(Long shopId, ShopDto updateDto) {
+    @SuppressWarnings("null")
+    public void updateShop(Long shopId, AddOrUpdateShopDto updateDto) {
         Optional<Shop> existingShop = shopRepository.findById(shopId);
 
         if (existingShop.isPresent()) {
             Shop shopToUpdate = existingShop.get();
 
             // Update fields that present in request body only
-            if (updateDto.getName() != null) {
-                shopToUpdate.setName(updateDto.getName());
+            if (updateDto.getShopName() != null) {
+                shopToUpdate.setName(updateDto.getShopName());
             }
             if (updateDto.getDescription() != null) {
                 shopToUpdate.setDescription(updateDto.getDescription());
             }
-            if(updateDto.getActivate()!= null){
-                shopToUpdate.setActivated(updateDto.getActivate());
+            if(updateDto.getIsActive()!= null){
+                shopToUpdate.setActive(updateDto.getIsActive());
             }
-            if(updateDto.getTrending()!=null){
-                shopToUpdate.setTrending(updateDto.getTrending());
+            if(updateDto.getIsTrending()!=null){
+                shopToUpdate.setTrending(updateDto.getIsTrending());
             }
-            if(updateDto.getOwnerId()!=null){
-                UserEntity owner = userRepository.findById(updateDto.getOwnerId())
-                        .orElseThrow(() -> new ResourceNotFoundException("Owner not found with ID " + updateDto.getOwnerId()));
+            if(updateDto.getShopOwnerId()!=null){
+                UserEntity owner = userRepository.findById(updateDto.getShopOwnerId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Owner not found with ID " + updateDto.getShopOwnerId()));
                 //PRINT
-                System.out.println(updateDto.getOwnerId());
+                System.out.println(updateDto.getShopOwnerId());
                 System.out.println(owner.getUserRole().getId());
                 if (owner.getUserRole() == null || owner.getUserRole().getId() != 2) {
                     throw new IllegalStateException("User with ID " + owner.getId() + " does not have the required role (role_id = 2)");
                 }else{
-                    Optional<Shop> existingShopOwner = shopRepository.findByOwnerId(updateDto.getOwnerId());
-                    System.out.println(existingShopOwner);
-                    if(existingShopOwner.isPresent()){
-                        throw new IllegalStateException("User with ID " + updateDto.getOwnerId() + " already owns a shop.");
-                    }else{
-                        shopToUpdate.setOwner(owner);
-                    }
-
+                    shopToUpdate.setOwner(owner);
                 }
 
             }
@@ -173,13 +174,15 @@ public class ShopService {
     }
 
     //DELETE
+    @SuppressWarnings("null")
     public void deleteShop(Long shopId){
         Optional<Shop> existingShop = shopRepository.findById(shopId);
         if (existingShop.isPresent()) {
             Shop shop = existingShop.get();
             //PRINT
             System.out.println(shop);
-            shop.setActivated(false);
+            shop.setDeletedAt(new Date());
+            shop.setActive(false);
             shopRepository.save(shop);
         } else {
             throw new ResourceNotFoundException("Shop with ID " + shopId + " not found");
@@ -187,11 +190,11 @@ public class ShopService {
     }
 
     //SEARCH SHOP BY NAME OR DESCRIPTION
-    public List<AllShopDto> searchShops(String keyword) {
+    public List<ShopDto> searchShops(String keyword) {
         List<Shop> shops = shopRepository.findByKeyword(keyword);
 
         // Convert to DTOs, filtering out shops where activated = false and trending = false
-        List<AllShopDto> dtos = shops.stream()
+        List<ShopDto> dtos = shops.stream()
                 .map(this::convertToDtoFiltered)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
