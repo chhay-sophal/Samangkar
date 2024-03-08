@@ -2,6 +2,7 @@ package com.samangkar.Samangkar.repository;
 
 import com.samangkar.Samangkar.model.PackageModel;
 import com.samangkar.Samangkar.model.Shop;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -19,4 +20,8 @@ public interface PackageRepository extends PagingAndSortingRepository<PackageMod
 
     List<PackageModel> findByNameAndShop(@Param("name") String name, @Param("shop") Shop shop);
 
+    List<PackageModel> findByShop_Id(Long id);
+
+    // @Query("SELECT p FROM PackageModel p WHERE p.shop = :shop AND p.deletedAt IS NULL")
+    List<PackageModel> findNonDeletedPackagesByShop_Id(Long shopId);
 }

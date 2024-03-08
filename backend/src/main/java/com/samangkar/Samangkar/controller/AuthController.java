@@ -11,9 +11,9 @@ import com.samangkar.Samangkar.repository.UserRepository;
 import com.samangkar.Samangkar.security.JwtGenerator;
 import com.samangkar.Samangkar.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,21 +22,23 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
+    @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private RoleRepository roleRepository;
+    @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
     private JwtGenerator jwtGenerator;
+    @Autowired
     private UserService userService;
 
-    @Autowired
     public AuthController(AuthenticationManager authenticationManager,
                           UserRepository userRepository,
                           RoleRepository roleRepository,
@@ -49,6 +51,18 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
         this.jwtGenerator = jwtGenerator;
         this.userService = userService;
+    }
+
+    @PostMapping("/check-password")
+    public ResponseEntity<?> checkPassword(@RequestBody LoginDto loginDto) {
+        UserEntity user = userRepository.findFirstByUsername(loginDto.getUsername());
+        if (user != null) {
+            String hashedPassword = user.getPassword();
+            boolean isPasswordMatch = passwordEncoder.matches(loginDto.getPassword(), hashedPassword);
+            return ResponseEntity.ok(isPasswordMatch);
+        } else {
+            return ResponseEntity.ok("User not found!");
+        }
     }
 
     @GetMapping("profile")

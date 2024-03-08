@@ -1,7 +1,16 @@
 package com.samangkar.Samangkar.model;
 
-import jakarta.persistence.*;
+import java.util.Date;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 @Entity
 public class UserCard {
 
@@ -12,9 +21,33 @@ public class UserCard {
     @ManyToOne
     private UserEntity user;
 
-    @ManyToOne
-    private Shop shop;
+    // @ManyToOne
+    // private Shop shop;
 
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+
+    @Column(name = "deleted_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = new Date();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = new Date();
+    }
+    
     @ManyToOne
     private ServiceModel service;
 
@@ -24,67 +57,12 @@ public class UserCard {
 
     public UserCard() {}
 
-    public UserCard(UserEntity user, Shop shop, ServiceModel service, double total, int quantity) {
+    public UserCard(UserEntity user, ServiceModel service, double total, int quantity) {
         this.user = user;
-        this.shop = shop;
+        // this.shop = shop;
         this.service = service;
         this.total = total;
         this.quantity = quantity;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
-    }
-
-    public Shop getShop() {
-        return shop;
-    }
-
-    public void setShop(Shop shop) {
-        this.shop = shop;
-    }
-
-    public ServiceModel getService() {
-        return service;
-    }
-
-    public void setService(ServiceModel service) {
-        this.service = service;
-    }
-
-    public boolean isPaid() {
-        return paid;
-    }
-
-    public void setPaid(boolean paid) {
-        this.paid = paid;
-    }
-
-    public double getTotal() {
-        return total;
-    }
-
-    public void setTotal(double total) {
-        this.total = total;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
 }

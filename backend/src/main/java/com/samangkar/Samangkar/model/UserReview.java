@@ -1,8 +1,11 @@
 package com.samangkar.Samangkar.model;
 
-import jakarta.persistence.*;
-
 import java.util.Date;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import jakarta.persistence.*;
 
 @Entity
 public class UserReview {
@@ -21,23 +24,38 @@ public class UserReview {
     private String description;
     private int stars;
 
-    private Boolean is_deleted;
-    private Boolean is_updated;
-    private Date create_date;
-    private Date last_modified_date;
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+
+    @Column(name = "deleted_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = new Date();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = new Date();
+    }
 
     public UserReview() {}
 
-    public UserReview(UserEntity user, Shop shop, int stars, String title, String description,Boolean is_deleted, Boolean is_updated, Date create_date, Date last_modified_date) {
+    public UserReview(UserEntity user, Shop shop, int stars, String title, String description) {
         this.user = user;
         this.shop = shop;
         this.stars = stars;
         this.title = title;
         this.description = description;
-        this.is_deleted = is_deleted;
-        this.is_updated = is_updated;
-        this.create_date = create_date;
-        this.last_modified_date = last_modified_date;
     }
 
     public Long getId() {
@@ -88,35 +106,27 @@ public class UserReview {
         this.stars = stars;
     }
 
-    public Boolean getIs_deleted() {
-        return is_deleted;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setIs_deleted(Boolean is_deleted) {
-        this.is_deleted = is_deleted;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public Boolean getIs_updated() {
-        return is_updated;
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setIs_updated(Boolean is_updated) {
-        this.is_updated = is_updated;
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
-    public Date getCreate_date() {
-        return create_date;
+    public Date getDeletedAt() {
+        return deletedAt;
     }
 
-    public void setCreate_date(Date create_date) {
-        this.create_date = create_date;
-    }
-
-    public Date getLast_modified_date() {
-        return last_modified_date;
-    }
-
-    public void setLast_modified_date(Date last_modified_date) {
-        this.last_modified_date = last_modified_date;
+    public void setDeletedAt(Date deletedAt) {
+        this.deletedAt = deletedAt;
     }
 }

@@ -1,33 +1,29 @@
 package com.samangkar.Samangkar.dto;
 
-import com.samangkar.Samangkar.model.Shop;
+import java.util.Date;
+
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
-
+@Data
 @Getter
 @Setter
 public class ShopDto {
-
-    private Long id;
+    private Long shopId;
     private String name;
-    private String description;
     private String shopImageUrl;
-    private Long ownerId;
-    private Boolean trending;
-    private Boolean activate;
-    private Long create_by;
-    private Date last_modified_date;
+    private UserDto shopOwner;
+    private Date createdAt;
+    private Date updatedAt;
 
+    public ShopDto(Long shopId, String name, String shopImageUrl, UserDto shopOwner, Date createdAt, Date updatedAt) {
+        this.shopId = shopId;
+        this.name = name;
+        this.shopImageUrl = shopImageUrl;
+        this.shopOwner = shopOwner;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 
-//    public Shop toEntity() {
-//        Shop shop = new Shop();
-//        shop.setName(name);
-//        shop.setDescription(description);
-//        shop.setShopImageUrl(shopImageUrl);
-//        shop.setTrending(trending);
-//        shop.setActivated(activate);
-//        return shop;
-//    }
 }

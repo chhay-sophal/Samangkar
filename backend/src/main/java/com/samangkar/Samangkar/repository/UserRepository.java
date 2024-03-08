@@ -1,5 +1,6 @@
 package com.samangkar.Samangkar.repository;
 
+import com.samangkar.Samangkar.model.Role;
 import com.samangkar.Samangkar.model.UserEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -19,9 +20,15 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, L
 
     UserEntity findFirstByUsername(@Param("username") String username);
 
+    UserEntity findFirstById(Long id);
+
     Boolean existsByUsername(String username);
 
     Optional<UserEntity> findByIdAndUserRole_Id(Long id, Long roleId);
+    Boolean existsByEmail(String email);
+
+    List<UserEntity> findByUserRole(Role userRole);
+
 }
 
 

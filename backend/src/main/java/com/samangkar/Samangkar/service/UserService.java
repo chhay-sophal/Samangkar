@@ -1,9 +1,22 @@
 package com.samangkar.Samangkar.service;
 
 import com.samangkar.Samangkar.dto.UserDto;
+import com.samangkar.Samangkar.model.Role;
 import com.samangkar.Samangkar.model.UserEntity;
+import com.samangkar.Samangkar.repository.RoleRepository;
 import com.samangkar.Samangkar.repository.UserRepository;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Base64;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,13 +25,64 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
+    public List<UserDto> getAllUsers() {
+        Iterable<UserEntity> users = userRepository.findAll();
+        return createUserDtoList(users);
+    }
+
+    public List<UserDto> getAllUsersByRole(String userRole) {
+        Role role = roleRepository.findByName(userRole).orElseThrow(() -> new RuntimeException("Role not found"));
+        Iterable<UserEntity> users = userRepository.findByUserRole(role);
+        return createUserDtoList(users);
+    }
+
     public UserDto getUserDetails(String username) {
         UserEntity user = userRepository.findFirstByUsername(username);
-        Long userId = user.getId();
-        String email = user.getEmail();
-        String profileUrl = user.getProfileUrl();
+        return createUserDto(user);
+    }
 
-        return new UserDto(userId, username, email, profileUrl);
+    public UserDto getUserById(Long userId) {
+        UserEntity user = userRepository.findFirstById(userId);
+        return createUserDto(user);
+    }
+
+    // Helper method to create a UserDto from a UserEntity
+    private UserDto createUserDto(UserEntity user) {
+        // Check if the resource is not null before creating UserDto
+        try {
+            Path imagePath = Paths.get("src/main/resources/images/" + user.getProfileUrl());
+            // Read the image file into a byte array
+            byte[] imageBytes = Files.readAllBytes(imagePath);
+            String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+
+            // String base64Image = Base64.getEncoder().encodeToString(imagePath.getBytes());
+            // Create a ByteArrayResource from the byte array
+            // ByteArrayResource resource = new ByteArrayResource(imageBytes);
+            return new UserDto(
+                    user.getId(),
+                    user.getUsername(),
+                    user.getEmail(),
+                    base64Image,
+                    user.getUserRole().getName(),
+                    user.getCreatedAt(),
+                    user.getUpdatedAt()
+            );
+        } catch (Exception e) {
+            // Handle the case where the resource is null (e.g., log a warning)
+            // You may also choose to return a default UserDto or throw an exception.
+            // For demonstration, a default UserDto is returned here.
+            return new UserDto(user.getId(), user.getUsername(), user.getEmail(), null, user.getUserRole().getName(), user.getCreatedAt(), user.getUpdatedAt());
+        }
+    }
+
+    // Helper method to create a list of UserDto from an Iterable of UserEntity
+    private List<UserDto> createUserDtoList(Iterable<UserEntity> users) {
+        return StreamSupport.stream(users.spliterator(), false)
+                .map(this::createUserDto)
+                .collect(Collectors.toList());
     }
 
     //CHECK IF A CERTAIN OWNER_ID EXIST
