@@ -46,10 +46,20 @@ public class PackageController {
     @Autowired
     private ServiceRepository serviceRepository;
     
-    @GetMapping("get-all/{shopId}")
-    public ResponseEntity<?> getAllShopPackages(@PathVariable Long shopId) {
+    @GetMapping("get-all")
+    public ResponseEntity<?> getAllShopPackages() {
         try {
-            List<PackageDto> packages = packageService.getAllPackages(shopId);
+            List<PackageDto> packages = packageService.getAllPackages();
+            return ResponseEntity.ok(packages);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
+        }
+    }
+
+    @GetMapping("get-all/{shopId}")
+    public ResponseEntity<?> getAllShopPackagesByShopId(@PathVariable Long shopId) {
+        try {
+            List<PackageDto> packages = packageService.getAllPackagesByShopId(shopId);
             return ResponseEntity.ok(packages);
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
@@ -71,7 +81,7 @@ public class PackageController {
             packageModel.setServices(services);
             packageRepository.save(packageModel);
 
-            List<PackageDto> packages = packageService.getAllPackages(request.getShopId());
+            List<PackageDto> packages = packageService.getAllPackagesByShopId(request.getShopId());
             return ResponseEntity.ok(packages);
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
@@ -99,7 +109,7 @@ public class PackageController {
                 packageModel.setShop(shop);
                 packageRepository.save(packageModel);
 
-                List<PackageDto> packages = packageService.getAllPackages(request.getShopId());
+                List<PackageDto> packages = packageService.getAllPackagesByShopId(request.getShopId());
                 return ResponseEntity.ok(packages);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Package not found.");
@@ -122,7 +132,7 @@ public class PackageController {
                 packageRepository.save(packageModel); // Save the updated model
     
                 Long shopId = packageModel.getShop().getId();
-                List<PackageDto> packages = packageService.getAllPackages(shopId);
+                List<PackageDto> packages = packageService.getAllPackagesByShopId(shopId);
                 return ResponseEntity.ok(packages);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Package not found");

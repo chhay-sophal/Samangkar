@@ -40,8 +40,6 @@ public class UserEntity {
 
     private String profileUrl;
 
-    private boolean active = true;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserFavorite> favoriteShops;
 

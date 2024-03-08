@@ -42,7 +42,9 @@ public class FavoriteShopService {
                         userService.getUserById(favorite.getUser().getId()),
                         shopService.getShopById(favorite.getShop().getId()),
                         favorite.getCreatedAt(), 
-                        favorite.getUpdatedAt()))
+                        favorite.getUpdatedAt(),
+                        favorite.getDeletedAt()
+                ))
                 .collect(Collectors.toList());
 
         return favorites;

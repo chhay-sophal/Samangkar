@@ -13,15 +13,17 @@ public class ShopContactDto {
     private ShopDto shop;
     private Date createdAt;
     private Date updatedAt;
+    private Date deletedAt;
     
     public ShopContactDto(Long contactId, String contactType, String url, ShopDto shop, Date createdAt,
-            Date updatedAt) {
+            Date updatedAt, Date deletedAt) {
         this.contactId = contactId;
         this.contactType = contactType;
         this.url = url;
         this.shop = shop;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
 
 }

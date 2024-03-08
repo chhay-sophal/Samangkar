@@ -11,12 +11,14 @@ public class ContactTypeDto {
     private String platForm;
     private Date createdAt;
     private Date updatedAt;
+    private Date deletedAt;
 
-    public ContactTypeDto(Long id, String platForm, Date createdAt, Date updatedAt) {
+    public ContactTypeDto(Long id, String platForm, Date createdAt, Date updatedAt, Date deletedAt) {
         this.id = id;
         this.platForm = platForm;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
 
 }

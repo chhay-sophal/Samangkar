@@ -15,9 +15,10 @@ public class PackageDto {
     private List<ServiceDto> services;
     private Date createdAt;
     private Date updatedAt;
+    private Date deletedAt;
 
     public PackageDto(Long packageId, String packageName, String description, Long shopId, List<ServiceDto> services,
-            Date createdAt, Date updatedAt) {
+            Date createdAt, Date updatedAt, Date deletedAt) {
         this.packageId = packageId;
         this.packageName = packageName;
         this.description = description;
@@ -25,6 +26,7 @@ public class PackageDto {
         this.services = services;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
 
 }

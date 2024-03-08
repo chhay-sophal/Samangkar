@@ -16,20 +16,20 @@ public class ShopDto {
     private UserDto shopOwner;
     private String description;
     private Boolean isTrending;
-    private Boolean isActive;
     private Date createdAt;
     private Date updatedAt;
+    private Date deletedAt;
 
-    public ShopDto(Long shopId, String name, String shopImageUrl, UserDto shopOwner, String description, Boolean isTreading, Boolean isActive, Date createdAt, Date updatedAt) {
+    public ShopDto(Long shopId, String name, String shopImageUrl, UserDto shopOwner, String description, Boolean isTreading, Date createdAt, Date updatedAt, Date deletedAt) {
         this.shopId = shopId;
         this.name = name;
         this.shopImageUrl = shopImageUrl;
         this.shopOwner = shopOwner;
         this.description = description;
         this.isTrending = isTreading;
-        this.isActive = isActive;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
 
 }

@@ -14,9 +14,10 @@ public class ServiceDto {
     private ShopDto shop;
     private Date createdAt;
     private Date updatedAt;
+    private Date deletedAt;
 
     public ServiceDto(Long id, String name, String description, double unitPrice, ShopDto shop,
-            Date createdAt, Date updatedAt) {
+            Date createdAt, Date updatedAt, Date deletedAt) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -24,6 +25,7 @@ public class ServiceDto {
         this.shop = shop;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
 
 }

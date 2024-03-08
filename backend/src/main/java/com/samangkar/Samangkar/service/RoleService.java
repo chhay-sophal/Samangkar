@@ -24,7 +24,8 @@ public class RoleService {
                     role.getId(), 
                     role.getName(), 
                     role.getCreatedAt(), 
-                    role.getUpdatedAt()
+                    role.getUpdatedAt(),
+                    role.getDeletedAt()
                 ))
                 .collect(Collectors.toList());
         return roleDtos;

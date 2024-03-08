@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 //@RepositoryRestResource(collectionResourceRel = "shops", path = "shops")
 @Repository
@@ -25,13 +24,14 @@ public interface ShopRepository extends PagingAndSortingRepository<Shop, Long>,
     // @Query("SELECT new com.samangkar.Samangkar.dto.AllShopDto(s.id, s.name, s.description, s.shopImageUrl, s.isActive, s.isTrending) FROM Shop s WHERE s.isTrending = true")
     // List<AllShopDto> findByTrendingTrue(); //get Trending shop
 
-    List<Shop> findAllByIsActiveIsTrue();
-
     List<Shop> findAllByIsTrendingIsTrue();
 
     boolean existsByOwner_Id(Long ownerId);
 
     List<Shop> findAllByDeletedAtIsNull();
+
+    List<Shop> findAllByDeletedAtIsNotNull();
+
     List<Shop> findAllByOwnerIdAndDeletedAtIsNull(Long ownerId);
 
     //FIND SHOP BY NAME AND DESCRIPTION

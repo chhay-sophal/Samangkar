@@ -14,7 +14,7 @@ import static org.hibernate.sql.ast.SqlTreeCreationLogger.LOGGER;
 
 
 @RestController
-@RequestMapping("api/shop")
+@RequestMapping("api/shops")
 @CrossOrigin
 public class ShopController {
 
@@ -22,7 +22,7 @@ public class ShopController {
     private ShopService shopService;
 
     //GET ALL SHOP (SPECIFIC COLUMNS)
-    @GetMapping("/all")
+    @GetMapping("/get-all")
     public ResponseEntity<List<ShopDto>> getAllShops() {
         try{
             List<ShopDto> shopDTOs = shopService.getAllShops();

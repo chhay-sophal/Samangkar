@@ -35,7 +35,8 @@ public class ShopContactService {
                     contact.getUrl(),
                     shopService.getShopById(contact.getShop().getId()),
                     contact.getCreatedAt(),
-                    contact.getUpdatedAt()
+                    contact.getUpdatedAt(),
+                    contact.getDeletedAt()
                 ))
                 .collect(Collectors.toList());
     } 

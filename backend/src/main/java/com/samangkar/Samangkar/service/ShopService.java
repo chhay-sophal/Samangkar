@@ -41,7 +41,9 @@ public class ShopService {
 
     //GET ALL
     public List<ShopDto> getAllShops() {
-        List<Shop> shops = shopRepository.findAllByDeletedAtIsNull();
+        Iterable<Shop> shopsIterable = shopRepository.findAll();
+        List<Shop> shops = StreamSupport.stream(shopsIterable.spliterator(), false)
+                                    .collect(Collectors.toList());
         return shops.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
@@ -60,9 +62,9 @@ public class ShopService {
             userService.getUserById(shop.getOwner().getId()),
             shop.getDescription(),
             shop.isTrending(),
-            shop.isActive(),
             shop.getCreatedAt(),
-            shop.getUpdatedAt()
+            shop.getUpdatedAt(),
+            shop.getDeletedAt()
         );
     }
 
@@ -75,7 +77,7 @@ public class ShopService {
 
     private ShopDto convertToDtoFiltered(Shop shop) {
         //FILTER OUT SHOP THAT ACTIVATE, TRENDING = FALSE
-        if (!shop.isActive() || !shop.isTrending()) {
+        if (shop.getDeletedAt() != null || !shop.isTrending()) {
             return null;
         }
         return convertToDto(shop);
@@ -83,11 +85,16 @@ public class ShopService {
 
     //GET ACTIVE SHOP
     public List<ShopDto> getActiveShops() {
-        List<Shop> activeShops =  shopRepository.findAllByIsActiveIsTrue();
+        List<Shop> activeShops =  shopRepository.findAllByDeletedAtIsNull();
         if(activeShops.isEmpty()){
             throw new RuntimeException("No active shops found.");
         }
         return createToDtoList(activeShops);
+    }
+
+    public List<ShopDto> getInActiveShops() {
+        List<Shop> shops = shopRepository.findAllByDeletedAtIsNotNull();
+        return shops.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     //GET TRENDING SHOP
@@ -147,9 +154,6 @@ public class ShopService {
             if (updateDto.getDescription() != null) {
                 shopToUpdate.setDescription(updateDto.getDescription());
             }
-            if(updateDto.getIsActive()!= null){
-                shopToUpdate.setActive(updateDto.getIsActive());
-            }
             if(updateDto.getIsTrending()!=null){
                 shopToUpdate.setTrending(updateDto.getIsTrending());
             }
@@ -182,7 +186,7 @@ public class ShopService {
             //PRINT
             System.out.println(shop);
             shop.setDeletedAt(new Date());
-            shop.setActive(false);
+            shop.setTrending(false);
             shopRepository.save(shop);
         } else {
             throw new ResourceNotFoundException("Shop with ID " + shopId + " not found");

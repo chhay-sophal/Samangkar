@@ -11,12 +11,14 @@ public class RoleDto {
     private String roleName;
     private Date createdAt;
     private Date updatedAt;
+    private Date deletedAt;
 
-    public RoleDto(Long roleId, String roleName, Date createdAt, Date updatedAt) {
+    public RoleDto(Long roleId, String roleName, Date createdAt, Date updatedAt, Date deletedAt) {
         this.roleId = roleId;
         this.roleName = roleName;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
 
 }

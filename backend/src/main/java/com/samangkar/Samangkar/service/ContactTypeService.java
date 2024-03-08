@@ -25,7 +25,8 @@ public class ContactTypeService {
                 contactType.getId(), 
                 contactType.getPlatform(),
                 contactType.getCreatedAt(), 
-                contactType.getUpdatedAt()
+                contactType.getUpdatedAt(),
+                contactType.getDeletedAt()
             ))
             .collect(Collectors.toList());
     }

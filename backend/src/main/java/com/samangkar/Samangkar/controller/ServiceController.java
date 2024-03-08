@@ -38,7 +38,7 @@ public class ServiceController {
 
     @GetMapping("get-all/{shopId}")
     public ResponseEntity<?> getAllShopServices(@PathVariable Long shopId) {
-        List<ServiceDto> shopContacts = serviceService.getAllShopServices(shopId);
+        List<ServiceDto> shopContacts = serviceService.getAllShopServicesByShopId(shopId);
         return ResponseEntity.ok(shopContacts);
     }
     
@@ -48,7 +48,7 @@ public class ServiceController {
             Shop shop = shopRepository.findFirstById(request.getShopId());
             ServiceModel serviceModel = new ServiceModel(request.getServiceName(), request.getDescription(), shop, request.getUnitPrice());
             serviceRepository.save(serviceModel);
-            List<ServiceDto> shopContacts = serviceService.getAllShopServices(request.getShopId());
+            List<ServiceDto> shopContacts = serviceService.getAllShopServicesByShopId(request.getShopId());
             return ResponseEntity.ok(shopContacts);
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
@@ -65,7 +65,7 @@ public class ServiceController {
                 ServiceModel service = serviceRepository.findFirstById(request.getServiceId());
                 service.setDeletedAt(new Date());
                 serviceRepository.save(service);
-                List<ServiceDto> shopContacts = serviceService.getAllShopServices(request.getShopId());
+                List<ServiceDto> shopContacts = serviceService.getAllShopServicesByShopId(request.getShopId());
                 return ResponseEntity.ok(shopContacts);
             }
         } catch (Exception ex) {

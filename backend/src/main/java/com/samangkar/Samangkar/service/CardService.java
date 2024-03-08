@@ -37,7 +37,8 @@ public class CardService {
                         card.getTotal(),
                         card.isPaid(),
                         card.getCreatedAt(),
-                        card.getUpdatedAt()
+                        card.getUpdatedAt(),
+                        card.getDeletedAt()
                 ))
                 .collect(Collectors.toList());
     }

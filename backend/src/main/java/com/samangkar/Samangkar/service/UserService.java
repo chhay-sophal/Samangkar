@@ -71,13 +71,23 @@ public class UserService {
                     base64Image,
                     user.getUserRole().getName(),
                     user.getCreatedAt(),
-                    user.getUpdatedAt()
+                    user.getUpdatedAt(),
+                    user.getDeletedAt()
             );
         } catch (Exception e) {
             // Handle the case where the resource is null (e.g., log a warning)
             // You may also choose to return a default UserDto or throw an exception.
             // For demonstration, a default UserDto is returned here.
-            return new UserDto(user.getId(), user.getUsername(), user.getEmail(), null, user.getUserRole().getName(), user.getCreatedAt(), user.getUpdatedAt());
+            return new UserDto(
+                user.getId(), 
+                user.getUsername(), 
+                user.getEmail(), 
+                null, 
+                user.getUserRole().getName(), 
+                user.getCreatedAt(), 
+                user.getUpdatedAt(),
+                user.getDeletedAt()
+            );
         }
     }
 
