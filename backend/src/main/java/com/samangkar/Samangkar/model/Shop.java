@@ -27,8 +27,8 @@ public class Shop {
     @JoinColumn(name = "owner_id")
     private UserEntity owner;
 
-    private boolean activated;
-    private boolean trending;
+    private boolean isActive;
+    private boolean isTrending;
 
     @OneToMany(mappedBy = "shop")
     private List<PackageModel> packageModels;
@@ -69,6 +69,8 @@ public class Shop {
         this.description = description;
         this.shopImageUrl = shopImageUrl;
         this.owner = owner;
+        this.isActive = true;
+        this.isTrending = false;
     }
 
 }

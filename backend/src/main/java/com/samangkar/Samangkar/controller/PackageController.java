@@ -3,7 +3,7 @@ package com.samangkar.Samangkar.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.samangkar.Samangkar.dto.AddOrModifyPackageDto;
+import com.samangkar.Samangkar.dto.AddOrUpdatePackageDto;
 import com.samangkar.Samangkar.dto.PackageDto;
 import com.samangkar.Samangkar.model.PackageModel;
 import com.samangkar.Samangkar.model.ServiceModel;
@@ -58,7 +58,7 @@ public class PackageController {
     
     @SuppressWarnings("null")
     @PostMapping("add")
-    public ResponseEntity<?> addPackage(@RequestBody AddOrModifyPackageDto request) {
+    public ResponseEntity<?> addPackage(@RequestBody AddOrUpdatePackageDto request) {
         try {
             Shop shop = shopRepository.findFirstById(request.getShopId());
             PackageModel packageModel = new PackageModel(request.getPackageName(), request.getDescription(), shop);
@@ -80,7 +80,7 @@ public class PackageController {
 
     @SuppressWarnings("null")
     @PostMapping("modify/{packageId}")
-    public ResponseEntity<?> modifyPackage(@PathVariable Long packageId, @RequestBody AddOrModifyPackageDto request) {
+    public ResponseEntity<?> modifyPackage(@PathVariable Long packageId, @RequestBody AddOrUpdatePackageDto request) {
         try {
             Optional<PackageModel> optionalPackage = packageRepository.findById(packageId);
 

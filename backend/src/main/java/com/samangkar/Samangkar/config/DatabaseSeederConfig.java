@@ -43,6 +43,14 @@ public class DatabaseSeederConfig {
             seedUser(userRepository, "user1", "user1@example.com", "user1234", roleRepository.findFirstByName("USER"));
             seedUser(userRepository, "user2", "user2@example.com", "user5678", roleRepository.findFirstByName("USER"));
             seedUser(userRepository, "user3", "user3@example.com", "user8910", roleRepository.findFirstByName("USER"));
+            // Seed More users
+            seedUser(userRepository, "shop_owner1a", "shop_owner1a@example.com", "admin1234", roleRepository.findFirstByName("SHOP_OWNER"));
+            seedUser(userRepository, "shop_owner1b", "shop_owner1b@example.com", "admin5678", roleRepository.findFirstByName("SHOP_OWNER"));
+            seedUser(userRepository, "shop_owner2d", "shop_owner2d@example.com", "shop5678", roleRepository.findFirstByName("SHOP_OWNER"));
+            seedUser(userRepository, "shop_owner3c", "shop_owner3c@example.com", "shop8910", roleRepository.findFirstByName("SHOP_OWNER"));
+            seedUser(userRepository, "shop_owner1q", "shop_owner1q@example.com", "user1234", roleRepository.findFirstByName("SHOP_OWNER"));
+            seedUser(userRepository, "shop_owner1e", "shop_owner1e@example.com", "user5678", roleRepository.findFirstByName("SHOP_OWNER"));
+            seedUser(userRepository, "shop_owner1f", "shop_owner1f@example.com", "user8910", roleRepository.findFirstByName("SHOP_OWNER"));
 
             // Seed contact types
             seedContactType(contactTypeRepository, "Phone Number");
@@ -127,21 +135,25 @@ public class DatabaseSeederConfig {
                     shopRepository.findFirstByName("shop1"),
                     5,
                     "This shop is good",
-                    "Description of this review.");
+                    "Description of this review."
+            );
+            ;
             seedUserReview(
                     userReviewRepository,
                     userRepository.findFirstByUsername("user1"),
                     shopRepository.findFirstByName("shop2"),
                     3,
                     "This shop is not good",
-                    "Description of this review.");
+                    "Description of this review."
+            );
             seedUserReview(
                     userReviewRepository,
                     userRepository.findFirstByUsername("user2"),
                     shopRepository.findFirstByName("shop2"),
                     4,
                     "This shop is almost good",
-                    "Description of this review.");
+                    "Description of this review."
+            );
 
             // After seeding data, display this message
             System.out.println("Data Seeding: Data seeded successfully!");
