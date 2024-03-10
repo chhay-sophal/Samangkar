@@ -18,11 +18,11 @@
           <!-- <div class="menu"><router-link to="/add">Add</router-link></div> -->
           <!-- <div class="menu"><router-link to="/user"><i class="fas fa-users"></i> Administrators</router-link></div>
           <div class="menu"><router-link to="/user"><i class="fas fa-users"></i> Shop Owners</router-link></div> -->
-          <div class="menu"><router-link to="/user"><i class="fas fa-users"></i> Users</router-link></div>
-          <div class="menu"><router-link to="/shop"><i class="fas fa-store"></i> Shop</router-link></div>
-          <div class="menu"><router-link to="/package"><i class="fas fa-shopping-cart"></i> Package</router-link></div>
+          <div class="menu"><router-link to="/admin/users"><i class="fas fa-users"></i> Users</router-link></div>
+          <div class="menu"><router-link to="/admin/shops"><i class="fas fa-store"></i> Shop</router-link></div>
+          <div class="menu"><router-link to="/admin/packages"><i class="fas fa-shopping-cart"></i> Package</router-link></div>
           <!-- <div class="menu"><router-link to="/contact"><i class="fas fa-box"></i> contact</router-link></div> -->
-          <div class="menu"><router-link to="/review"><i class="fas fa-comments"></i> Review</router-link></div>
+          <div class="menu"><router-link to="/admin/reviews"><i class="fas fa-comments"></i> Review</router-link></div>
         </ul>
       </div>
     </nav>

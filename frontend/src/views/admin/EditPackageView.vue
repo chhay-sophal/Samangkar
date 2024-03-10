@@ -2,7 +2,7 @@
     <div class="admin-dashboard">
       <Sidebar :links="sidebarLinks" />
       <div class="main-content">
-        <router-link to="/package" class="back-icon">
+        <router-link to="/admin/packages" class="back-icon">
           <i class="mdi mdi-arrow-left">Back</i> 
         </router-link>
         <div class="admin-form">
@@ -75,7 +75,7 @@ export default {
     
         console.log("Package updated:", this.packageInfo);
         alert("Package updated successfuly!");
-        this.$router.push("/package");
+        this.$router.push("/admin/packages");
       } catch (error) {
         console.error(error);
       }

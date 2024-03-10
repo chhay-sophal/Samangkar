@@ -24,7 +24,7 @@
               </div>
             </div>
           </div>
-          <router-link :to="`/user/edit/${userInfo.id}`"><button class="edit-button">Edit</button></router-link>
+          <router-link :to="`/admin/users/edit/${userInfo.id}`"><button class="edit-button">Edit</button></router-link>
 
         </div>
       </div>

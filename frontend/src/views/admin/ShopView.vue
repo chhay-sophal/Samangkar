@@ -43,7 +43,7 @@
             <td>{{ !shop.deletedAt ? "Active" : "Inactive" }}</td>
             <td>{{ shop.isTrending ? "Yes" : "No" }}</td>
             <td>
-              <router-link :to="`/shop/edit/${shop.id}`">
+              <router-link :to="`/admin/shops/edit/${shop.id}`">
                 <button class="action-button edit-button">
                   Edit
                 </button>

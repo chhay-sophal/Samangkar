@@ -35,9 +35,9 @@
                 </div>
               </td>
               <td>
-                <router-link :to="`/user/edit/${user.id}`"><button class="edit-button">Edit</button></router-link>
+                <router-link :to="`/admin/users/edit/${user.id}`"><button class="edit-button">Edit</button></router-link>
                 <button v-if="!user.deletedAt" class="delete-button" @click="deleteUser(user.id)">Delete</button>
-                <router-link :to="`/user/detail/${user.id}`"><button class="detail-button" >Details</button></router-link>
+                <router-link :to="`/admin/users/detail/${user.id}`"><button class="detail-button" >Detail</button></router-link>
               </td>
             </tr>
           </tbody>
@@ -47,7 +47,7 @@
       <div class="pagination">
        <Pagination :currentPage="currentPage" :totalPages="totalPages" :first="first" :last="last" @page-change="handlePageChange"/>
       </div>
-      <router-link to="/add"><button class="add-user-button">Add User</button></router-link>
+      <router-link to="/admin/users/add"><button class="add-user-button">Add User</button></router-link>
     </div>
   </div>
 </template>

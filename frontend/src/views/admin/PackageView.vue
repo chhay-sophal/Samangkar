@@ -3,7 +3,7 @@
       <Sidebar :links="sidebarLinks" />
       <div class="main-content">
         <h2>Package Table</h2>
-        <router-link to="/addpackage"><button class="add-package-button">Add Package</button></router-link>
+        <router-link to="/admin/packages/add"><button class="add-package-button">Add Package</button></router-link>
         <div class="search-container">
           <label for="search">Search:</label>
           <input type="text" id="search" v-model="searchQuery" placeholder="Search" @input="searchPackages">
@@ -24,7 +24,7 @@
                 <td>{{ pkg.shop.name }}</td>
                 <td>{{ pkg.description }}</td>
                 <td>
-                  <router-link :to="`/package/edit/${pkg.id}`">
+                  <router-link :to="`/admin/packages/edit/${pkg.id}`">
                     <button class="action-button edit-button">
                       Edit
                     </button>

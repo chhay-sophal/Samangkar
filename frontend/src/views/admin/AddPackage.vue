@@ -81,7 +81,7 @@ export default {
         });
     
         alert("Package added successfuly!");
-        this.$router.push("/package");
+        this.$router.push("/admin/packages");
       } catch (error) {
         
       }

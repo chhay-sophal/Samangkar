@@ -5,7 +5,7 @@
       <h1>Overview</h1>
       <div class="section">
         <h2>User Management</h2>
-        <router-link to="/user" class="view-all-link">View All</router-link>
+        <router-link to="/admin/users" class="view-all-link">View All</router-link>
         <div class="stats">
           <div class="stat dark:bg-gray-700">
             <h3>Total Users</h3>
@@ -23,7 +23,7 @@
       </div>
       <div class="section">
         <h2>Shop Management</h2>
-        <router-link to="/shop" class="view-all-link">View All</router-link>
+        <router-link to="/admin/shops" class="view-all-link">View All</router-link>
         <div class="stats">
           <div class="stat dark:bg-gray-700">
             <h3>Total Shops</h3>
@@ -41,7 +41,7 @@
       </div>
       <div class="section">
         <h2>Review Management</h2>
-        <router-link to="/review" class="view-all-link">View All</router-link>
+        <router-link to="/admin/reviews" class="view-all-link">View All</router-link>
         <div class="stats">
           <div class="stat dark:bg-gray-700">
             <h3>Total Reviews</h3>
@@ -59,7 +59,7 @@
       </div>
       <div class="section">
         <h2>Packages Management</h2>
-        <router-link to="/package" class="view-all-link">View All</router-link>
+        <router-link to="/admin/packages" class="view-all-link">View All</router-link>
         <div class="stats">
           <div class="stat dark:bg-gray-700">
             <h3>Total Packages</h3>

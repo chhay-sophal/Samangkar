@@ -100,7 +100,7 @@ export default {
           }
 
           alert("User registered successfuly!");
-          this.$router.push("/user");
+          this.$router.push("/admin/users");
         } else {
           alert("Passwords do not match!");
         }

@@ -2,7 +2,7 @@
     <div class="admin-dashboard">
       <Sidebar :links="sidebarLinks" />
       <div class="main-content">
-        <router-link to="/user" class="back-icon">
+        <router-link to="/admin/users" class="back-icon">
           <i class="mdi mdi-arrow-left">Back</i> <!-- Assuming you're using Material Design Icons -->
         </router-link>
         <div class="admin-form">
@@ -81,7 +81,7 @@
 
           console.log("User updated:", this.userInfo);
           alert("User updated successfuly!");
-          this.$router.push("/user");
+          this.$router.push("/admin/users");
         } catch (error) {
           console.error(error);
         }

@@ -2,7 +2,7 @@
     <div class="admin-dashboard">
       <Sidebar :links="sidebarLinks" />
       <div class="main-content">
-        <router-link to="/shop" class="back-icon">
+        <router-link to="/admin/shops" class="back-icon">
           <i class="mdi mdi-arrow-left">Back</i> 
         </router-link>
         <div class="admin-form">
@@ -92,7 +92,7 @@
 
           console.log("Shop updated:", this.shopInfo);
           alert("Shop updated successfuly!");
-          this.$router.push("/shop");
+          this.$router.push("/admin/shops");
         } catch (error) {
           console.error(error);
         }
