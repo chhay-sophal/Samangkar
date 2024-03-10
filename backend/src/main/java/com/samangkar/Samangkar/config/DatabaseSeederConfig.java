@@ -62,9 +62,9 @@
 //             seedContactType(contactTypeRepository, "Tik Tok");
 
 //             // Seed shops
-//             seedShop(shopRepository, "shop1", "This is shop 1", "ImageUrl1", userRepository.findFirstByUsername("shop_owner1"));
-//             seedShop(shopRepository, "shop2", "This is shop 2", "ImageUrl2", userRepository.findFirstByUsername("shop_owner2"));
-//             seedShop(shopRepository, "shop3", "This is shop 3", "ImageUrl3", userRepository.findFirstByUsername("shop_owner3"));
+//             seedShop(shopRepository, "shop1", "This is shop 1", userRepository.findFirstByUsername("shop_owner1"));
+//             seedShop(shopRepository, "shop2", "This is shop 2", userRepository.findFirstByUsername("shop_owner2"));
+//             seedShop(shopRepository, "shop3", "This is shop 3", userRepository.findFirstByUsername("shop_owner3"));
 
 //             // Seed shop contacts
 //             seedShopContact(shopContactRepository, contactTypeRepository.findFirstByPlatform("Phone Number"), "0987654321", shopRepository.findFirstByName("shop1"));
@@ -195,9 +195,9 @@
 //     }
 
 //     @Transactional
-//     private void seedShop(ShopRepository repository, String name, String description, String shopImageUrl, UserEntity owner) {
+//     private void seedShop(ShopRepository repository, String name, String description, UserEntity owner) {
 //         if (repository.findByName(name).isEmpty()) {
-//             Shop shop = new Shop(name, description, shopImageUrl, owner);
+//             Shop shop = new Shop(name, description, owner);
 //             repository.save(shop);
 //         }
 //     }

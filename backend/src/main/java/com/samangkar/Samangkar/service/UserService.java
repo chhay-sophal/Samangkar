@@ -70,7 +70,7 @@ public class UserService {
             if (user.getProfileUrl() != null) {
                 imagePath = Paths.get("src/main/resources/images/" + user.getProfileUrl());
             } else {
-                imagePath = Paths.get("src/main/resources/images/default-profile.png");
+                imagePath = Paths.get("src/main/resources/default-profile.png");
             }
             // Read the image file into a byte array
             byte[] imageBytes = Files.readAllBytes(imagePath);

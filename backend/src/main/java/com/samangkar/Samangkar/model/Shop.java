@@ -63,10 +63,9 @@ public class Shop {
     }
 
     public Shop() {}
-    public Shop(String name, String description, String shopImageUrl, UserEntity owner) {
+    public Shop(String name, String description, UserEntity owner) {
         this.name = name;
         this.description = description;
-        this.shopImageUrl = shopImageUrl;
         this.owner = owner;
         this.isTrending = false;
     }
