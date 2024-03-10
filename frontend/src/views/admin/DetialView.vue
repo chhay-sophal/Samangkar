@@ -6,24 +6,25 @@
           <h2 class="form-title">User Profile</h2>
           <div class="profile-info">
             <div class="profile-picture">
-              <img :src="user.profilePicture" alt="Profile Picture">
+              <ImageViewer :imageData="userInfo.profile" />
+              <!-- <img :src="user.profile" alt="Profile Picture"> -->
             </div>
             <div class="profile-details">
               <div class="detail">
-                <span class="label">User Type:</span>
-                <span>{{ user.userType }}</span>
+                <span class="label">Role:</span>
+                <span>{{ userInfo.role }}</span>
               </div>
               <div class="detail">
                 <span class="label">Username:</span>
-                <span>{{ user.username }}</span>
+                <span>{{ userInfo.username }}</span>
               </div>
               <div class="detail">
                 <span class="label">Email:</span>
-                <span>{{ user.email }}</span>
+                <span>{{ userInfo.email }}</span>
               </div>
             </div>
           </div>
-          <router-link to="/user/edit"><button class="edit-button">Edit</button></router-link>
+          <router-link :to="`/user/edit/${userInfo.id}`"><button class="edit-button">Edit</button></router-link>
 
         </div>
       </div>
@@ -32,11 +33,14 @@
   
 <script>
 import Sidebar from "./../../components/AdminSidebar.vue"; // Adjust the path as per your project structure
+import ImageViewer from "@/components/ImageViewer.vue";
+import http from "@/services/httpService";
 
 export default {
   name: 'AdminDashboard',
   components: {
-    Sidebar
+    Sidebar,
+    ImageViewer,
   },
   data() {
     return {
@@ -45,14 +49,22 @@ export default {
         { text: 'Other Section', icon: 'mdi-folder' },
         // Add more sidebar links as needed
       ],
-      user: {
-        userType: 'User', // Assume default user type is User
-        username: 'example_user',
-        email: 'example@example.com',
-        profilePicture: 'https://via.placeholder.com/150', // Placeholder image URL
-      }
+      userInfo: []
     };
-  }
+  },
+  async mounted() {
+    this.userInfo.userId = this.$route.params.userId;
+    try {
+      const response = await http.get(`api/users/get/${this.userInfo.userId}`);
+      this.userInfo = response.data;
+      // this.userInfo.username = response.data.username;
+      // this.userInfo.email = response.data.email;
+      console.log(response.data);
+      console.log(this.userInfo);
+    } catch (error) {
+      
+    }
+  },
 }
 </script>
 <style scoped>

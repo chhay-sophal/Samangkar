@@ -8,21 +8,21 @@ import lombok.Data;
 @Data
 public class PackageDto {
     
-    private Long packageId;
-    private String packageName;
+    private Long id;
+    private String name;
     private String description;
-    private Long shopId;
+    private ShopDto shop;
     private List<ServiceDto> services;
     private Date createdAt;
     private Date updatedAt;
     private Date deletedAt;
 
-    public PackageDto(Long packageId, String packageName, String description, Long shopId, List<ServiceDto> services,
+    public PackageDto(Long id, String name, String description, ShopDto shop, List<ServiceDto> services,
             Date createdAt, Date updatedAt, Date deletedAt) {
-        this.packageId = packageId;
-        this.packageName = packageName;
+        this.id = id;
+        this.name = name;
         this.description = description;
-        this.shopId = shopId;
+        this.shop = shop;
         this.services = services;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;

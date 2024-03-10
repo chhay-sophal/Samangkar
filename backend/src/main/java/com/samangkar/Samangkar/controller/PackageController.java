@@ -1,6 +1,7 @@
 package com.samangkar.Samangkar.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.samangkar.Samangkar.dto.AddOrUpdatePackageDto;
@@ -21,11 +22,13 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -46,10 +49,40 @@ public class PackageController {
     @Autowired
     private ServiceRepository serviceRepository;
     
+    @GetMapping("get/{packageId}")
+    public ResponseEntity<?> getPackageById(@PathVariable Long packageId) {
+        try {
+            PackageDto pkg = packageService.getPackageById(packageId);
+            return ResponseEntity.ok(pkg);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
+        }
+    }
+
     @GetMapping("get-all")
     public ResponseEntity<?> getAllShopPackages() {
         try {
             List<PackageDto> packages = packageService.getAllPackages();
+            return ResponseEntity.ok(packages);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
+        }
+    }
+
+    @GetMapping("get-all/pagable")
+    public ResponseEntity<?> getPagableShopPackages(@RequestParam int page, @RequestParam int size) {
+        try {
+            Page<PackageDto> packages = packageService.getPageablePackages(page, size);
+            return ResponseEntity.ok(packages);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
+        }
+    }
+
+    @GetMapping("search/{query}")
+    public ResponseEntity<?> searchPackages(@PathVariable String query, @RequestParam int page, @RequestParam int size) {
+        try {
+            Page<PackageDto> packages = packageService.searchPackages(query, page, size);
             return ResponseEntity.ok(packages);
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
@@ -89,7 +122,7 @@ public class PackageController {
     }
 
     @SuppressWarnings("null")
-    @PostMapping("modify/{packageId}")
+    @PutMapping("update/{packageId}")
     public ResponseEntity<?> modifyPackage(@PathVariable Long packageId, @RequestBody AddOrUpdatePackageDto request) {
         try {
             Optional<PackageModel> optionalPackage = packageRepository.findById(packageId);
@@ -103,6 +136,7 @@ public class PackageController {
                         .stream(serviceRepository.findAllById(request.getServiceIds()).spliterator(), false)
                         .collect(Collectors.toSet());
 
+                packageModel.setServices(null);
                 packageModel.setServices(services);
                 packageModel.setName(request.getPackageName());
                 packageModel.setDescription(request.getDescription());

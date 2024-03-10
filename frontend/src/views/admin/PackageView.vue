@@ -3,81 +3,132 @@
       <Sidebar :links="sidebarLinks" />
       <div class="main-content">
         <h2>Package Table</h2>
-        <router-link to="/addpackage"><button @click="addNewPackage" class="add-package-button">Add Package</button></router-link>
+        <router-link to="/addpackage"><button class="add-package-button">Add Package</button></router-link>
         <div class="search-container">
           <label for="search">Search:</label>
-          <input type="text" id="search" v-model="searchQuery" placeholder="Search by Package Name">
+          <input type="text" id="search" v-model="searchQuery" placeholder="Search" @input="searchPackages">
         </div>
         <div class="table-container">
           <table class="package-table">
             <thead>
               <tr>
                 <th>Package Name</th>
-                <th>Shop ID</th>
+                <th>Shop Name</th>
                 <th>Description</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="pkg in filteredPackages" :key="pkg.id">
-                <td>{{ pkg.packageName }}</td>
-                <td>{{ pkg.shopID }}</td>
+              <tr v-for="pkg in packages" :key="pkg.id">
+                <td>{{ pkg.name }}</td>
+                <td>{{ pkg.shop.name }}</td>
                 <td>{{ pkg.description }}</td>
                 <td>
-                  <button @click="editPackage(pkg)" class="edit-button">Edit</button>
-                  <button @click="deletePackage(pkg.id)" class="delete-button">Delete</button>
+                  <router-link :to="`/package/edit/${pkg.id}`">
+                    <button class="action-button edit-button">
+                      Edit
+                    </button>
+                  </router-link>
+                  
+                  <!-- <button @click="editPackage(pkg)" class="edit-button">Edit</button> -->
+                  <button @click="handleDelete(pkg.id)" class="delete-button">Delete</button>
                 </td>
               </tr>
             </tbody>
           </table>
+          <div>
+            <Pagination :currentPage="currentPage" :totalPages="totalPages" :first="first" :last="last" @page-change="handlePageChange"/>
+          </div>
         </div>
       </div>
     </div>
   </template>
   
-  <script>
-  import Sidebar from "./../../components/AdminSidebar.vue"; // Adjust the path as per your project structure
-  
-  export default {
-    components: {
-      Sidebar
-    },
-    data() {
-      return {
-        sidebarLinks: [
-          { text: 'Dashboard', icon: 'mdi-view-dashboard', route: '/dashboard' },
-          { text: 'Users', icon: 'mdi-account', route: '/users' },
-          { text: 'Shops', icon: 'mdi-store', route: '/shops' },
-          // Add more sidebar links as needed
-        ],
-        packages: [
-          { id: 1, packageName: 'Package A', shopID: 'Shop1', description: 'Description of Package A' },
-          { id: 2, packageName: 'Package B', shopID: 'Shop2', description: 'Description of Package B' },
-          // Add more packages as needed
-        ],
-        searchQuery: ''
-      };
-    },
-    computed: {
-      filteredPackages() {
-        return this.packages.filter(pkg => pkg.packageName.toLowerCase().includes(this.searchQuery.toLowerCase()));
-      }
-    },
-    methods: {
-      addNewPackage() {
-        // Logic to add new package
-        console.log('Adding new package...');
-      },
-      editPackage(pkg) {
-        // Logic to edit package
-        console.log('Edit package:', pkg);
-      },
-      deletePackage(packageId) {
-        // Logic to delete package
-        console.log('Delete package with ID:', packageId);
-      }
+<script>
+import Sidebar from "./../../components/AdminSidebar.vue"; // Adjust the path as per your project structure
+import Pagination from "./Pagination.vue";
+import http from "@/services/httpService";
+export default {
+  components: {
+    Sidebar,
+    Pagination,
+  },
+  data() {
+    return {
+      sidebarLinks: [
+        { text: 'Dashboard', icon: 'mdi-view-dashboard', route: '/dashboard' },
+        { text: 'Users', icon: 'mdi-account', route: '/users' },
+        { text: 'Shops', icon: 'mdi-store', route: '/shops' },
+        // Add more sidebar links as needed
+      ],
+      packages: [],
+      searchQuery: "",
+      currentPage: 1,
+      size: 5,
+      totalPages: 0,
+      totalElements: 0,
+      first: true,
+      last: false,
+    };
+  },
+  computed: {
+    filteredPackages() {
+      return this.packages.filter(pkg => pkg.packageName.toLowerCase().includes(this.searchQuery.toLowerCase()));
     }
-  };
+  },
+  methods: {
+    handleDelete(packageId) {
+      if (confirm("Are you sure you want to delete?")) {
+        // Call update method
+        this.deletePackage(packageId);
+      }
+    },
+    async deletePackage(packageId) {
+      try {
+        await http.post(`api/packages/delete/${packageId}`);
+        alert("Package deleted successfuly!");
+        this.fetchPackages();
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    },
+    async searchPackages() {
+      try {
+        if (this.searchQuery) {
+          const response = await http.get(`api/packages/search/${this.searchQuery}?page=${this.currentPage - 1}&size=${this.size}`);
+          this.packages = response.data.content;
+          this.totalPages = response.data.totalPages;
+          this.first = response.data.first;
+          this.last = response.data.last;
+          console.log(this.packages)
+        } else {
+          this.fetchPackages();
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    },
+    async fetchPackages() {
+      try {
+        const response = await http.get(`api/packages/get-all/pagable?page=${this.currentPage - 1}&size=${this.size}`);
+        this.packages = response.data.content;
+        this.totalPages = response.data.totalPages;
+        this.first = response.data.first;
+        this.last = response.data.last;
+        console.log(this.packages)
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    },
+    async handlePageChange(newPage) {
+      this.currentPage = newPage;
+      await this.searchPackages();
+    },
+  },
+  mounted() {
+    this.fetchPackages();
+  }
+};
   </script>
   
   <style scoped>

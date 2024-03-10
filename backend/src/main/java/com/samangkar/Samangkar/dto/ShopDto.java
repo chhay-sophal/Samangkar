@@ -10,21 +10,21 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ShopDto {
-    private Long shopId;
+    private Long id;
     private String name;
-    private String shopImageUrl;
-    private UserDto shopOwner;
+    private String imageUrl;
+    private UserDto owner;
     private String description;
     private Boolean isTrending;
     private Date createdAt;
     private Date updatedAt;
     private Date deletedAt;
 
-    public ShopDto(Long shopId, String name, String shopImageUrl, UserDto shopOwner, String description, Boolean isTreading, Date createdAt, Date updatedAt, Date deletedAt) {
-        this.shopId = shopId;
+    public ShopDto(Long id, String name, String imageUrl, UserDto owner, String description, Boolean isTreading, Date createdAt, Date updatedAt, Date deletedAt) {
+        this.id = id;
         this.name = name;
-        this.shopImageUrl = shopImageUrl;
-        this.shopOwner = shopOwner;
+        this.imageUrl = imageUrl;
+        this.owner = owner;
         this.description = description;
         this.isTrending = isTreading;
         this.createdAt = createdAt;

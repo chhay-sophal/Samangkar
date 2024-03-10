@@ -9,20 +9,12 @@
           <h2 class="form-title">Edit User</h2> <!-- Changed title to "Edit User" -->
           <form @submit.prevent="handleUpdate">
             <div class="form-group">
-              <label for="usertype">User Type</label>
-              <select id="usertype" v-model="admin.userType" required>
-                <option value="User">User</option>
-                <option value="ShopOwner">Shop Owner</option>
-                <option value="Admin">Admin</option>
-              </select>
-            </div>
-            <div class="form-group">
               <label for="username">Username</label>
-              <input type="text" id="username" v-model="admin.username" required>
+              <input type="text" id="username" v-model="userInfo.username" required>
             </div>
             <div class="form-group">
               <label for="email">Email</label>
-              <input type="email" id="email" v-model="admin.email" required>
+              <input type="email" id="email" v-model="userInfo.email" required>
             </div>
             
             <!-- <div class="form-group">
@@ -41,8 +33,10 @@
   </template>
   
   
-  <script>
+<script>
   import Sidebar from "./../../components/AdminSidebar.vue"; // Adjust the path as per your project structure
+  import http from "@/services/httpService";
+  import convertImageToBlob from "@/services/convertImageToBlob";
   
   export default {
     name: 'AdminDashboard',
@@ -56,33 +50,71 @@
           { text: 'Other Section', icon: 'mdi-folder' },
           // Add more sidebar links as needed
         ],
-        admin: {
+        userInfo: {
+          userId: null,
           username: '',
           email: '',
-          password: '',
           profilePicture: null
         }
       };
     },
     methods: {
-    handleUpdate() {
-      if (confirm("Are you sure you want to update?")) {
-        // Call update method
-        this.updateUser();
+      handleUpdate() {
+        if (confirm("Are you sure you want to update?")) {
+          // Call update method
+          this.updateUser();
+        }
+      },
+      async updateUser() {
+        try {
+          await http.post(`api/users/update/${this.userInfo.userId}`, { 
+            "username": this.userInfo.username, 
+            "email": this.userInfo.email 
+          });
+
+          if (this.userInfo.profilePicture) {
+            const formData = new FormData();
+            formData.append('file', convertImageToBlob(this.userInfo.profilePicture), 'image.jpg')
+
+            await http.post(`api/users/${this.userInfo.userId}/image/upload`, formData);
+          }
+
+          console.log("User updated:", this.userInfo);
+          alert("User updated successfuly!");
+          this.$router.push("/user");
+        } catch (error) {
+          console.error(error);
+        }
+      },
+      onFileChange(event) {
+        const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = (e) => {
+                  this.userInfo.profilePicture = e.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            }
       }
     },
-    updateUser() {
-      // Logic to update user
-      console.log("User updated:", this.admin);
+    async mounted() {
+      this.userInfo.userId = this.$route.params.userId;
+      try {
+        const response = await http.get(`api/users/get/${this.userInfo.userId}`);
+        this.userInfo.username = response.data.username;
+        this.userInfo.email = response.data.email;
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
     },
-    onFileChange(event) {
-      this.admin.profilePicture = event.target.files[0];
-    }
   }
-  }
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
   .back-icon {
   color: #007bff; /* Blue color for the icon, adjust as needed */
   text-decoration: none;
@@ -163,5 +195,4 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.431); /* horizontal-offset vertical-offset blur spread color */
   
   }
-  </style>
-  
+</style>

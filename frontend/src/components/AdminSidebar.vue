@@ -14,8 +14,10 @@
           <h3><i class="fas fa-chart-line"></i> Dashboard </h3>
         </div>
         <ul class="sidebar-list">
-          <div class="menu"><router-link to="/add">Add</router-link></div>
-          <div class="menu"><router-link to="/overview"><i class="fas fa-chart-pie"></i> Overview</router-link></div>
+          <div class="menu"><router-link to="/admin"><i class="fas fa-chart-pie"></i> Overview</router-link></div>
+          <!-- <div class="menu"><router-link to="/add">Add</router-link></div> -->
+          <!-- <div class="menu"><router-link to="/user"><i class="fas fa-users"></i> Administrators</router-link></div>
+          <div class="menu"><router-link to="/user"><i class="fas fa-users"></i> Shop Owners</router-link></div> -->
           <div class="menu"><router-link to="/user"><i class="fas fa-users"></i> Users</router-link></div>
           <div class="menu"><router-link to="/shop"><i class="fas fa-store"></i> Shop</router-link></div>
           <div class="menu"><router-link to="/package"><i class="fas fa-shopping-cart"></i> Package</router-link></div>

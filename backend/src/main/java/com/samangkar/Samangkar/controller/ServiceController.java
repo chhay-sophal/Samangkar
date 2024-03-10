@@ -36,7 +36,7 @@ public class ServiceController {
     @Autowired
     private ShopRepository shopRepository;
 
-    @GetMapping("get-all/{shopId}")
+    @GetMapping("get/{shopId}")
     public ResponseEntity<?> getAllShopServices(@PathVariable Long shopId) {
         List<ServiceDto> shopContacts = serviceService.getAllShopServicesByShopId(shopId);
         return ResponseEntity.ok(shopContacts);

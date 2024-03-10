@@ -14,7 +14,9 @@ import AddAdmin from './views/admin/AddAdmin.vue'
 // frontend\src\components\sideBar.vue
 import User from './views/admin/UserView.vue'
 import Detail from './views/admin/DetialView.vue'
-import Edit from './views/admin/EditView.vue'
+import EditUserView from './views/admin/EditUserView.vue'
+import EditShopView from './views/admin/EditShopView.vue'
+import EditPackageView from './views/admin/EditPackageView.vue'
 import ShopView from './views/admin/ShopView.vue'
 import AddPackage from './views/admin/AddPackage.vue'
 import PackageView from './views/admin/PackageView.vue'
@@ -53,12 +55,12 @@ const routes = [
         path: '/profile/cards',
         component: CardsView,
     },
-    {
-        name: 'DashboardPageRoute',
-        path: '/admin',
-        component: AdminView,
-        meta: { requiresAuth: false, hideHeaderFooter: true } 
-    },
+    // {
+    //     name: 'DashboardPageRoute',
+    //     path: '/admin',
+    //     component: AdminView,
+    //     meta: { requiresAuth: false, hideHeaderFooter: true } 
+    // },
     {
         name: 'SidebarPageRoute',
         path: '/sidebar',
@@ -73,7 +75,7 @@ const routes = [
     },
     {
         name: 'OverViewRoute',
-        path: '/overview',
+        path: '/admin',
         component: OverView,
         meta: { requiresAuth: false, hideHeaderFooter: true } 
     },
@@ -97,37 +99,51 @@ const routes = [
     },
     {
         name: 'DetialView',
-        path: '/user/detail',
+        path: '/user/detail/:userId',
         component: Detail,
-        meta: { requiresAuth: false, hideHeaderFooter: true } 
+        meta: { hideHeaderFooter: true } 
     },
     {
-        name: 'EditView',
-        path: '/user/edit',
-        component: Edit,
-        meta: { requiresAuth: false, hideHeaderFooter: true } 
+        name: 'EditUserView',
+        path: '/user/edit/:userId',
+        component: EditUserView,
+        meta: { hideHeaderFooter: true } 
     },
     {
         name: 'ShopView',
         path: '/shop',
         component: ShopView,
-        meta: { requiresAuth: false, hideHeaderFooter: true } 
-    },{
+        meta: { hideHeaderFooter: true } 
+    },
+    {
+        name: 'EditShopView',
+        path: '/shop/edit/:shopId',
+        component: EditShopView,
+        meta: { hideHeaderFooter: true } 
+    },
+    {
         name: 'AddPackageView',
         path: '/addpackage',
         component: AddPackage,
-        meta: { requiresAuth: false, hideHeaderFooter: true } 
+        meta: { hideHeaderFooter: true } 
     },
     ,{
         name: 'PackageView',
         path: '/package',
         component: PackageView,
-        meta: { requiresAuth: false, hideHeaderFooter: true } 
+        meta: { hideHeaderFooter: true } 
+    },
+    {
+        name: 'EditPackageView',
+        path: '/package/edit/:packageId',
+        component: EditPackageView,
+        meta: { hideHeaderFooter: true } 
     },
     {
         name: 'ReviewView',
         path: '/review',
-        component: ReviewView
+        component: ReviewView,
+        meta: { hideHeaderFooter: true } 
     },
     {
         name: 'aboutPageRout',

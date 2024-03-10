@@ -2,32 +2,42 @@
   <div class="page-container">
     <Sidebar :links="sidebarLinks" />
     <div class="main-content">
-      <div class="search-container">
-        <label for="search">Search:</label>
-        <input type="text" id="search" v-model="searchQuery" placeholder="Search username" @input="searchUsers">
+      <div class="flex gap-5">
+        <div class="search-container">
+          <label for="search">Search:</label>
+          <input type="text" id="search" v-model="searchQuery" placeholder="Search" @input="searchUsers">
+        </div>
       </div>
       <h2>User Table</h2>
       <transition name="fade">
-        <table v-if="users.length > 0" class="user-table">
+        <table v-if="users" class="user-table">
           <thead>
             <tr>
+              <th>ID</th>
               <th>Username</th>
               <th>Email</th>
-              <th>User Type</th>
+              <th>Role</th>
               <th>Status</th>
+              <th>Profile</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(user, index) in displayedUsers" :key="index">
+            <tr v-for="(user, index) in users" :key="index">
+              <td>{{ user.id }}</td>
               <td>{{ user.username }}</td>
               <td>{{ user.email }}</td>
-              <td>{{ user.userType }}</td>
-              <td>{{ user.active ? 'Active' : 'Not Active' }}</td>
+              <td>{{ user.role }}</td>
+              <td>{{ !user.deletedAt ? 'Active' : 'Deleted' }}</td>
+              <td class="flex items-center justify-center">
+                <div class="aspect-square overflow-hidden size-16">
+                  <ImageViewer :imageData="user.profile" />
+                </div>
+              </td>
               <td>
-                <router-link to="/user/edit"><button class="edit-button" @click="editUser(index)">Edit</button></router-link>
-                <button class="delete-button" @click="deleteUser(index)">Delete</button>
-                <router-link to="/user/detail"><button class="detail-button" >Details</button></router-link>
+                <router-link :to="`/user/edit/${user.id}`"><button class="edit-button">Edit</button></router-link>
+                <button v-if="!user.deletedAt" class="delete-button" @click="deleteUser(user.id)">Delete</button>
+                <router-link :to="`/user/detail/${user.id}`"><button class="detail-button" >Details</button></router-link>
               </td>
             </tr>
           </tbody>
@@ -35,7 +45,7 @@
         <p v-else>No users found.</p>
       </transition>
       <div class="pagination">
-       <Pagination/>
+       <Pagination :currentPage="currentPage" :totalPages="totalPages" :first="first" :last="last" @page-change="handlePageChange"/>
       </div>
       <router-link to="/add"><button class="add-user-button">Add User</button></router-link>
     </div>
@@ -45,12 +55,15 @@
 <script>
 import Sidebar from "./../../components/AdminSidebar.vue"; // Adjust the path as per your project structure
 import Pagination from "./Pagination.vue";
+import ImageViewer from "@/components/ImageViewer.vue";
+import http from "@/services/httpService";
 
 export default {
   name: 'UserManagementPage',
   components: {
     Sidebar,
-    Pagination
+    Pagination,
+    ImageViewer,
 },
   data() {
     return {
@@ -58,46 +71,69 @@ export default {
         { text: 'User Management', icon: 'mdi-account-multiple' },
         // Add more sidebar links as needed
       ],
-      users: [
-        { username: 'user1', email: 'user1@example.com', userType: 'User', active: true },
-        { username: 'user2', email: 'user2@example.com', userType: 'Admin', active: false },
-        // Add more users as needed
-      ],
+      users: [],
+      totalPages: 0,
+      totalElements: 0,
+      last: false,
+      first: true,
       currentPage: 1,
-      usersPerPage: 10
+      size: 5,
+      searchQuery: "",
     };
   },
-  computed: {
-    totalPages() {
-      return Math.ceil(this.users.length / this.usersPerPage);
+  methods: {  
+    async deleteUser(userId) {
+      try {
+        if (confirm(`Are you sure to delete user with id ${userId}?`)) {
+          await http.post(`api/users/delete/${userId}`);
+          alert(`User with id ${userId} deleted successfully!`);
+          this.fetchUserList();
+        }
+      } catch (error) {
+        console.error(error);
+      }
     },
-    displayedUsers() {
-      const start = (this.currentPage - 1) * this.usersPerPage;
-      const end = start + this.usersPerPage;
-      return this.users.slice(start, end);
-    }
+    async searchUsers() {
+      try {
+        if (this.searchQuery) {
+          const response = await http.get(`api/users/search?page=${this.currentPage - 1}&size=${this.size}&query=${this.searchQuery}`);
+          this.users = response.data.content;
+          this.totalPages = response.data.totalPages;
+          this.totalElements = response.data.totalElements;
+          this.first = response.data.first;
+          this.last = response.data.last;
+          if (!response.data) {
+            this.fetchUserList();
+          }
+          console.log(this.users);
+        } else {
+          this.fetchUserList();
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    async fetchUserList() {
+      try {
+        const response = await http.get(`api/users/get-all/pagable?page=${this.currentPage - 1}&size=${this.size}`);
+        this.users = response.data.content;
+        this.totalPages = response.data.totalPages;
+        this.totalElements = response.data.totalElements;
+        this.first = response.data.first;
+        this.last = response.data.last;
+        console.log(this.users);
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    async handlePageChange(newPage) {
+      this.currentPage = newPage;
+      await this.searchUsers();
+    },
   },
-  methods: {  searchUsers() {
-      // Perform search logic here
-    },
-    editUser(index) {
-      // Logic to edit user
-      console.log('Edit user:', this.users[index]);
-    },
-    deleteUser(index) {
-      // Logic to delete user
-      console.log('Delete user:', this.users[index]);
-    },
-    nextPage() {
-      if (this.currentPage < this.totalPages) {
-        this.currentPage++;
-      }
-    },
-    prevPage() {
-      if (this.currentPage > 1) {
-        this.currentPage--;
-      }
-    }
+  mounted() {
+    this.fetchUserList();
+    this.filterdUsers = this.users;
   }
 }
 </script>
@@ -143,7 +179,7 @@ export default {
 }
 
 .user-table th {
-  background-color: #f0f0f0;
+  /* background-color: #f0f0f0; */
   font-weight: bold;
   text-align: left;
 }
@@ -154,6 +190,7 @@ export default {
 
 .user-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
+  color: darkslategray;
 }
 
 .fade-enter-active,

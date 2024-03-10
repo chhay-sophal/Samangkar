@@ -57,4 +57,24 @@ public class ServiceService {
             service.getDeletedAt()
         );
     }
+
+    public List<ServiceDto> getServicesByPackageId(Long packageId) {
+        List<ServiceModel> services = serviceRepository.findByPackages_Id(packageId);
+
+        return services.stream()
+                .map(service -> new ServiceDto(
+                    service.getId(),
+                    service.getName(),
+                    service.getDescription(),
+                    service.getUnitPrice(),
+                    (
+                        shopService.getShopById(service.getShop().getId())
+                    ),
+                    service.getCreatedAt(), 
+                    service.getUpdatedAt(),
+                    service.getDeletedAt()
+                ))
+                .collect(Collectors.toList());
+    }
+
 }

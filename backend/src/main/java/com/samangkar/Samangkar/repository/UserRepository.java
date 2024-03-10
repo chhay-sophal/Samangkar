@@ -2,6 +2,10 @@ package com.samangkar.Samangkar.repository;
 
 import com.samangkar.Samangkar.model.Role;
 import com.samangkar.Samangkar.model.UserEntity;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -28,6 +32,19 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, L
     Boolean existsByEmail(String email);
 
     List<UserEntity> findByUserRole(Role userRole);
+
+    @Query("SELECT u FROM UserEntity u WHERE " +
+        "LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+        "LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+        // "u.deletedAt IS NULL OR " +
+        "LOWER(u.userRole.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    Page<UserEntity> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
+
+    @SuppressWarnings("null")
+    Page<UserEntity> findAll(Pageable pageable);
+
+    @SuppressWarnings("null")
+    List<UserEntity> findAll();
 
 }
 

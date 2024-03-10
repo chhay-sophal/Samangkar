@@ -6,15 +6,34 @@
       <form @submit.prevent="addPackage">
         <div class="form-group">
           <label for="package-name">Package Name</label>
-          <input type="text" id="package-name" v-model="packageName" required>
+          <input type="text" id="package-name" v-model="packageInfo.name" required>
         </div>
         <div class="form-group">
           <label for="description">Description</label>
-          <textarea id="description" v-model="description" required></textarea>
+          <textarea id="description" v-model="packageInfo.description" required></textarea>
+        </div>
+        <!-- <div class="form-group">
+          <label for="shop-id">Shop ID</label>
+          <input type="text" id="shop-id" v-model="packageInfo.shopId" required>
+        </div> -->
+        <div class="form-group">
+          <label for="shop-id">Shop</label>
+          <input type="text" id="search" v-model="selectedShopName" list="shops-list" @change="fetchServices" />
+          <datalist id="shops-list">
+            <option v-for="shop in shops" :value="shop.name">
+              {{ shop.name }}
+            </option>
+          </datalist>
         </div>
         <div class="form-group">
-          <label for="shop-id">Shop ID</label>
-          <input type="text" id="shop-id" v-model="shopID" required>
+          <label for="shop-id">Services</label>
+          <!-- <input type="checkbox" id="search" v-model="selectedServiceName" list="shops-list" /> -->
+          <div class="flex gap-10">
+            <div class="flex gap-2" v-for="service in services" :key="service.id">
+              <input type="checkbox" v-model="packageInfo.serviceIds" :value="service.id">
+              <label>{{ service.name }}</label>
+            </div>
+          </div>
         </div>
         <button type="submit" class="submit-button">Add Package</button>
       </form>
@@ -23,8 +42,9 @@
 </template>
 
 <script>
-// i
+import http from "@/services/httpService";
 import Sidebar from '../../components/AdminSidebar.vue'
+
 export default {
   name:'Package',
   components: {
@@ -38,24 +58,56 @@ export default {
         { text: 'Shops', icon: 'mdi-store', route: '/shops' },
         // Add more sidebar links as needed
       ],
-      packageName: '',
-      description: '',
-      shopID: ''
+      packageInfo: {
+        id: null,
+        name: '',
+        description: '',
+        shopId: null,
+        serviceIds: []
+      },
+      services: [],
+      shops: [],
+      selectedShopName: "",
     };
   },
   methods: {
-    addPackage() {
-      // Here you would typically send an API request to add the package to the database
-      // For simplicity, I'm just logging the package data
-      console.log('Package Name:', this.packageName);
-      console.log('Description:', this.description);
-      console.log('Shop ID:', this.shopID);
-
-      // Clear form fields after submission
-      this.packageName = '';
-      this.description = '';
-      this.shopID = '';
-    }
+    async addPackage() {
+      try {
+        await http.post(`api/packages/add`, {
+          "packageName": this.packageInfo.name,
+          "description": this.packageInfo.description,
+          "shopId": this.packageInfo.shopId,
+          "serviceIds": this.packageInfo.serviceIds,
+        });
+    
+        alert("Package added successfuly!");
+        this.$router.push("/package");
+      } catch (error) {
+        
+      }
+    },
+    async fetchServices() {
+      try {
+        this.packageInfo.shopId = this.shops.find(shop => shop.name === this.selectedShopName).id;
+        const response = await http.get(`api/services/get/${this.packageInfo.shopId}`);
+        this.services = response.data;
+        console.log(this.services);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async fetchShops() {
+      try {
+        const response = await http.get(`api/shops/get-all`);
+        this.shops = response.data;
+        console.log(this.shops)
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    },
+  },
+  mounted() {
+    this.fetchShops();
   }
 };
 </script>

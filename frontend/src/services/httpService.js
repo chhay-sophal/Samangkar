@@ -33,7 +33,7 @@ instance.interceptors.response.use(
     if (status === 401) {
       console.error('Unauthorized request. Token might be expired or invalid.');
       // Optionally, redirect to the login page or refresh the token
-      logout(); // Clear the invalid token
+      // logout(); // Clear the invalid token
       // Redirect or refresh token logic can be added here
     }
 

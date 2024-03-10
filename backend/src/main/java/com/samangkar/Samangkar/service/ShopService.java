@@ -5,12 +5,18 @@ import com.samangkar.Samangkar.dto.ShopDto;
 import com.samangkar.Samangkar.model.UserEntity;
 import com.samangkar.Samangkar.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.samangkar.Samangkar.model.Shop;
 import com.samangkar.Samangkar.repository.ShopRepository;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -27,6 +33,18 @@ public class ShopService {
 
     @Autowired
     private UserService userService;
+
+    public Page<ShopDto> getAllShops(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Shop> shops = shopRepository.findAll(pageable);
+        return shops.map(this::convertToDto);
+    }
+
+    public Page<ShopDto> searchShops(String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Shop> shops = shopRepository.findShopsByKeyword(keyword, pageable);
+        return shops.map(this::convertToDto);
+    }
 
     public ShopDto getShopById(Long shopId) {
         Shop shop = shopRepository.findFirstById(shopId);
@@ -48,24 +66,41 @@ public class ShopService {
     }
 
     private ShopDto convertToDto(Shop shop) {
-        // ShopDto dto = new ShopDto();
-        // dto.setId(shop.getId());
-        // dto.setName(shop.getName());
-        // dto.setDescription(shop.getDescription());
-        // dto.setShopImageUrl(shop.getShopImageUrl());
-        // dto.setActivated(shop.isActive());
-        // dto.setTrending(shop.isTrending());
-        return new ShopDto(
-            shop.getId(), 
-            shop.getName(), 
-            shop.getShopImageUrl(), 
-            userService.getUserById(shop.getOwner().getId()),
-            shop.getDescription(),
-            shop.isTrending(),
-            shop.getCreatedAt(),
-            shop.getUpdatedAt(),
-            shop.getDeletedAt()
-        );
+        try {
+            Path imagePath;
+            if (shop.getShopImageUrl() != null) {
+                imagePath = Paths.get("src/main/resources/images/" + shop.getShopImageUrl());
+            } else {
+                imagePath = Paths.get("src/main/resources/images/default-profile.png");
+            }
+            // Read the image file into a byte array
+            byte[] imageBytes = Files.readAllBytes(imagePath);
+            String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+
+            return new ShopDto(
+                shop.getId(), 
+                shop.getName(), 
+                base64Image, 
+                userService.getUserById(shop.getOwner().getId()),
+                shop.getDescription(),
+                shop.isTrending(),
+                shop.getCreatedAt(),
+                shop.getUpdatedAt(),
+                shop.getDeletedAt()
+            );
+        } catch (Exception e) {
+            return new ShopDto(
+                shop.getId(), 
+                shop.getName(), 
+                null, 
+                userService.getUserById(shop.getOwner().getId()),
+                shop.getDescription(),
+                shop.isTrending(),
+                shop.getCreatedAt(),
+                shop.getUpdatedAt(),
+                shop.getDeletedAt()
+            );
+        }
     }
 
     // Helper method to create a list of DTO from an Iterable of UserEntity
@@ -179,14 +214,18 @@ public class ShopService {
 
     //DELETE
     @SuppressWarnings("null")
-    public void deleteShop(Long shopId){
+    public void activateOrReactivateShop(Long shopId){
         Optional<Shop> existingShop = shopRepository.findById(shopId);
         if (existingShop.isPresent()) {
             Shop shop = existingShop.get();
             //PRINT
             System.out.println(shop);
-            shop.setDeletedAt(new Date());
-            shop.setTrending(false);
+            if (shop.getDeletedAt() == null) {
+                shop.setDeletedAt(new Date());
+                shop.setTrending(false);
+            } else {
+                shop.setDeletedAt(null);
+            }
             shopRepository.save(shop);
         } else {
             throw new ResourceNotFoundException("Shop with ID " + shopId + " not found");

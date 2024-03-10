@@ -1,8 +1,8 @@
 <template>
     <div class="pagination">
-      <button @click="prevPage" :disabled="currentPage === 1">Previous</button>
+      <button @click="prevPage" :disabled="first">Previous</button>
       <span>Page {{ currentPage }} of {{ totalPages }}</span>
-      <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
+      <button @click="nextPage" :disabled="last">Next</button>
     </div>
   </template>
   
@@ -10,7 +10,9 @@
   export default {
     props: {
       currentPage: Number,
-      totalPages: Number
+      totalPages: Number,
+      first: Boolean,
+      last: Boolean,
     },
     methods: {
       prevPage() {

@@ -4,30 +4,34 @@
     <div class="main-content">
       <div class="admin-form">
         <h2 class="form-title">User Registration</h2>
-        <form @submit.prevent="registerAdmin">
+        <form @submit.prevent="registerUser">
           <div class="form-group">
             <label for="usertype">User Type</label>
-            <select id="usertype" v-model="admin.userType" required>
-              <option value="User">User</option>
-              <option value="ShopOwner">Shop Owner</option>
-              <option value="Admin">Admin</option>
+            <select id="usertype" v-model="userInfo.role" required>
+              <!-- <option value="USER">User</option> -->
+              <option value="SHOP_OWNER">Shop Owner</option>
+              <option value="ADMIN">Admin</option>
             </select>
           </div>
           <div class="form-group">
             <label for="username">Username</label>
-            <input type="text" id="username" v-model="admin.username" required>
+            <input type="text" id="username" placeholder="Username" v-model="userInfo.username" required>
           </div>
           <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="email" v-model="admin.email" required>
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" v-model="admin.password" required>
+            <input type="email" id="email" placeholder="Email" v-model="userInfo.email" required>
           </div>
           <div class="form-group">
             <label for="profile-picture">Profile Picture</label>
             <input type="file" id="profile-picture" accept="image/*" @change="onFileChange">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Password" v-model="userInfo.password" required>
+          </div>
+          <div class="form-group">
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" id="confirm-password" placeholder="Comfirm password" v-model="userInfo.confirmPassword" required>
           </div>
           <button type="submit" class="submit-button">Register</button>
         </form>
@@ -39,7 +43,9 @@
 
 <script>
 import Sidebar from "./../../components/AdminSidebar.vue"; // Adjust the path as per your project structure
-
+import http from "@/services/httpService";
+import convertImageToBlob from "@/services/convertImageToBlob";
+  
 export default {
   name: 'AdminDashboard',
   components: {
@@ -52,28 +58,55 @@ export default {
         { text: 'Other Section', icon: 'mdi-folder' },
         // Add more sidebar links as needed
       ],
-      admin: {
+      userInfo: {
+        role: null,
         username: '',
         email: '',
         password: '',
+        confirmPassword: '',
         profilePicture: null
       }
     };
   },
   methods: {
     onFileChange(event) {
-      this.admin.profilePicture = event.target.files[0];
+      const file = event.target.files[0];
+
+          if (file) {
+              const reader = new FileReader();
+
+              reader.onload = (e) => {
+                this.userInfo.profilePicture = e.target.result;
+              };
+
+              reader.readAsDataURL(file);
+          }
     },
-    registerAdmin() {
-      // Logic to register new admin
-      console.log(this.admin);
-      // Reset form fields after submission
-      this.admin = {
-        username: '',
-        email: '',
-        password: '',
-        profilePicture: null
-      };
+    async registerUser() {
+      try {
+        if (this.userInfo.password === this.userInfo.confirmPassword) {
+          const user = await http.post(`api/users/register`, {
+            "role": this.userInfo.role,
+            "username": this.userInfo.username,
+            "email": this.userInfo.email,
+            "password": this.userInfo.password
+          });
+
+          if (this.userInfo.profilePicture) {
+            const formData = new FormData();
+            formData.append('file', convertImageToBlob(this.userInfo.profilePicture), 'image.jpg')
+
+            await http.post(`api/users/${user.data.id}/image/upload`, formData);
+          }
+
+          alert("User registered successfuly!");
+          this.$router.push("/user");
+        } else {
+          alert("Passwords do not match!");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
   }
 }

@@ -3,6 +3,9 @@ package com.samangkar.Samangkar.repository;
 import com.samangkar.Samangkar.model.PackageModel;
 import com.samangkar.Samangkar.model.Shop;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -26,4 +29,15 @@ public interface PackageRepository extends PagingAndSortingRepository<PackageMod
     List<PackageModel> findNonDeletedPackagesByShop_Id(Long shopId);
 
     List<PackageModel> findAllByDeletedAtIsNull();
+
+    // @SuppressWarnings("null")
+    Page<PackageModel> findAllByDeletedAtIsNull(Pageable pageable);
+
+    @Query("SELECT pkg FROM PackageModel pkg WHERE " +
+        "LOWER(pkg.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+        "LOWER(pkg.description) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+        "pkg.deletedAt IS NULL OR " +
+        "LOWER(pkg.shop.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    Page<PackageModel> findPackagesByKeyword(String keyword, Pageable pageable);
+
 }

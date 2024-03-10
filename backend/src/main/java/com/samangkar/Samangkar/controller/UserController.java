@@ -14,15 +14,20 @@ import com.samangkar.Samangkar.repository.RoleRepository;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -42,10 +47,20 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("get-user/{userId}")
+    @GetMapping("get/{userId}")
     public ResponseEntity<?> getUserById(@PathVariable Long userId) {
         UserDto userDto = userService.getUserById(userId);
         return ResponseEntity.ok(userDto);
+    }
+
+    @GetMapping("get-all/pagable")
+    public ResponseEntity<?> getAllUsersPagable(@RequestParam int page, @RequestParam int size) {
+        try {
+            Page<UserDto> users = userService.getAllUsers(page, size);
+            return ResponseEntity.ok(users);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
+        }
     }
 
     @GetMapping("get-all")
@@ -68,11 +83,11 @@ public class UserController {
         }
     }
 
-    @PostMapping("register/{userRole}")
-    public ResponseEntity<?> registerNewAdminOrShopOwner(@RequestBody RegisterDto registerDto, @PathVariable String userRole) {
+    @PostMapping("register")
+    public ResponseEntity<?> registerNewAdminOrShopOwner(@RequestBody RegisterDto registerDto) {
         try {
             if (userRepository.findByUsername(registerDto.getUsername()).isEmpty()) {
-                Role role = roleRepository.findFirstByName(userRole);
+                Role role = roleRepository.findFirstByName(registerDto.getRole());
                 UserEntity user = new UserEntity(
                     registerDto.getUsername(),
                     registerDto.getEmail(),
@@ -90,32 +105,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
         }
     }
-    
-    // @PostMapping(path = "/add")
-    // public @ResponseBody String addNewUser (
-    //         @RequestParam String username,
-    //         @RequestParam String email,
-    //         @RequestParam String password,
-    //         @RequestParam String type
-    // ) {
-    //     Role role = roleRepository.findFirstByName(type);
-
-    //     if (role != null) {
-    //         if (userRepository.findByUsername(username).isEmpty()) {
-    //             if (userRepository.findByEmail(email).isEmpty()) {
-    //                 UserEntity newUser = new UserEntity(username, email, password, role);
-    //                 userRepository.save(newUser);
-    //                 return "UserEntity added successfully!";
-    //             } else {
-    //                 return "UserEntity with email " + email + " already exists!";
-    //             }
-    //         } else {
-    //             return "UserEntity with username " + username + " already exists!";
-    //         }
-    //     } else {
-    //         return "UserEntity type not found!";
-    //     }
-    // }
 
     @SuppressWarnings("null")
     @PostMapping("/update/{userId}")
@@ -146,6 +135,18 @@ public class UserController {
 
             return new ResponseEntity<>(userDto, HttpStatus.OK);
         }).orElse(new ResponseEntity<>("User not found!", HttpStatus.NOT_FOUND));
+    }    
+    
+    @PostMapping("/delete/{userId}")
+    public ResponseEntity<?> updateUser(@PathVariable Long userId) {
+        try {
+            UserEntity user = userRepository.findFirstById(userId);
+            user.setDeletedAt(new Date());
+            userRepository.save(user);
+            return ResponseEntity.ok("User deleted successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
+        }
     }    
     
     @PostMapping("/change-password/{userId}")
@@ -214,9 +215,14 @@ public class UserController {
         }
     }
 
-
+    @GetMapping("search")
+    public ResponseEntity<?> searchUser(@RequestParam String query, @RequestParam int page, @RequestParam int size) {
+        try {
+            Page<UserDto> userDto = userService.searchUsersByUsernameOrEmailOrRole(query, page, size);
+            return ResponseEntity.ok(userDto);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
+        }
+    }
     
-   
-    
-
 }
