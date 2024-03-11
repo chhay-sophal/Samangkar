@@ -41,11 +41,13 @@
                     Log In
                   </button>
                   <div class="flex text-sm">
-                    Don't have an account? 
-                        <button @click="">
-                          <a>Create new account</a>
-                        </button>
-                      </div>
+                    Don't have an account?
+                    <button class="pl-3 hover:text-green-500">
+                      <router-link to="/register" title="Register" class="font-bold">
+                        <a>Create new account</a>
+                      </router-link>
+                    </button>
+                  </div>
                 </div>
               </form>
             </div>
@@ -89,10 +91,12 @@
                 </button>
                 <div class="flex text-sm">
                   Don't have an account? 
-                      <button @click="">
-                        <a>Create new account</a>
-                      </button>
-                    </div>
+                  <button class="pl-3 hover:text-green-500">
+                    <router-link to="/register" title="Register" class="font-bold">
+                      <a>Create new account</a>
+                    </router-link>
+                  </button>
+                </div>
               </div>
             </form>
           </div>

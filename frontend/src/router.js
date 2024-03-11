@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from './views/user/homeView.vue'
 import LoginView from './views/LoginView.vue'
+import RegisterUserView from './views/RegisterUserView.vue'
 import LogoutView from './views/LogoutView.vue'
 import ProfileView from './views/ProfileView.vue'
 import FavoriteShopsView from './views/FavoriteShopsView.vue'
@@ -103,6 +104,12 @@ const routes = [
         path: '/login',
         name: 'loginPageRoute',
         component: LoginView,
+        meta: { requiresAuth: false, hideHeaderFooter: true } 
+    },
+    {
+        path: '/register',
+        name: 'registerPageRoute',
+        component: RegisterUserView,
         meta: { requiresAuth: false, hideHeaderFooter: true } 
     },
     {
