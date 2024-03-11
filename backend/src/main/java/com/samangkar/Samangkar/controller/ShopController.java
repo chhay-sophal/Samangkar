@@ -17,6 +17,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static org.hibernate.sql.ast.SqlTreeCreationLogger.LOGGER;
 
@@ -70,6 +71,19 @@ public class ShopController {
             return ResponseEntity.ok(shops);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
+        }
+    }
+
+    //GET SHOP DETAILS BY ID
+    @GetMapping("/detail")
+    public ResponseEntity<?> getShopDetailInfo(@RequestParam Long shopId){
+        try{
+            Stream<ShopDto> shopOptional = shopService.findShopById(shopId);
+            return ResponseEntity.ok(shopOptional);
+        }catch(Exception e){
+            LOGGER.error("An error occurred while creating the shop: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while creating the shop: " + e.getMessage());
         }
     }
 
