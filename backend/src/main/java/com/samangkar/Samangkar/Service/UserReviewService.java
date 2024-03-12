@@ -1,12 +1,18 @@
 package com.samangkar.Samangkar.service;
 
 import com.samangkar.Samangkar.dto.UserReviewDto;
+import com.samangkar.Samangkar.model.Role;
 import com.samangkar.Samangkar.model.Shop;
+import com.samangkar.Samangkar.model.UserEntity;
 import com.samangkar.Samangkar.model.UserReview;
 import com.samangkar.Samangkar.repository.ShopRepository;
+import com.samangkar.Samangkar.repository.UserRepository;
 import com.samangkar.Samangkar.repository.UserReviewRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,6 +27,9 @@ public class UserReviewService {
     @Autowired
     ShopRepository shopRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     //GET ALL USER REVIEW
     public List<UserReviewDto> getAllUserReview(){
         List<UserReview> results = userReviewRepository.findAllByDeletedAtIsNull();
@@ -33,6 +42,8 @@ public class UserReviewService {
     private UserReviewDto convertToDto(UserReview userReview){
         UserReviewDto urdto = new UserReviewDto();
         urdto.setId(userReview.getId());
+        urdto.setUser_id(userReview.getUser().getId());
+        urdto.setShop_id(userReview.getShop().getId());
         urdto.setTitle(userReview.getTitle());
         urdto.setDescription(userReview.getDescription());
         urdto.setStars(userReview.getStars());
@@ -63,13 +74,73 @@ public class UserReviewService {
     }
 
     //INSERT REVIEW BY SHOP_ID AND USER_ID
-    public void CreatReview(UserReviewDto userReviewDto){
+    public void saveUserReview(UserReviewDto userReviewDto) {
+
+        if(userReviewDto.getUser_id() == null){
+            throw new IllegalStateException("user_id can not be null");
+        }
+        if(userReviewDto.getShop_id() == null){
+            throw new IllegalStateException("shop_id can not be null");
+        }
+        Optional<UserEntity> userOptional = userRepository.findById(userReviewDto.getUser_id());
+        if (userOptional.isEmpty()) {
+            throw new EntityNotFoundException("User with ID " + userReviewDto.getUser_id() + " not found");
+        }else{
+            UserEntity user = userOptional.get();
+            Role userRole = user.getUserRole();
+            System.out.println(userRole);
+            if (userRole.getId() != 3) {
+                throw new IllegalStateException("User does not have role ID 2");
+            }
+        }
+        Optional<Shop> shopOptional = shopRepository.findById(userReviewDto.getShop_id());
+        if (shopOptional.isEmpty()) {
+            throw new EntityNotFoundException("Shop with ID " + userReviewDto.getShop_id() + " not found");
+        }
+        if(userReviewDto.getStars() > 5){
+            throw new IllegalStateException("stars can not be greater than 5");
+        }
+
+        UserReview urw = new UserReview();
+        urw.setUser(userOptional.get());
+        urw.setShop(shopOptional.get());
+        urw.setTitle(userReviewDto.getTitle());
+        urw.setDescription(userReviewDto.getDescription());
+        urw.setStars(userReviewDto.getStars());
+        urw.setCreatedAt(new Date());
+        userReviewRepository.save(urw);
 
     }
 
-    //UPDATE REVIEW BY SHOP_ID AND USER_ID => SET DESCRIPRTION , UPDATED_AT = NOW
-    
-    //DELETE REVIEW => SET DELETED_AT TO NOW
 
+    //UPDATE REVIEW => SET DESCRIPTION, UPDATED_AT = NOW
+    public void updateUserReview(UserReviewDto userReviewDto){
+
+        Optional<UserReview> existingUserReviewOptional = userReviewRepository.findById(userReviewDto.getId());
+        if (existingUserReviewOptional.isEmpty()) {
+            throw new EntityNotFoundException("User Review with ID " + userReviewDto.getId() + " not found");
+        }
+        if(userReviewDto.getStars() > 5){
+            throw new IllegalStateException("stars can not be greater than 5");
+        }
+        UserReview existingUserReview = existingUserReviewOptional.get();
+        existingUserReview.setTitle(userReviewDto.getTitle());
+        existingUserReview.setDescription(userReviewDto.getDescription());
+        existingUserReview.setStars(userReviewDto.getStars());
+        existingUserReview.setUpdatedAt(new Date());
+        userReviewRepository.save(existingUserReview);
+    }
+
+    //DELETE REVIEW => SET DELETED_AT TO NOW
+    public void deletedUserReview(Long id){
+
+        Optional<UserReview> existingUserReviewOptional = userReviewRepository.findById(id);
+        if (existingUserReviewOptional.isEmpty()) {
+            throw new EntityNotFoundException("User Review with ID " + id + " not found");
+        }
+        UserReview existingUserReview = existingUserReviewOptional.get();
+        existingUserReview.setDeletedAt(new Date());
+        userReviewRepository.save(existingUserReview);
+    }
 
 }

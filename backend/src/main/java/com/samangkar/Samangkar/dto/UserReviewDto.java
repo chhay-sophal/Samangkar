@@ -10,6 +10,8 @@ import java.util.Date;
 public class UserReviewDto {
     private Long id;
     private String title;
+    private Long user_id;
+    private Long shop_id;
     private String description;
     private int stars;
     private Date createdAt;

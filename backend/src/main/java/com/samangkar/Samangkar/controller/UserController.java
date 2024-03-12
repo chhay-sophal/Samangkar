@@ -3,7 +3,6 @@ package com.samangkar.Samangkar.controller;
 import com.samangkar.Samangkar.dto.*;
 import com.samangkar.Samangkar.model.UserEntity;
 import com.samangkar.Samangkar.model.Role;
-import com.samangkar.Samangkar.model.UserReview;
 import com.samangkar.Samangkar.repository.UserRepository;
 import com.samangkar.Samangkar.service.UserReviewService;
 import com.samangkar.Samangkar.service.UserService;
@@ -17,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -228,7 +228,7 @@ public class UserController {
     }
 
     //GET ALL USER_REVIEW && BY SHOP ID
-    @GetMapping("review/all")
+    @GetMapping("reviews/all")
     public ResponseEntity<?> getAllUserReviews(@RequestParam(required = false) Long ShopId){
         if(ShopId != null){
             try{
@@ -248,7 +248,7 @@ public class UserController {
     }
 
     //GET ALL USER_REVIEW SHOT BY STARS DESC
-    @GetMapping("review/all/star")
+    @GetMapping("reviews/all/star")
     public ResponseEntity<?> getAllUserReviewsShortByStar(){
         try{
             List<UserReviewDto> r = userReviewService.getAllUserReviewShortByStarDesc();
@@ -257,5 +257,46 @@ public class UserController {
             return ResponseEntity.status(500).body("Error retrieving user reviews order by stars: " + e.getMessage());
         }
     }
+
+    //INSERT REVIEW
+    @PostMapping("reviews/insert")
+    public ResponseEntity<?> createUserReview(@RequestBody UserReviewDto userReviewDto){
+        try {
+            userReviewService.saveUserReview(userReviewDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Review added successfully");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating user review: " + e.getMessage());
+        }
+    }
+
+    //UPDATE REVIEW
+    @PutMapping("reviews/update/{id}")
+    public ResponseEntity<?> updateUserReview(@PathVariable Long id, @RequestBody UserReviewDto userReviewDto) {
+        try {
+            userReviewDto.setId(id);
+            userReviewService.updateUserReview(userReviewDto);
+            return ResponseEntity.status(HttpStatus.OK).body("Review updated successfully");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating user review: " + e.getMessage());
+        }
+    }
+
+    //DELETE REVIEW
+    @PutMapping("reviews/delete/{id}")
+    public ResponseEntity<?> deletedUserReview(@PathVariable Long id) {
+        try {
+            userReviewService.deletedUserReview(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Review deleted successfully");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating user review: " + e.getMessage());
+        }
+    }
+
 
 }
