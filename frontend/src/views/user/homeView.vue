@@ -1,27 +1,32 @@
 <template>
-  <main id="app">
+  <div>
     <section class="slideshow-container">
       <div class="slides">
-        <div class="slide" v-for="(shop, index) in shops" :key="index">
-          <img :src="shop.image" :alt="shop.name">
+        <div class="slide flex items-center justify-center" v-for="(shop, index) in shops" :key="index">
+          <ImageViewer :imageData="shop.imageUrl"/>
+          <!-- <img :src="shop.imgUrl" :alt="shop.name"> -->
         </div>
       </div>
       <button class="prev" @click="prevSlide">&#10094;</button>
       <button class="next" @click="nextSlide">&#10095;</button>
     </section>
     <section class="popular-shops">
-      <h2>Popular Shops</h2>
+      <div class="flex">
+        <h2 class="text-2xl p-5 dark:text-stone-300 grow">Popular Shops</h2>
+        <h2 class="text-2xl p-5 dark:text-stone-300">See all</h2>
+      </div>
       <div class="shop-list" id="popularShopList">
         <div class="shop-item" v-for="(shop, index) in popularShops" :key="index">
-          <img :src="shop.image" :alt="shop.name">
+          <ImageViewer :imageData="shop.imageUrl" class="flex aspect-square object-fill"/>
+          <!-- <img :src="shop.image" :alt="shop.name"> -->
           <div class="shop-details">
             <div class="items">{{ shop.name }}</div>
-            <p>{{ shop.category }}</p>
+            <p>{{ shop.description }}</p>
           </div>
         </div>
       </div>
     </section>
-    <div class="title"> All Shop</div>
+    <div class="title">Explore</div>
     <div class="search-filter">
       <input type="text" v-model="searchText" placeholder="Search...">
       <select v-model="selectedCategory">
@@ -30,35 +35,59 @@
         <option value="MiddleClass">MiddleClass</option>
         <option value="Simple">Simple</option>
       </select>
-      <button @click="searchAndFilter">Apply</button>
+      <button @click="searchShops()">Apply</button>
     </div>
-    <div class="shop-list" id="shopList">
-      <div class="shop-item" v-for="(shop, index) in filteredShops" :key="index">
+    <section class="shop-list flex flex-col" id="shopList">
+      <div class="flex">
+        <h2 class="text-2xl p-5 dark:text-stone-300 grow">Popular Shops</h2>
+        <h2 class="text-2xl p-5 dark:text-stone-300">See all</h2>
+      </div>
+      <div class="shop-list">
+        <div class="shop-item" v-for="(shop, index) in shops" :key="index">
+          <ImageViewer :imageData="shop.imageUrl" class="flex aspect-square object-fill"/>
+          <!-- <img :src="shop.image" :alt="shop.name"> -->
+          <div class="shop-details">
+            <div class="items">{{ shop.name }}</div>
+            <p>{{ shop.description }}</p>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="shop-item" v-for="(shop, index) in filteredShops" :key="index">
         <img :src="shop.image" :alt="shop.name">
         <div class="shop-details">
           <div class="items">{{ shop.name }}</div>
           <p>{{ shop.category }}</p>
         </div>
-      </div>
-    </div>
+      </div> -->
+    </section>
     <section class="packages">
-      <h2>Packages</h2>
+      <!-- <h2>Packages</h2> -->
+      <div class="flex">
+        <h2 class="text-2xl p-5 dark:text-stone-300 grow">Packages</h2>
+        <h2 class="text-2xl p-5 dark:text-stone-300">See all</h2>
+      </div>
       <div class="package-list" id="packageList">
         <div class="package-item" v-for="(pkg, index) in packages" :key="index">
-          <img :src="pkg.image" :alt="pkg.name">
+          <ImageViewer :imageData="pkg.imageUrl" />
           <div class="package-details">
             <div class="items">{{ pkg.name }}</div>
-            <div>{{ pkg.price }}</div>
-            <p>{{ pkg.details }}</p>
+            <div>$ {{ pkg.price }}</div>
+            <p>{{ pkg.description }}</p>
           </div>
         </div>
       </div>
     </section>
-  </main>
+  </div>
 </template>
 
 <script>
+import http from "@/services/httpService";
+import ImageViewer from "@/components/ImageViewer.vue";
+
 export default {
+  components: {
+    ImageViewer,
+  },
   data() {
     return {
       shops: [
@@ -104,11 +133,46 @@ export default {
         (shop.name.toLowerCase().includes(searchText) || shop.category.toLowerCase().includes(searchText)) &&
         (categoryFilter === "" || shop.category.toLowerCase() === categoryFilter)
       );
-    }
+    },
+    async searchShops() {
+      try {
+        if (this.searchText) {
+          const response = await http.get(`api/shops/search/${this.searchText}?page=0&size=10`);
+          this.shops = response.data.content;
+          console.log(this.shops)
+        } else {
+          this.fetchShops();
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    },
+    async fetchShops() {
+      try {
+        const response = await http.get(`api/shops/get-all/pagable?page=0&size=10`);
+        this.shops = response.data.content;
+        this.popularShops = response.data.content.filter(s => s.isTrending == true);
+        console.log(this.shops)
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    },
+    async fetchPackages() {
+      try {
+        // const response = await http.get(`api/packages/get-all/with-services?page=0&size=10`);
+        const response = await http.get(`api/packages/get-all`);
+        this.packages = response.data;
+        console.log(this.packages)
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    },
   },
   mounted() {
     // Initialize any data or perform initial actions here
-    this.filteredShops = this.shops;
+    // this.filteredShops = this.shops;
+    this.fetchShops();
+    this.fetchPackages()
   }
 };
 </script>
@@ -119,7 +183,6 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #FFFFFF;
 }
 
 main {
@@ -162,7 +225,7 @@ main {
   padding: 20px;
   font-style: oblique;
   text-align: center;
-  color: #5A585C;
+  /* color: #5A585C; */
 }
 
 .search-filter {
@@ -183,7 +246,7 @@ main {
 .search-filter button {
   padding: 8px 16px;
   background-color: #DD6895;
-  color: #FFFFFF;
+  /* color: #FFFFFF; */
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -292,7 +355,6 @@ h2 {
 .package-item {
   width: 30%;
   margin-bottom: 20px;
-  background-color: #FFFFFF;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -330,7 +392,6 @@ h2 {
 .package-item {
   width: 30%;
   margin-bottom: 20px;
-  background-color: #FFFFFF;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
