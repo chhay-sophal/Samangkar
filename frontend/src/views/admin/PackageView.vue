@@ -15,6 +15,7 @@
                 <th>Package Name</th>
                 <th>Shop Name</th>
                 <th>Description</th>
+                <th>Services</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -24,13 +25,19 @@
                 <td>{{ pkg.shop.name }}</td>
                 <td>{{ pkg.description }}</td>
                 <td>
+                  <ul>
+                    <li v-for="service in pkg.services" :key="service.id">
+                      - {{ service.name }}
+                    </li>
+                  </ul>
+                </td>
+                <td>
+                  <button @click="showDetail(pkg.id)" class="edit-button">Details</button>
                   <router-link :to="`/admin/packages/edit/${pkg.id}`">
                     <button class="action-button edit-button">
                       Edit
                     </button>
                   </router-link>
-                  
-                  <!-- <button @click="editPackage(pkg)" class="edit-button">Edit</button> -->
                   <button @click="handleDelete(pkg.id)" class="delete-button">Delete</button>
                 </td>
               </tr>
@@ -41,6 +48,57 @@
           </div>
         </div>
       </div>
+
+      <div 
+            v-if="showDetailPanel"
+            class="top-1/2 left-1/2 bg-green-100 2xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl sm:h-1/3 h-2/5 -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
+        >
+            <div class="flex justify-end items-center pr-5 dark:text-stone-600">
+                <button 
+                    @click="hideDetail()"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="text-3xl text-center pb-1 dark:text-stone-600">
+                Detail
+            </div>
+            <div action="" class="w-full px-10 pb-10 dark:text-stone-600 flex flex-col">
+              <div class="flex gap-4">
+                <label for="old-password" class="block font-medium text-slate-600">Package name:</label>
+                <div class="">{{ selectedPackage.name }}</div>
+              </div>
+              <div class="flex gap-4">
+                <label for="old-password" class="block font-medium text-slate-600">Shop name:</label>
+                <div class="">{{ selectedPackage.shop.name }}</div>
+              </div>
+              <div class="flex gap-4">
+                <label for="old-password" class="block font-medium text-slate-600">Description:</label>
+                <div class="">{{ selectedPackage.description }}</div>
+              </div>
+              <div class="flex gap-4">
+                <label for="old-password" class="block font-medium text-slate-600">Price:</label>
+                <div class="">{{ selectedPackage.price }}</div>
+              </div>
+              <div class="flex gap-4">
+                <label for="old-password" class="block font-medium text-slate-600">Services:</label>
+                <ul>
+                  <li v-for="service in selectedPackage.services" :key="service.id">
+                    - {{ service.name }}
+                  </li>
+                </ul>
+              </div>
+              <div class="">
+                <router-link :to="`/admin/packages/edit/${selectedPackage.id}`">
+                  <button class="action-button edit-button">
+                    Edit
+                  </button>
+                </router-link>
+              </div>
+            </div>
+        </div>
     </div>
   </template>
   
@@ -69,6 +127,8 @@ export default {
       totalElements: 0,
       first: true,
       last: false,
+      showDetailPanel: false,
+      selectedPackage: null,
     };
   },
   computed: {
@@ -82,6 +142,14 @@ export default {
         // Call update method
         this.deletePackage(packageId);
       }
+    },
+    showDetail(pkgId){
+      this.selectedPackage = this.packages.find(pkg => pkg.id == pkgId);
+      this.showDetailPanel = true;
+    },
+    hideDetail(){
+      this.selectedPackage = null;
+      this.showDetailPanel = false;
     },
     async deletePackage(packageId) {
       try {
