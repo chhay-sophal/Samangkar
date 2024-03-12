@@ -75,17 +75,17 @@ public class ShopController {
     }
 
     //GET SHOP DETAILS BY ID
-//    @GetMapping("/detail")
-//    public ResponseEntity<?> getShopDetailInfo(@RequestParam Long shopId){
-//        try{
-//            Stream<ShopDto> shopOptional = shopService.findShopById(shopId);
-//            return ResponseEntity.ok(shopOptional);
-//        }catch(Exception e){
-//            LOGGER.error("An error occurred while creating the shop: {}", e.getMessage(), e);
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("An error occurred while creating the shop: " + e.getMessage());
-//        }
-//    }
+    @GetMapping("/detail")
+    public ResponseEntity<?> getShopDetailInfo(@RequestParam Long shopId){
+        try{
+            Stream<ShopDto> shopOptional = shopService.findShopById(shopId);
+            return ResponseEntity.ok(shopOptional);
+        }catch(Exception e){
+            LOGGER.error("An error occurred while creating the shop: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while creating the shop: " + e.getMessage());
+        }
+    }
 
     //GET ACTIVE SHOP
     @GetMapping("/active")

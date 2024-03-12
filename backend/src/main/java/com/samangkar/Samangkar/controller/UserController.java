@@ -1,12 +1,11 @@
 package com.samangkar.Samangkar.controller;
 
-import com.samangkar.Samangkar.dto.ChangePasswordDto;
-import com.samangkar.Samangkar.dto.ModifyUserDto;
-import com.samangkar.Samangkar.dto.RegisterDto;
-import com.samangkar.Samangkar.dto.UserDto;
+import com.samangkar.Samangkar.dto.*;
 import com.samangkar.Samangkar.model.UserEntity;
 import com.samangkar.Samangkar.model.Role;
+import com.samangkar.Samangkar.model.UserReview;
 import com.samangkar.Samangkar.repository.UserRepository;
+import com.samangkar.Samangkar.service.UserReviewService;
 import com.samangkar.Samangkar.service.UserService;
 
 import com.samangkar.Samangkar.repository.RoleRepository;
@@ -46,6 +45,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserReviewService userReviewService;
 
     @GetMapping("get/{userId}")
     public ResponseEntity<?> getUserById(@PathVariable Long userId) {
@@ -224,5 +226,36 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
         }
     }
-    
+
+    //GET ALL USER_REVIEW && BY SHOP ID
+    @GetMapping("review/all")
+    public ResponseEntity<?> getAllUserReviews(@RequestParam(required = false) Long ShopId){
+        if(ShopId != null){
+            try{
+                List<UserReviewDto> r = userReviewService.getAllUserReviewByShopId(ShopId);
+                return ResponseEntity.ok(r);
+            }catch (Exception e){
+                return ResponseEntity.status(500).body("Error retrieving user reviews with shopId " + ShopId + e.getMessage());
+            }
+        }else{
+            try{
+                List<UserReviewDto> r = userReviewService.getAllUserReview();
+                return ResponseEntity.ok(r);
+            }catch (Exception e){
+                return ResponseEntity.status(500).body("Error retrieving user reviews: " + e.getMessage());
+            }
+        }
+    }
+
+    //GET ALL USER_REVIEW SHOT BY STARS DESC
+    @GetMapping("review/all/star")
+    public ResponseEntity<?> getAllUserReviewsShortByStar(){
+        try{
+            List<UserReviewDto> r = userReviewService.getAllUserReviewShortByStarDesc();
+            return ResponseEntity.ok(r);
+        }catch (Exception e){
+            return ResponseEntity.status(500).body("Error retrieving user reviews order by stars: " + e.getMessage());
+        }
+    }
+
 }

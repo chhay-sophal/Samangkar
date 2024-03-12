@@ -7,8 +7,10 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.security.core.userdetails.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @RepositoryRestResource(collectionResourceRel = "reviews", path = "reviews")
 public interface UserReviewRepository extends PagingAndSortingRepository<UserReview, Long>,
@@ -19,4 +21,16 @@ public interface UserReviewRepository extends PagingAndSortingRepository<UserRev
     List<UserReview> findByShop(@Param("shop") Shop shop);
 
     List<UserReview> findByUserAndShop(@Param("user") UserEntity user, @Param("shop") Shop shop);
+
+    List<UserReview> findAllByDeletedAtIsNull();
+
+    List<UserReview> findAllByDeletedAtIsNullOrderByStarsDesc();
+
+    List<UserReview> findByShopIdAndDeletedAtIsNull(Long ShopId);
+
+    Optional<UserReview> findByShopId(Long ShopId);
+
+    Optional<UserReview> findByUserId(Long UserId);
+
+
 }
