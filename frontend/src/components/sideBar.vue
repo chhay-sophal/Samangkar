@@ -11,16 +11,20 @@
             <i class="fas fa-arrow-left"></i>
           </div>
 
-          <h3><i class="fas fa-chart-line"></i> Dashboard </h3>
+          <!-- Add admin picture and name -->
+          <div class="admin-info">
+            <img src="https://th.bing.com/th/id/OIP.CBFZpMOFqyCjyHOJxouwVAHaE8?rs=1&pid=ImgDetMain" alt="Admin Picture" class="admin-picture">
+            <p class="admin-name"> Nidet </p>
+          </div>
         </div>
         <ul class="sidebar-list">
-          <div class="menu"><router-link to="/add">Add</router-link></div>
-          <div class="menu"><router-link to="/overview"><i class="fas fa-chart-pie"></i> Overview</router-link></div>
-          <div class="menu"><router-link to="/user"><i class="fas fa-users"></i> Users</router-link></div>
-          <div class="menu"><router-link to="/shop"><i class="fas fa-store"></i> Shop</router-link></div>
-          <div class="menu"><router-link to="/package"><i class="fas fa-shopping-cart"></i> Package</router-link></div>
+          <router-link to="/add"><div class="menu">Add Users</div></router-link>
+          <router-link to="/overview"><div class="menu"><i class="fas fa-chart-pie"></i> Overview</div></router-link>
+          <router-link to="/user"><div class="menu"><i class="fas fa-users"></i> Users</div></router-link>
+          <router-link to="/shop"><div class="menu"><i class="fas fa-store"></i> Shop</div></router-link>
+          <router-link to="/package"><div class="menu"><i class="fas fa-shopping-cart"></i> Package</div></router-link>
           <!-- <div class="menu"><router-link to="/contact"><i class="fas fa-box"></i> contact</router-link></div> -->
-          <div class="menu"><router-link to="/review"><i class="fas fa-comments"></i> Review</router-link></div>
+          <router-link to="/review"><div class="menu"><i class="fas fa-comments"></i> Review</div></router-link>
         </ul>
       </div>
     </nav>
@@ -49,11 +53,12 @@ export default {
 /* Your CSS styles go here */
 .menu{
   padding-left:20px;
-  padding-top: 10px;
+  padding-top: 20px;
 }
 .menu:hover{
-  background-color: rgb(76, 70, 86);
+  background-color: rgba(220, 207, 240, 0.417);
   transition: ease;
+  color: #242b38;
 }
 .sidebaricon {
   display: none;
@@ -131,6 +136,21 @@ export default {
   z-index: 1000; /* Ensure it's above the sidebar */
 }
 
+.admin-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.admin-picture {
+  width: 50px; /* Adjust as needed */
+  height: 50px; /* Adjust as needed */
+  border-radius: 50%; /* Ensures the picture is round */
+}
+
+.admin-name {
+  margin-top: 10px;
+}
 /* Font Awesome icons */
 .fa-bars {
   font-size: 24px;

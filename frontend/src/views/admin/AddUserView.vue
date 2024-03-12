@@ -82,8 +82,7 @@ export default {
 <style scoped>
 .admin-dashboard {
   display: flex;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.431); /* horizontal-offset vertical-offset blur spread color */
-
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.431);  */
 }
 
 .main-content {
