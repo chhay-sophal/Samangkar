@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.samangkar.Samangkar.dto.PackageDto;
-import com.samangkar.Samangkar.dto.UserDto;
 import com.samangkar.Samangkar.model.PackageModel;
 import com.samangkar.Samangkar.repository.PackageRepository;
 
@@ -44,7 +43,7 @@ public class PackageService {
 
     public Page<PackageDto> getPackagesWithServices(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<PackageModel> packages = packageRepository.findPackagesWithServices(pageable);
+        Page<PackageModel> packages = packageRepository.findPackagesWithServicesAndDeletedAtIsNull(pageable);
         return packages.map(this::createPackageDto);
     }
 
