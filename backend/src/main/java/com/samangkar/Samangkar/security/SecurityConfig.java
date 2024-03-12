@@ -25,18 +25,23 @@ public class SecurityConfig {
     @SuppressWarnings("deprecation")
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http
+//                .csrf(csrf -> csrf.disable())
+//                .cors(withDefaults())
+//                .exceptionHandling(handling -> handling
+//                        .authenticationEntryPoint(authEntryPoint))
+//                .sessionManagement(management -> management
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authorizeRequests(requests -> requests
+//                        .requestMatchers("/api/auth/**").permitAll()
+//                        .anyRequest().authenticated())
+//                .httpBasic(withDefaults());
+//        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+//        return http.build();
         http
-                .csrf(csrf -> csrf.disable())
-                .cors(withDefaults())
-                .exceptionHandling(handling -> handling
-                        .authenticationEntryPoint(authEntryPoint))
-                .sessionManagement(management -> management
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeRequests(requests -> requests
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .anyRequest().authenticated())
-                .httpBasic(withDefaults());
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .csrf().disable() // Disable CSRF protection
+                .authorizeRequests()
+                .anyRequest().permitAll(); // Allow all requests
         return http.build();
     }
 
