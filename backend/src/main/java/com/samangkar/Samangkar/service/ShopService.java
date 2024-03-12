@@ -19,7 +19,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 
@@ -118,17 +117,6 @@ public class ShopService {
             return null;
         }
         return convertToDto(shop);
-    }
-
-    //GET SHOP DETAILS
-    public Stream<ShopDto> findShopById(Long shopId) {
-        boolean isExisted = shopRepository.existsById(shopId);
-        if(isExisted){
-            Optional<Shop> shop = shopRepository.findById(shopId);
-            return shop.stream().map(this::convertToDto);
-        }else{
-            throw new RuntimeException("Shop does not exist");
-        }
     }
 
     //GET ACTIVE SHOP
