@@ -260,7 +260,7 @@ export default {
   }
   
   .package-table th {
-    background-color: #f0f0f0;
+    /* background-color: #f0f0f0; */
     font-weight: bold;
     text-align: left;
   }
@@ -269,9 +269,9 @@ export default {
     text-align: left;
   }
   
-  .package-table tbody tr:nth-child(even) {
+  /* .package-table tbody tr:nth-child(even) {
     background-color: #f9f9f9;
-  }
+  } */
   
   .edit-button,
   .delete-button {

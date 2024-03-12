@@ -69,7 +69,7 @@ public class PackageService {
         try {
             Path imagePath;
             if (packageModel.getImage() != null) {
-                imagePath = Paths.get("src/main/resources/images/" + packageModel.getImage());
+                imagePath = Paths.get("src/main/resources/package-images/" + packageModel.getImage());
             } else {
                 imagePath = Paths.get("src/main/resources/package-image.jpg");
             }

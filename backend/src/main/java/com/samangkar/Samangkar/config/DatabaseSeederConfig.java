@@ -46,13 +46,13 @@
 //             seedUser(userRepository, "user2", "user2@example.com", "user5678", roleRepository.findFirstByName("USER"));
 //             seedUser(userRepository, "user3", "user3@example.com", "user8910", roleRepository.findFirstByName("USER"));
 //             // Seed More users
-//             seedUser(userRepository, "shop_owner1a", "shop_owner1a@example.com", "admin1234", roleRepository.findFirstByName("SHOP_OWNER"));
-//             seedUser(userRepository, "shop_owner1b", "shop_owner1b@example.com", "admin5678", roleRepository.findFirstByName("SHOP_OWNER"));
-//             seedUser(userRepository, "shop_owner2d", "shop_owner2d@example.com", "shop5678", roleRepository.findFirstByName("SHOP_OWNER"));
-//             seedUser(userRepository, "shop_owner3c", "shop_owner3c@example.com", "shop8910", roleRepository.findFirstByName("SHOP_OWNER"));
-//             seedUser(userRepository, "shop_owner1q", "shop_owner1q@example.com", "user1234", roleRepository.findFirstByName("SHOP_OWNER"));
-//             seedUser(userRepository, "shop_owner1e", "shop_owner1e@example.com", "user5678", roleRepository.findFirstByName("SHOP_OWNER"));
-//             seedUser(userRepository, "shop_owner1f", "shop_owner1f@example.com", "user8910", roleRepository.findFirstByName("SHOP_OWNER"));
+//             seedUser(userRepository, "shop_owner4", "shop_owner1a@example.com", "admin1234", roleRepository.findFirstByName("SHOP_OWNER"));
+//             seedUser(userRepository, "shop_owner5", "shop_owner1b@example.com", "admin5678", roleRepository.findFirstByName("SHOP_OWNER"));
+//             seedUser(userRepository, "shop_owner6", "shop_owner2d@example.com", "shop5678", roleRepository.findFirstByName("SHOP_OWNER"));
+//             seedUser(userRepository, "shop_owner7", "shop_owner3c@example.com", "shop8910", roleRepository.findFirstByName("SHOP_OWNER"));
+//             seedUser(userRepository, "shop_owner8", "shop_owner1q@example.com", "user1234", roleRepository.findFirstByName("SHOP_OWNER"));
+//             seedUser(userRepository, "shop_owner9", "shop_owner1e@example.com", "user5678", roleRepository.findFirstByName("SHOP_OWNER"));
+//             seedUser(userRepository, "shop_owner10", "shop_owner1f@example.com", "user8910", roleRepository.findFirstByName("SHOP_OWNER"));
 
 //             // Seed contact types
 //             seedContactType(contactTypeRepository, "Phone Number");
@@ -62,9 +62,12 @@
 //             seedContactType(contactTypeRepository, "Tik Tok");
 
 //             // Seed shops
-//             seedShop(shopRepository, "shop1", "This is shop 1", userRepository.findFirstByUsername("shop_owner1"));
-//             seedShop(shopRepository, "shop2", "This is shop 2", userRepository.findFirstByUsername("shop_owner2"));
-//             seedShop(shopRepository, "shop3", "This is shop 3", userRepository.findFirstByUsername("shop_owner3"));
+//             seedShop(shopRepository, "shop1", "This is shop 1", "shop1.jpg", userRepository.findFirstByUsername("shop_owner1"));
+//             seedShop(shopRepository, "shop2", "This is shop 2", "shop2.jpg", userRepository.findFirstByUsername("shop_owner2"));
+//             seedShop(shopRepository, "shop3", "This is shop 3", "shop3.jpg", userRepository.findFirstByUsername("shop_owner3"));
+//             seedShop(shopRepository, "shop4", "This is shop 4", "shop4.jpeg", userRepository.findFirstByUsername("shop_owner4"));
+//             seedShop(shopRepository, "shop5", "This is shop 5", "shop5.jpg", userRepository.findFirstByUsername("shop_owner5"));
+//             seedShop(shopRepository, "shop6", "This is shop 6", "shop6.jpg", userRepository.findFirstByUsername("shop_owner6"));
 
 //             // Seed shop contacts
 //             seedShopContact(shopContactRepository, contactTypeRepository.findFirstByPlatform("Phone Number"), "0987654321", shopRepository.findFirstByName("shop1"));
@@ -174,7 +177,6 @@
 
 //     @Transactional
 //     private void seedUser(UserRepository userRepository, String username, String email, String password, Role role) {
-
 //         if (userRepository.findByUsername(username).isEmpty()) {
 //             UserEntity user = new UserEntity();
 //             user.setUsername(username);
@@ -195,9 +197,10 @@
 //     }
 
 //     @Transactional
-//     private void seedShop(ShopRepository repository, String name, String description, UserEntity owner) {
+//     private void seedShop(ShopRepository repository, String name, String description, String image, UserEntity owner) {
 //         if (repository.findByName(name).isEmpty()) {
 //             Shop shop = new Shop(name, description, owner);
+//             shop.setShopImageUrl(image);
 //             repository.save(shop);
 //         }
 //     }

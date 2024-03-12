@@ -182,7 +182,7 @@ public class UserController {
     @PostMapping("{userId}/image/upload")
     public ResponseEntity<?> handleFileUpload(@PathVariable Long userId, @RequestParam("file") MultipartFile file) {
         try {
-            Path uploadDirectory = Path.of("src/main/resources/images");
+            Path uploadDirectory = Path.of("src/main/resources/profile-images");
 
             // Ensure the directory exists, create it if not
             Files.createDirectories(uploadDirectory);

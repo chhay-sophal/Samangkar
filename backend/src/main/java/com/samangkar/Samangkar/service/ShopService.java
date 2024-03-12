@@ -69,7 +69,7 @@ public class ShopService {
         try {
             Path imagePath;
             if (shop.getShopImageUrl() != null) {
-                imagePath = Paths.get("src/main/resources/images/" + shop.getShopImageUrl());
+                imagePath = Paths.get("src/main/resources/shop-images/" + shop.getShopImageUrl());
             } else {
                 imagePath = Paths.get("src/main/resources/default-shop-img.jpg");
             }
