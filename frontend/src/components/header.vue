@@ -54,10 +54,32 @@
 
 <script setup>
 import { useUserStore } from '@/store/userStore' 
+import { logout } from '@/services/authService';
+import { ref, onMounted } from 'vue'
+import http from '@/services/httpService'
 
 const userStore = useUserStore()
 const user = userStore.user
 console.log(user)
+
+const userFavorites = ref(userStore.favorites)
+
+const fetchUserFavorites = async () => {
+    try {
+        const response = await http.get(`api/favorites/get-all/${user.id}`)
+        userStore.setFavorites(response.data)
+    } catch (error) {
+        console.error(error)
+        logout()
+    }
+}
+
+// Fetch data when the component is mounted
+onMounted(() => {
+    if (!userFavorites.value.length) {
+        fetchUserFavorites();
+    }
+});
 </script>
 
 <script>
