@@ -40,4 +40,6 @@ public interface PackageRepository extends PagingAndSortingRepository<PackageMod
         "LOWER(pkg.shop.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<PackageModel> findPackagesByKeyword(String keyword, Pageable pageable);
 
+    @Query("SELECT p FROM PackageModel p WHERE SIZE(p.services) > 0")
+    Page<PackageModel> findPackagesWithServices(Pageable pageable);
 }
