@@ -22,11 +22,11 @@ a,
 
 
 /* Layout styles */
-/* #app {
+#app {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-} */
+}
 
 body {
   /* display: flex;
