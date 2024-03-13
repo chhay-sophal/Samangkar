@@ -21,6 +21,9 @@ import ShopView from './views/admin/ShopView.vue'
 import AddPackageView from './views/admin/AddPackage.vue'
 import PackageView from './views/admin/PackageView.vue'
 import ReviewView from './views/admin/ReviewView.vue'
+import ServiceView from './views/user/serviceView.vue'
+import ContactView from './views/user/contactView.vue'
+import AboutView from './views/user/aboutView.vue'
 
 const routes = [
     {
@@ -101,6 +104,21 @@ const routes = [
         component: HomeView
     },
     {
+        name: 'ServiceRoute',
+        path: '/services',
+        component: ServiceView
+    },
+    {
+        name: 'ContactRoute',
+        path: '/contact',
+        component: ContactView
+    },
+    {
+        name: 'AboutRoute',
+        path: '/about',
+        component: AboutView
+    },
+    {
         path: '/login',
         name: 'loginPageRoute',
         component: LoginView,
@@ -144,9 +162,32 @@ const routes = [
         component: ReviewView
     },
     {
-        path: '/services',
-        name: 'servicesPageRout',
-        component: ReviewView
+        name: 'EditView',
+        path: '/user/edit',
+        component: Edit,
+        meta: { requiresAuth: false, hideHeaderFooter: true } 
+    },
+    {
+        name: 'ShopView',
+        path: '/shop',
+        component: ShopView,
+        meta: { requiresAuth: false, hideHeaderFooter: true } 
+    },{
+        name: 'AddPackageView',
+        path: '/addpackage',
+        component: AddPackage,
+        meta: { requiresAuth: false, hideHeaderFooter: true } 
+    },
+    ,{
+        name: 'PackageView',
+        path: '/package',
+        component: PackageView,
+        meta: { requiresAuth: false, hideHeaderFooter: true } 
+    } ,{
+        name: 'ReviewView',
+        path: '/review',
+        component: ReviewView,
+        meta: { requiresAuth: false, hideHeaderFooter: true } 
     },
 ];
 
