@@ -15,7 +15,7 @@ public class ServiceModel {
     private String description;
     private double unitPrice;
     private String image;
-    
+    private boolean isTrending;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -149,6 +149,14 @@ public class ServiceModel {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public boolean isTrending() {
+        return isTrending;
+    }
+
+    public void setTrending(boolean isTrending) {
+        this.isTrending = isTrending;
     }
 
 }

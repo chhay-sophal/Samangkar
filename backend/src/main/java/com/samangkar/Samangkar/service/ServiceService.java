@@ -9,6 +9,9 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.samangkar.Samangkar.dto.ServiceDto;
@@ -25,6 +28,12 @@ public class ServiceService {
 
     @Autowired
     private ShopRepository shopRepository;
+
+    public Page<ServiceDto> getAllServices(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ServiceModel> services = serviceRepository.findAll(pageable);
+        return services.map(this::createServiceDto);
+    }
 
     public List<ServiceDto> getAllShopServicesByShopId(Long shopId) {
         Shop shop = shopRepository.findFirstById(shopId);
@@ -44,7 +53,7 @@ public class ServiceService {
         return createServiceDtoList(services);
     }
 
-        private ServiceDto createServiceDto(ServiceModel service) {
+    private ServiceDto createServiceDto(ServiceModel service) {
         // Check if the resource is not null before creating UserDto
         try {
             Path imagePath;
@@ -65,6 +74,7 @@ public class ServiceService {
                     service.getName(),
                     service.getDescription(),
                     service.getUnitPrice(),
+                    service.isTrending(),
                     service.getShop().getId(),
                     base64Image,
                     service.getCreatedAt(),
@@ -80,6 +90,7 @@ public class ServiceService {
                     service.getName(),
                     service.getDescription(),
                     service.getUnitPrice(),
+                    service.isTrending(),
                     service.getShop().getId(),
                     null,
                     service.getCreatedAt(),
