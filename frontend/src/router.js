@@ -25,6 +25,8 @@ import ServiceView from './views/user/serviceView.vue'
 import ContactView from './views/user/contactView.vue'
 import AboutView from './views/user/aboutView.vue'
 import AdminServicesView from './views/admin/ServicesView.vue'
+import ShopDetail from './views/shop/ShopDetail.vue'
+import PackageDetail from './views/shop/PackageDetail.vue'
 
 const routes = [
     {
