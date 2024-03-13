@@ -168,11 +168,21 @@ const routes = [
         name: 'contactPageRout',
         component: ReviewView
     },
+    {
+        name: "ShopDetail",
+        path: "/shop/detail",
+        component: ShopDetail,
+    },
+    {
+        name: "PackageDetail",
+        path: "/shop/package/detail",
+        component: PackageDetail,
+    },
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes
+  history: createWebHistory(),
+  routes,
 });
 
 export default router;
