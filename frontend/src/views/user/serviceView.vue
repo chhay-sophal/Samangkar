@@ -13,7 +13,9 @@
         <h2 style="text-align: center;">Popular Services</h2>
         <div class="service-list">
           <div class="service-item" v-for="(service, index) in popularServices" :key="index">
-            <img :src="service.image" :alt="service.name">
+            <div class="flex h-80 object-cover">
+              <img :src="service.image" :alt="service.name" class="w-full">
+            </div>
             <div class="service-details">
               <div class="items">{{ service.name }}</div>
               <p>{{ service.description }}</p>

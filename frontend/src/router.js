@@ -161,34 +161,6 @@ const routes = [
         name: 'contactPageRout',
         component: ReviewView
     },
-    {
-        name: 'EditView',
-        path: '/user/edit',
-        component: Edit,
-        meta: { requiresAuth: false, hideHeaderFooter: true } 
-    },
-    {
-        name: 'ShopView',
-        path: '/shop',
-        component: ShopView,
-        meta: { requiresAuth: false, hideHeaderFooter: true } 
-    },{
-        name: 'AddPackageView',
-        path: '/addpackage',
-        component: AddPackage,
-        meta: { requiresAuth: false, hideHeaderFooter: true } 
-    },
-    ,{
-        name: 'PackageView',
-        path: '/package',
-        component: PackageView,
-        meta: { requiresAuth: false, hideHeaderFooter: true } 
-    } ,{
-        name: 'ReviewView',
-        path: '/review',
-        component: ReviewView,
-        meta: { requiresAuth: false, hideHeaderFooter: true } 
-    },
 ];
 
 const router = createRouter({

@@ -70,7 +70,7 @@
             </div>
             <div class="col-md-6 col-sm-6 mb-4">
               <div class="card-body p-2" style="width:70%;">
-                <a href="#"><img class="card-img-top card-img-blk" src="D:\UNIVERSIT\Samangkar\frontend\public\image.png" alt="Card image cap"></a>
+                <a href="#"><img class="card-img-top card-img-blk" src="/image.png" alt="Card image cap"></a>
               </div>
             </div>
             <div class="col-md-5 offset-md-1 col-sm-6 mb-4 d-flex flex-column">
