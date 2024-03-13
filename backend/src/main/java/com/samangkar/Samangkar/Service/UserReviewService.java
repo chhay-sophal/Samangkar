@@ -63,6 +63,7 @@ public class UserReviewService {
     }
 
     //GET USER REVIEW BY SHOP ID => WHERE IS DELETE_AT = NULL
+    @SuppressWarnings("null")
     public List<UserReviewDto> getAllUserReviewByShopId(Long ShopId){
         Optional<Shop> shop = shopRepository.findById(ShopId);
         if(shop.isPresent()){
@@ -74,6 +75,7 @@ public class UserReviewService {
     }
 
     //INSERT REVIEW BY SHOP_ID AND USER_ID
+    @SuppressWarnings("null")
     public void saveUserReview(UserReviewDto userReviewDto) {
 
         if(userReviewDto.getUser_id() == null){
@@ -114,6 +116,7 @@ public class UserReviewService {
 
 
     //UPDATE REVIEW => SET DESCRIPTION, UPDATED_AT = NOW
+    @SuppressWarnings("null")
     public void updateUserReview(UserReviewDto userReviewDto){
 
         Optional<UserReview> existingUserReviewOptional = userReviewRepository.findById(userReviewDto.getId());
@@ -132,6 +135,7 @@ public class UserReviewService {
     }
 
     //DELETE REVIEW => SET DELETED_AT TO NOW
+    @SuppressWarnings("null")
     public void deletedUserReview(Long id){
 
         Optional<UserReview> existingUserReviewOptional = userReviewRepository.findById(id);

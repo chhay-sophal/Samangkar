@@ -121,6 +121,7 @@ public class ShopService {
 
 
     //GET SHOP DETAIL
+    @SuppressWarnings("null")
     public Stream<ShopDto> findShopById(Long shopId) {
         boolean isExisted = shopRepository.existsById(shopId);
         if(isExisted){
