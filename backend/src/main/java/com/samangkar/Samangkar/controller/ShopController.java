@@ -189,7 +189,7 @@ public class ShopController {
     @PostMapping("{shopId}/image/upload")
     public ResponseEntity<?> handleFileUpload(@PathVariable Long shopId, @RequestParam("file") MultipartFile file) {
         try {
-            Path uploadDirectory = Path.of("src/main/resources/images");
+            Path uploadDirectory = Path.of("src/main/resources/shop-images");
 
             // Ensure the directory exists, create it if not
             Files.createDirectories(uploadDirectory);

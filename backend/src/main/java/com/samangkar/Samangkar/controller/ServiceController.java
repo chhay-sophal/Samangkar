@@ -1,7 +1,9 @@
 package com.samangkar.Samangkar.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.samangkar.Samangkar.dto.AddServiceDto;
 import com.samangkar.Samangkar.dto.RemoveServiceDto;
@@ -12,8 +14,12 @@ import com.samangkar.Samangkar.repository.ServiceRepository;
 import com.samangkar.Samangkar.repository.ShopRepository;
 import com.samangkar.Samangkar.service.ServiceService;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -73,5 +79,41 @@ public class ServiceController {
         }
     }
     
+    @SuppressWarnings("null")
+    @PostMapping("{serviceId}/image/upload")
+    public ResponseEntity<?> handleFileUpload(@PathVariable Long serviceId, @RequestParam("file") MultipartFile file) {
+        try {
+            Path uploadDirectory = Path.of("src/main/resources/service-images");
+
+            // Ensure the directory exists, create it if not
+            Files.createDirectories(uploadDirectory);
+
+            ServiceModel service = serviceRepository.findFirstById(serviceId);
+
+            // Delete the existing profile image if it exists
+            if (service.getImage() != null) {
+                Path existingImagePath = uploadDirectory.resolve(service.getImage());
+                Files.deleteIfExists(existingImagePath);
+            }
+
+            // Append a unique identifier to the filename
+            String originalFilename = file.getOriginalFilename();
+            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            String uniqueFilename = UUID.randomUUID().toString() + "." + fileExtension;
+            Path targetPath = uploadDirectory.resolve(uniqueFilename);
+
+            // Save the file to the server
+            Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+
+            // Update the user's profileUrl
+            service.setImage(uniqueFilename);
+            serviceRepository.save(service);
+
+            ServiceDto serviceDto = serviceService.getServiceById(serviceId);
+            return ResponseEntity.ok(serviceDto);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error uploading file: " + e.getMessage());
+        }
+    }
     
 }

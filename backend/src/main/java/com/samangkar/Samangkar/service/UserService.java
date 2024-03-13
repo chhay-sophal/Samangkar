@@ -68,7 +68,7 @@ public class UserService {
         try {
             Path imagePath;
             if (user.getProfileUrl() != null) {
-                imagePath = Paths.get("src/main/resources/images/" + user.getProfileUrl());
+                imagePath = Paths.get("src/main/resources/profile-images/" + user.getProfileUrl());
             } else {
                 imagePath = Paths.get("src/main/resources/default-profile.png");
             }

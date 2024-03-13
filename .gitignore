@@ -2,3 +2,5 @@
 backend/src/main/resources/application.properties
 *.mjs
 /backend/src/main/resources/images
+*.expo
+/backend/src/main/resources/profile-images

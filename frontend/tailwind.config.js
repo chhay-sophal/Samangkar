@@ -8,8 +8,13 @@ export default {
       colors: {
         'custom-dark': '#16171d',
       },
+      aspectRatio: {
+        '9/16': '9 / 16', // Adding a 9:16 aspect ratio
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/aspect-ratio'),
+  ],
 }
 

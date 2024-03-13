@@ -1,5 +1,9 @@
 package com.samangkar.Samangkar.service;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -37,6 +41,12 @@ public class PackageService {
         return createPackageDtoList(packages);
     }
 
+    public Page<PackageDto> getPackagesWithServices(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PackageModel> packages = packageRepository.findPackagesWithServicesAndDeletedAtIsNull(pageable);
+        return packages.map(this::createPackageDto);
+    }
+
     public Page<PackageDto> getPageablePackages(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<PackageModel> packages = packageRepository.findAllByDeletedAtIsNull(pageable);
@@ -56,16 +66,49 @@ public class PackageService {
 
     // Helper method to create a UserDto from a UserEntity
     private PackageDto createPackageDto(PackageModel packageModel) {
-        return new PackageDto(
-            packageModel.getId(),
-            packageModel.getName(),
-            packageModel.getDescription(),
-            shopService.getShopById(packageModel.getShop().getId()),
-            serviceService.getServicesByPackageId(packageModel.getId()),
-            packageModel.getCreatedAt(),
-            packageModel.getUpdatedAt(),
-            packageModel.getDeletedAt()
-        );
+        try {
+            Path imagePath;
+            if (packageModel.getImage() != null) {
+                imagePath = Paths.get("src/main/resources/package-images/" + packageModel.getImage());
+            } else {
+                imagePath = Paths.get("src/main/resources/package-image.jpg");
+            }
+            // Read the image file into a byte array
+            byte[] imageBytes = Files.readAllBytes(imagePath);
+            String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+
+            // String base64Image = Base64.getEncoder().encodeToString(imagePath.getBytes());
+            // Create a ByteArrayResource from the byte array
+            // ByteArrayResource resource = new ByteArrayResource(imageBytes);
+            return new PackageDto(
+                packageModel.getId(),
+                packageModel.getName(),
+                packageModel.getDescription(),
+                base64Image,
+                packageModel.getPrice(),
+                shopService.getShopById(packageModel.getShop().getId()),
+                serviceService.getServicesByPackageId(packageModel.getId()),
+                packageModel.getCreatedAt(),
+                packageModel.getUpdatedAt(),
+                packageModel.getDeletedAt()
+            );
+        } catch (Exception e) {
+            // Handle the case where the resource is null (e.g., log a warning)
+            // You may also choose to return a default UserDto or throw an exception.
+            // For demonstration, a default UserDto is returned here.
+            return new PackageDto(
+                packageModel.getId(),
+                packageModel.getName(),
+                packageModel.getDescription(),
+                null,
+                packageModel.getPrice(),
+                shopService.getShopById(packageModel.getShop().getId()),
+                serviceService.getServicesByPackageId(packageModel.getId()),
+                packageModel.getCreatedAt(),
+                packageModel.getUpdatedAt(),
+                packageModel.getDeletedAt()
+            );
+        }
     }
 
     // Helper method to create a list of PackageDto from an Iterable of UserEntity

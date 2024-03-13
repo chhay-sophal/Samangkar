@@ -14,7 +14,8 @@ public class ServiceModel {
     private String name;
     private String description;
     private double unitPrice;
-
+    private String image;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -140,6 +141,14 @@ public class ServiceModel {
 
     public void setDeletedAt(Date deletedAt) {
         this.deletedAt = deletedAt;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
 }

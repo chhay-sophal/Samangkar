@@ -69,6 +69,16 @@ public class PackageController {
         }
     }
 
+    @GetMapping("get-all/with-services")
+    public ResponseEntity<?> getAllShopPackagesWithServices(@RequestParam int page, @RequestParam int size) {
+        try {
+            Page<PackageDto> packages = packageService.getPackagesWithServices(page, size);
+            return ResponseEntity.ok(packages);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
+        }
+    }
+
     @GetMapping("get-all/pagable")
     public ResponseEntity<?> getPagableShopPackages(@RequestParam int page, @RequestParam int size) {
         try {
@@ -105,13 +115,20 @@ public class PackageController {
         try {
             Shop shop = shopRepository.findFirstById(request.getShopId());
             PackageModel packageModel = new PackageModel(request.getPackageName(), request.getDescription(), shop);
-
+            
             // Convert Iterable<ServiceModel> to Set<ServiceModel>
             Set<ServiceModel> services = StreamSupport
                 .stream(serviceRepository.findAllById(request.getServiceIds()).spliterator(), false)
                 .collect(Collectors.toSet());
-
+            
             packageModel.setServices(services);
+
+            double price = services.stream()
+                .mapToDouble(ServiceModel::getUnitPrice)
+                .sum();
+
+            packageModel.setPrice(price);
+
             packageRepository.save(packageModel);
 
             List<PackageDto> packages = packageService.getAllPackagesByShopId(request.getShopId());
@@ -135,9 +152,13 @@ public class PackageController {
                 Set<ServiceModel> services = StreamSupport
                         .stream(serviceRepository.findAllById(request.getServiceIds()).spliterator(), false)
                         .collect(Collectors.toSet());
-
-                packageModel.setServices(null);
+                
+                double price = services.stream()
+                        .mapToDouble(ServiceModel::getUnitPrice)
+                        .sum();
+        
                 packageModel.setServices(services);
+                packageModel.setPrice(price);
                 packageModel.setName(request.getPackageName());
                 packageModel.setDescription(request.getDescription());
                 packageModel.setShop(shop);

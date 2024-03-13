@@ -13,6 +13,8 @@ public class PackageModel {
 
     private String name;
     private String description;
+    private String image;
+    private double price;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -115,5 +117,21 @@ public class PackageModel {
     }
     public void setDeletedAt(Date deletedAt) {
         this.deletedAt = deletedAt;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }
