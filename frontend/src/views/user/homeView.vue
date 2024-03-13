@@ -83,6 +83,7 @@
 <script>
 import http from "@/services/httpService";
 import ImageViewer from "@/components/ImageViewer.vue";
+import { useUserStore } from "@/store/userStore";
 
 export default {
   components: {
@@ -169,6 +170,10 @@ export default {
     },
   },
   mounted() {
+    const userStore = useUserStore()
+    if (!userStore.user.username) {
+        this.$router.push({ name: 'loginPageRoute' })
+    }
     // Initialize any data or perform initial actions here
     // this.filteredShops = this.shops;
     this.fetchShops();

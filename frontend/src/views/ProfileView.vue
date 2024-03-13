@@ -667,7 +667,7 @@ export default {
     mounted() {
         const userStore = useUserStore()
         if (!userStore.user.username) {
-            this.$router.push({ name: 'homePageRoute' })
+            this.$router.push({ name: 'loginPageRoute' })
         }
     },
     computed() {
