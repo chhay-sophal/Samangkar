@@ -9,20 +9,24 @@
               <tr>
                 <th>User ID</th>
                 <th>Shop ID</th>
-                <th>Rating</th>
-                <th>Comment</th>
+                <th>Title</th>
+                <th>Stars</th>
+                <th>Description</th>
+                <!-- <th>Deleted</th> -->
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="review in reviews" :key="review.id">
-                <td>{{ review.userID }}</td>
-                <td>{{ review.shopID }}</td>
-                <td>{{ review.rating }}</td>
-                <td>{{ review.comment }}</td>
+                <td>{{ review.user_id }}</td>
+                <td>{{ review.shop_id }}</td>
+                <td>{{ review.title }}</td>
+                <td>{{ review.stars }}</td>
+                <td>{{ review.description }}</td>
+                <!-- <td>{{ review.deleteAt ? "Yes" : "No" }}</td> -->
                 <td>
-                  <button @click="editReview(review)" class="edit-button">Edit</button>
-                  <button @click="deleteReview(review.id)" class="delete-button">Delete</button>
+                  <!-- <button @click="editReview(review)" class="edit-button">Edit</button> -->
+                  <button v-if="!review.deleteAt" @click="handleDelete(review)" class="delete-button">Delete</button>
                 </td>
               </tr>
             </tbody>
@@ -32,40 +36,63 @@
     </div>
   </template>
   
-  <script>
-  import Sidebar from "./../../components/AdminSidebar.vue"; // Adjust the path as per your project structure
-  
-  export default {
-    components: {
-      Sidebar
+<script>
+import Sidebar from "./../../components/AdminSidebar.vue"; // Adjust the path as per your project structure
+import http from "@/services/httpService";
+
+export default {
+  components: {
+    Sidebar
+  },
+  data() {
+    return {
+      sidebarLinks: [
+        { text: 'Dashboard', icon: 'mdi-view-dashboard', route: '/dashboard' },
+        { text: 'Users', icon: 'mdi-account', route: '/users' },
+        { text: 'Shops', icon: 'mdi-store', route: '/shops' },
+        // Add more sidebar links as needed
+      ],
+      reviews: [
+        { id: 1, user_id: 'User1', shop_id: 'Shop1', rating: 4, comment: 'Great service!' },
+        { id: 2, user_id: 'User2', shop_id: 'Shop2', rating: 5, comment: 'Excellent experience!' },
+        // Add more reviews as needed
+      ]
+    };
+  },
+  methods: {
+    handleDelete(review) {
+      if (confirm(`Are you sure to delete review with title "${review.title}"?`)) {
+        this.deleteReview(review.id);
+      }
     },
-    data() {
-      return {
-        sidebarLinks: [
-          { text: 'Dashboard', icon: 'mdi-view-dashboard', route: '/dashboard' },
-          { text: 'Users', icon: 'mdi-account', route: '/users' },
-          { text: 'Shops', icon: 'mdi-store', route: '/shops' },
-          // Add more sidebar links as needed
-        ],
-        reviews: [
-          { id: 1, userID: 'User1', shopID: 'Shop1', rating: 4, comment: 'Great service!' },
-          { id: 2, userID: 'User2', shopID: 'Shop2', rating: 5, comment: 'Excellent experience!' },
-          // Add more reviews as needed
-        ]
-      };
+    editReview(review) {
+      // Logic to edit review
+      console.log('Edit review:', review);
     },
-    methods: {
-      editReview(review) {
-        // Logic to edit review
-        console.log('Edit review:', review);
-      },
-      deleteReview(reviewId) {
-        // Logic to delete review
-        console.log('Delete review with ID:', reviewId);
+    async deleteReview(reviewId) {
+      try {
+        const response = await http.put(`api/users/reviews/delete/${reviewId}`);
+        this.reviews = response.data;
+        this.fetchReviews();
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    },
+    async fetchReviews() {
+      try {
+        const response = await http.get(`api/users/reviews/all`);
+        this.reviews = response.data;
+        console.log(this.reviews)
+      } catch (error) {
+        console.error("Error:", error);
       }
     }
-  };
-  </script>
+  },
+  mounted() {
+    this.fetchReviews();
+  }
+};
+</script>
   
   <style scoped>
   .review-table-page {
