@@ -61,6 +61,7 @@ public class ServiceModel {
         this.description = description;
         this.shop = shop;
         this.unitPrice = unitPrice;
+        this.isTrending = false;
     }
 
     public Long getId() {

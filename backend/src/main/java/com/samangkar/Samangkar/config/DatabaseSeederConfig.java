@@ -248,10 +248,10 @@
 
 //     @Transactional
 //     private void seedUserReview(UserReviewRepository repository, UserEntity user, Shop shop, int stars, String title, String description) {
-// //        if (repository.findByUserAndShop(user, shop).isEmpty()) {
-// //            UserReview userReview = new UserReview(user, shop, title, description);
-// //            repository.save(userReview);
-// //        }
+//        if (repository.findByUserAndShop(user, shop).isEmpty()) {
+//            UserReview userReview = new UserReview(user, shop, stars, title, description);
+//            repository.save(userReview);
+//        }
 
 //         UserReview userReview = new UserReview(user, shop, stars, title, description);
 //         repository.save(userReview);

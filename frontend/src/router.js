@@ -24,6 +24,7 @@ import ReviewView from './views/admin/ReviewView.vue'
 import ServiceView from './views/user/serviceView.vue'
 import ContactView from './views/user/contactView.vue'
 import AboutView from './views/user/aboutView.vue'
+import AdminServicesView from './views/admin/ServicesView.vue'
 
 const routes = [
     {
@@ -72,6 +73,12 @@ const routes = [
         path: '/admin/shops/edit/:shopId',
         name: 'EditShopView',
         component: EditShopView,
+        meta: { hideHeaderFooter: true } 
+    },
+    {
+        path: '/admin/services',
+        name: 'AdminServicesView',
+        component: AdminServicesView,
         meta: { hideHeaderFooter: true } 
     },
     {

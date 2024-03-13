@@ -5,8 +5,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.samangkar.Samangkar.dto.AddServiceDto;
-import com.samangkar.Samangkar.dto.RemoveServiceDto;
+import com.samangkar.Samangkar.dto.AddOrUpdateServiceDto;
 import com.samangkar.Samangkar.dto.ServiceDto;
 import com.samangkar.Samangkar.model.ServiceModel;
 import com.samangkar.Samangkar.model.Shop;
@@ -56,10 +55,10 @@ public class ServiceController {
     }
     
     @PostMapping("add")
-    public ResponseEntity<?> addService(@RequestBody AddServiceDto request) {
+    public ResponseEntity<?> addService(@RequestBody AddOrUpdateServiceDto request) {
         try {
             Shop shop = shopRepository.findFirstById(request.getShopId());
-            ServiceModel serviceModel = new ServiceModel(request.getServiceName(), request.getDescription(), shop, request.getUnitPrice());
+            ServiceModel serviceModel = new ServiceModel(request.getName(), request.getDescription(), shop, request.getUnitPrice());
             serviceRepository.save(serviceModel);
             List<ServiceDto> shopContacts = serviceService.getAllShopServicesByShopId(request.getShopId());
             return ResponseEntity.ok(shopContacts);
@@ -69,12 +68,14 @@ public class ServiceController {
     }
 
     @PostMapping("update")
-    public ResponseEntity<?> updateService(@RequestBody ServiceDto request) {
+    public ResponseEntity<?> updateService(@RequestBody AddOrUpdateServiceDto request) {
         try {
+            Shop shop = shopRepository.findFirstById(request.getShopId());
             ServiceModel serviceModel = serviceRepository.findFirstById(request.getId());
             serviceModel.setName(request.getName());
             serviceModel.setDescription(request.getDescription());
             serviceModel.setUnitPrice(request.getUnitPrice());
+            serviceModel.setShop(shop);
             serviceModel.setTrending(request.isTrending());
             serviceRepository.save(serviceModel);
             List<ServiceDto> shopContacts = serviceService.getAllShopServicesByShopId(request.getShopId());
@@ -85,17 +86,16 @@ public class ServiceController {
     }
 
     @SuppressWarnings("null")
-    @PostMapping("remove")
-    public ResponseEntity<?> removeService(@RequestBody RemoveServiceDto request) {
+    @PostMapping("delete/{serviceId}")
+    public ResponseEntity<?> removeService(@PathVariable Long serviceId) {
         try {
-            if (shopRepository.findById(request.getShopId()).isEmpty()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Service with id " + request.getShopId() + " does not exists.");
+            if (serviceRepository.findById(serviceId).isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Service with id " + serviceId + " does not exists.");
             } else {
-                ServiceModel service = serviceRepository.findFirstById(request.getServiceId());
+                ServiceModel service = serviceRepository.findFirstById(serviceId);
                 service.setDeletedAt(new Date());
                 serviceRepository.save(service);
-                List<ServiceDto> shopContacts = serviceService.getAllShopServicesByShopId(request.getShopId());
-                return ResponseEntity.ok(shopContacts);
+                return ResponseEntity.ok("Service deleted successfully!");
             }
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");

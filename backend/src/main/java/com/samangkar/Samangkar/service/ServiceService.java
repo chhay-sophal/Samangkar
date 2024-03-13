@@ -29,6 +29,9 @@ public class ServiceService {
     @Autowired
     private ShopRepository shopRepository;
 
+    @Autowired
+    private ShopService shopService;
+
     public Page<ServiceDto> getAllServices(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ServiceModel> services = serviceRepository.findAll(pageable);
@@ -75,7 +78,7 @@ public class ServiceService {
                     service.getDescription(),
                     service.getUnitPrice(),
                     service.isTrending(),
-                    service.getShop().getId(),
+                    shopService.getShopById(service.getShop().getId()),
                     base64Image,
                     service.getCreatedAt(),
                     service.getUpdatedAt(),
@@ -91,7 +94,7 @@ public class ServiceService {
                     service.getDescription(),
                     service.getUnitPrice(),
                     service.isTrending(),
-                    service.getShop().getId(),
+                    shopService.getShopById(service.getShop().getId()),
                     null,
                     service.getCreatedAt(),
                     service.getUpdatedAt(),
