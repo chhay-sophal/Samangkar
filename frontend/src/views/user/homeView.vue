@@ -54,13 +54,6 @@
           </div>
         </div>
       </div>
-      <!-- <div class="shop-item" v-for="(shop, index) in filteredShops" :key="index">
-        <img :src="shop.image" :alt="shop.name">
-        <div class="shop-details">
-          <div class="items">{{ shop.name }}</div>
-          <p>{{ shop.category }}</p>
-        </div>
-      </div> -->
     </section>
     <section class="packages">
       <!-- <h2>Packages</h2> -->
@@ -70,7 +63,9 @@
       </div>
       <div class="package-list" id="packageList">
         <div class="package-item" v-for="(pkg, index) in packages" :key="index">
-          <ImageViewer :imageData="pkg.image" />
+          <div class="">
+            <ImageViewer :imageData="pkg.image" />
+          </div>
           <div class="package-details">
             <div class="items">{{ pkg.name }}</div>
             <div>$ {{ pkg.price }}</div>

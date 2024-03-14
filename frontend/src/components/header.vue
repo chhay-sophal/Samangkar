@@ -133,16 +133,19 @@ export default {
       hideLogOutIcon: false,
     };
   },
-  methods: {},
+  methods: {
+    updateVisibility(path) {
+      this.hideProfileIcon = path === "/profile" || path === "/shop-owner/profile";
+      this.hideLogOutIcon = !this.hideProfileIcon;
+    }
+  },
   watch: {
     $route(to, from) {
-      this.hideProfileIcon = to.path === "/profile";
-      this.hideLogOutIcon = to.path !== "/profile";
+      this.updateVisibility(to.path);
     },
   },
   mounted() {
-    this.hideProfileIcon = this.$route.path === "/profile";
-    this.hideLogOutIcon = this.$route.path !== "/profile";
+    this.updateVisibility(this.$route.path);
   },
 };
 </script>

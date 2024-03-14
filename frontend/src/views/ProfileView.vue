@@ -3,8 +3,8 @@
         <!-- User detail on the left -->
         <div class="2xl:w-1/5 xl:w-1/4 w-full">
             <div class="p-5 pb-0 flex justify-center">
-                <div class="dark:bg-slate-600 bg-gray-100 overflow-hidden flex items-center rounded-full aspect-square">
-                    <img v-if="userStore.getUser.profile" class="w-full" :src="getUserImageUrl(userStore.getUser.profile)" alt="">
+                <div class="dark:bg-slate-600 bg-gray-100 overflow-hidden flex items-center rounded-full w-48 h-48">
+                    <img v-if="userStore.getUser.profile" :src="getUserImageUrl(userStore.getUser.profile)" alt="">
                     <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                     </svg>
