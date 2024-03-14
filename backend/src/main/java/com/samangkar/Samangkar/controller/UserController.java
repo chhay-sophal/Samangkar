@@ -228,14 +228,14 @@ public class UserController {
     }
 
     //GET ALL USER_REVIEW && BY SHOP ID
-    @GetMapping("reviews/all")
-    public ResponseEntity<?> getAllUserReviews(@RequestParam(required = false) Long ShopId){
-        if(ShopId != null){
+    @GetMapping("reviews/all/{shopId}")
+    public ResponseEntity<?> getAllUserReviews(@PathVariable(required = false) Long shopId){
+        if(shopId != null){
             try{
-                List<UserReviewDto> r = userReviewService.getAllUserReviewByShopId(ShopId);
+                List<UserReviewDto> r = userReviewService.getAllUserReviewByShopId(shopId);
                 return ResponseEntity.ok(r);
             }catch (Exception e){
-                return ResponseEntity.status(500).body("Error retrieving user reviews with shopId " + ShopId + e.getMessage());
+                return ResponseEntity.status(500).body("Error retrieving user reviews with shopId " + shopId + e.getMessage());
             }
         }else{
             try{

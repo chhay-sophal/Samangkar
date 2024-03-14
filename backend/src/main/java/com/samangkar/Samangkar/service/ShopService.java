@@ -52,7 +52,7 @@ public class ShopService {
         return convertToDto(shop);
     }
 
-    public List<ShopDto> getShopByUserId(Long UserId) {
+    public List<ShopDto> getShopsByUserId(Long UserId) {
         List<Shop> shops = shopRepository.findAllByOwnerIdAndDeletedAtIsNull(UserId);
         return shops.stream().map(this::convertToDto).collect(Collectors.toList());
     }

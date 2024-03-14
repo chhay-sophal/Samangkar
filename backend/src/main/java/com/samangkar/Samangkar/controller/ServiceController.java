@@ -48,7 +48,7 @@ public class ServiceController {
         return ResponseEntity.ok(services);
     }
 
-    @GetMapping("get/{shopId}")
+    @GetMapping("get-all/{shopId}")
     public ResponseEntity<?> getAllShopServices(@PathVariable Long shopId) {
         List<ServiceDto> services = serviceService.getAllShopServicesByShopId(shopId);
         return ResponseEntity.ok(services);

@@ -30,6 +30,9 @@ public class UserReviewService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    UserService userService;
+
     //GET ALL USER REVIEW
     public List<UserReviewDto> getAllUserReview(){
         List<UserReview> results = userReviewRepository.findAllByDeletedAtIsNull();
@@ -42,7 +45,7 @@ public class UserReviewService {
     private UserReviewDto convertToDto(UserReview userReview){
         UserReviewDto urdto = new UserReviewDto();
         urdto.setId(userReview.getId());
-        urdto.setUser_id(userReview.getUser().getId());
+        urdto.setUser(userService.getUserById(userReview.getUser().getId()));
         urdto.setShop_id(userReview.getShop().getId());
         urdto.setTitle(userReview.getTitle());
         urdto.setDescription(userReview.getDescription());
@@ -78,15 +81,15 @@ public class UserReviewService {
     @SuppressWarnings("null")
     public void saveUserReview(UserReviewDto userReviewDto) {
 
-        if(userReviewDto.getUser_id() == null){
+        if(userReviewDto.getUser() == null){
             throw new IllegalStateException("user_id can not be null");
         }
         if(userReviewDto.getShop_id() == null){
             throw new IllegalStateException("shop_id can not be null");
         }
-        Optional<UserEntity> userOptional = userRepository.findById(userReviewDto.getUser_id());
+        Optional<UserEntity> userOptional = userRepository.findById(userReviewDto.getUser().getId());
         if (userOptional.isEmpty()) {
-            throw new EntityNotFoundException("User with ID " + userReviewDto.getUser_id() + " not found");
+            throw new EntityNotFoundException("User with ID " + userReviewDto.getUser().getId() + " not found");
         }else{
             UserEntity user = userOptional.get();
             Role userRole = user.getUserRole();

@@ -20,6 +20,9 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import static org.hibernate.sql.ast.SqlTreeCreationLogger.LOGGER;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -40,6 +43,16 @@ public class ShopController {
             ShopDto shop = shopService.getShopById(id);
             return new ResponseEntity<>(shop, HttpStatus.OK);
         }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
+        }
+    }
+
+    @GetMapping("get-by-owner/{userId}")
+    public ResponseEntity<?> getShopByUser(@PathVariable Long userId) {
+        try {
+            List<ShopDto> shops = shopService.getShopsByUserId(userId);
+            return new ResponseEntity<>(shops, HttpStatus.OK);
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
         }
     }
@@ -117,7 +130,7 @@ public class ShopController {
             shopService.createShop(addShopDto);
             System.out.println(addShopDto);
             System.out.println("Shop created successfully");
-            List<ShopDto> shopDTOs = shopService.getShopByUserId(addShopDto.getShopOwnerId());
+            List<ShopDto> shopDTOs = shopService.getShopsByUserId(addShopDto.getShopOwnerId());
             return new ResponseEntity<>(shopDTOs, HttpStatus.OK);
         }catch(Exception e){
             LOGGER.error("An error occurred while creating the shop: {}", e.getMessage(), e);
@@ -132,7 +145,7 @@ public class ShopController {
         try{
             shopService.updateShop(shopId, updateDto);
             System.out.println("Shop updated successfully");
-            List<ShopDto> shopDTOs = shopService.getShopByUserId(updateDto.getShopOwnerId());
+            List<ShopDto> shopDTOs = shopService.getShopsByUserId(updateDto.getShopOwnerId());
             return new ResponseEntity<>(shopDTOs, HttpStatus.OK);
         }catch(Exception e){
             LOGGER.error("An error occurred while updating the shop: {}", e.getMessage(), e);
@@ -149,7 +162,7 @@ public class ShopController {
             Long ownerId = shopService.getShopById(shopId).getOwner().getId();
             shopService.activateOrReactivateShop(shopId);
             System.out.println("Shop deleted successfully");
-            List<ShopDto> shopDTOs = shopService.getShopByUserId(ownerId);
+            List<ShopDto> shopDTOs = shopService.getShopsByUserId(ownerId);
             return new ResponseEntity<>(shopDTOs, HttpStatus.OK);
         }catch(Exception e){
             LOGGER.error("An error occurred while delete the shop: {}", e.getMessage(), e);
@@ -164,7 +177,7 @@ public class ShopController {
             Long ownerId = shopService.getShopById(shopId).getOwner().getId();
             shopService.activateOrReactivateShop(shopId);
             System.out.println("Shop deleted successfully");
-            List<ShopDto> shopDTOs = shopService.getShopByUserId(ownerId);
+            List<ShopDto> shopDTOs = shopService.getShopsByUserId(ownerId);
             return new ResponseEntity<>(shopDTOs, HttpStatus.OK);
         }catch(Exception e){
             LOGGER.error("An error occurred while delete the shop: {}", e.getMessage(), e);

@@ -11,7 +11,7 @@ public class PackageDto {
     private Long id;
     private String name;
     private String description;
-    private String imageUrl;
+    private String image;
     private double price;
     private ShopDto shop;
     private List<ServiceDto> services;
@@ -19,12 +19,12 @@ public class PackageDto {
     private Date updatedAt;
     private Date deletedAt;
 
-    public PackageDto(Long id, String name, String description, String imageUrl, double price, ShopDto shop,
+    public PackageDto(Long id, String name, String description, String image, double price, ShopDto shop,
             List<ServiceDto> services, Date createdAt, Date updatedAt, Date deletedAt) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.imageUrl = imageUrl;
+        this.image = image;
         this.price = price;
         this.shop = shop;
         this.services = services;
