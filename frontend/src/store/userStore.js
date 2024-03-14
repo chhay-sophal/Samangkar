@@ -8,6 +8,7 @@ export const useUserStore = defineStore({
             user: JSON.parse(localStorage.getItem('userStore') || '{}'),
             favorites: JSON.parse(sessionStorage.getItem('favorites') || '[]'),
             cards: JSON.parse(sessionStorage.getItem('cards') || '[]'),
+            shops: JSON.parse(sessionStorage.getItem('shops') || '[]'),
         };
     },
     getters: {
@@ -31,6 +32,10 @@ export const useUserStore = defineStore({
         setCards(data) {
             this.cards = data
             sessionStorage.setItem('cards', JSON.stringify(this.cards))
+        },
+        setShops(data) {
+            this.shops = data
+            sessionStorage.setItem('shops', JSON.stringify(this.shops))
         },
     }
 })

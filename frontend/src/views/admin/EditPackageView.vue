@@ -95,7 +95,7 @@ export default {
     },
     async fetchServices() {
       try {
-        const response = await http.get(`api/services/get/${this.packageInfo.shopId}`);
+        const response = await http.get(`api/services/get-all/${this.packageInfo.shopId}`);
         this.services = response.data;
         console.log(this.services);
       } catch (error) {

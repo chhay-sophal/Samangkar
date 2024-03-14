@@ -669,6 +669,10 @@ export default {
         if (!userStore.user.username) {
             this.$router.push({ name: 'loginPageRoute' })
         }
+
+        if (userStore.user.role == "SHOP_OWNER") {
+            this.$router.push({ name: 'ShopOwnerProfile' })
+        }
     },
     computed() {
     },

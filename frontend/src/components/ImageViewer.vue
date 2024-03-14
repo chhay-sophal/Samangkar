@@ -1,6 +1,6 @@
 <template>
-    <div>
-      <img :src="getUserImageUrl(imageData)" alt="Image">
+    <div class="w-full h-full">
+      <img :src="getUserImageUrl(imageData)" alt="Image" class="w-full h-full object-cover">
     </div>
   </template>
   

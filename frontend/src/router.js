@@ -24,6 +24,8 @@ import AboutView from './views/user/aboutView.vue'
 import AdminServicesView from './views/admin/ServicesView.vue'
 import ShopDetail from './views/shop/ShopDetail.vue'
 import PackageDetail from './views/shop/PackageDetail.vue'
+import ShopDashboard from './views/shop-owner/ShopDashboard.vue'
+import ShopOwnerProfile from './views/shop-owner/ShopOwnerProfile.vue'
 
 const routes = [
     {
@@ -176,6 +178,16 @@ const routes = [
         name: "PackageDetail",
         path: "/shop/package/detail",
         component: PackageDetail,
+    },
+    {
+        path: "/shop-owner/shop/:shopId",
+        name: "ShopDashboard",
+        component: ShopDashboard
+    },
+    {
+        path: "/shop-owner/profile",
+        name: "ShopOwnerProfile",
+        component: ShopOwnerProfile
     },
 ];
 
