@@ -44,7 +44,9 @@
       </div>
       <div class="shop-list">
         <div class="shop-item" v-for="(shop, index) in shops" :key="index">
-          <ImageViewer :imageData="shop.imageUrl" class="flex aspect-square object-fill"/>
+          <div class="">
+            <ImageViewer :imageData="shop.imageUrl" class="flex aspect-square object-fill"/>
+          </div>
           <!-- <img :src="shop.image" :alt="shop.name"> -->
           <div class="shop-details">
             <div class="items">{{ shop.name }}</div>
@@ -68,7 +70,7 @@
       </div>
       <div class="package-list" id="packageList">
         <div class="package-item" v-for="(pkg, index) in packages" :key="index">
-          <ImageViewer :imageData="pkg.imageUrl" />
+          <ImageViewer :imageData="pkg.image" />
           <div class="package-details">
             <div class="items">{{ pkg.name }}</div>
             <div>$ {{ pkg.price }}</div>
