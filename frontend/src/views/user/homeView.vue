@@ -17,8 +17,9 @@
       </div>
       <div class="shop-list" id="popularShopList">
         <div class="shop-item" v-for="(shop, index) in popularShops" :key="index">
-          <ImageViewer :imageData="shop.imageUrl" class="flex aspect-square object-fill"/>
-          <!-- <img :src="shop.image" :alt="shop.name"> -->
+          <div class="">
+            <ImageViewer :imageData="shop.imageUrl" class="flex aspect-square object-fill"/>
+          </div>
           <div class="shop-details">
             <div class="items">{{ shop.name }}</div>
             <p>{{ shop.description }}</p>
