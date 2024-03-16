@@ -2,8 +2,14 @@
   <div class="">
     <!-- <Sidebar :links="sidebarLinks" /> -->
     <div class="">
-      <div class="w-full flex items-center justify-center">
+      <div class="w-full flex items-center justify-center relative">
         <ImageViewer :imageData="shop.imageUrl" class=" w-1/2 h-fit rounded-xl overflow-hidden"/>
+        <button class="absolute right-1 top-1" @click="openFileInput()">
+          <input type="file" ref="fileInput" style="display: none" @change="handleFileChange">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+          </svg>
+        </button>
       </div>
       <div class="text-4xl font-bold flex items-center justify-center p-5">Shop Management</div>
 
@@ -19,17 +25,32 @@
               <h3>Shop Id</h3>
               <p>{{ shop.id }}</p>
             </div>
-            <div class="border p-2 rounded-lg">
+            <div class="border p-2 rounded-lg relative">
               <h3>Shop Name</h3>
               <p>{{ shop.name }}</p>
+              <button class="absolute right-1 top-1" @click="displayPanel('changeShopNamePanel', shop.name)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                </svg>
+              </button>
             </div>
-            <div class="border p-2 rounded-lg">
-              <h3>Shop Descriptions</h3>
+            <div class="border p-2 rounded-lg relative">
+              <h3>Shop Description</h3>
               <p>{{ shop.description }}</p>
+              <button class="absolute right-1 top-1" @click="displayPanel('changeShopDescriptionPanel', shop.description)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                </svg>
+              </button>
             </div>
-            <div class="border p-2 rounded-lg">
+            <div class="border p-2 rounded-lg relative">
               <h3>Trending</h3>
               <p>{{ shop.isTrending ? 'Yes' : 'No' }}</p>
+              <button class="absolute right-1 top-1" @click="displayPanel('changeShopTrendingPanel', shop.isTrending)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                </svg>
+              </button>
             </div>
             <div class="border p-2 rounded-lg">
               <h3>Created Date</h3>
@@ -43,7 +64,7 @@
       <div class="section">
         <div class="flex justify-between">
           <h2>Services ({{ services.length }})</h2>
-          <button @click="displayAddServicePanel()" class="text-xl">
+          <button @click="displayPanel('addServicePanel')" class="text-xl">
             Add
           </button>
         </div>
@@ -54,7 +75,7 @@
                   <div class="flex space-x-4 h-full text-2xl">
                       <!-- Loop through your shop cards -->
                       <button 
-                      @click="displayServiceDetailsPanel(service)"
+                      @click="displayPanel('serviceDetailsPanel', service)"
                       v-for="service in services" 
                       :key="service.id" 
                       class="flex-none w-64 bg-green-400 p-3 flex flex-col justify-center items-center rounded-lg"
@@ -72,7 +93,7 @@
       <div class="section">
         <div class="flex justify-between">
           <h2>Packages ({{ packages.length }})</h2>
-          <button @click="displayAddPackagePanel()" class="text-xl">
+          <button @click="displayPanel('addPackagePanel')" class="text-xl">
               Add
           </button>
         </div>
@@ -82,7 +103,7 @@
               <div class="px-4 h-full">
                   <div class="flex space-x-4 h-full text-2xl">
                       <!-- Loop through your shop cards -->
-                      <button @click="displayPackageDetailsPanel(pkg)" v-for="pkg in packages" :key="pkg.id" class="flex-none w-64 bg-green-400 p-3 flex flex-col justify-center items-center rounded-lg">
+                      <button @click="displayPanel('packageDetailsPanel', pkg)" v-for="pkg in packages" :key="pkg.id" class="flex-none w-64 bg-green-400 p-3 flex flex-col justify-center items-center rounded-lg">
                           {{ pkg.name }}
                           <ImageViewer :imageData="pkg.image" class=" w-1/2 h-fit rounded-xl overflow-hidden"/>
                       </button>
@@ -136,6 +157,62 @@
     </div>
   </div>
 
+  <!-- Change Shop Details panel -->
+  <div 
+  v-if="showChangeShopDetailsPanel"
+  class="top-1/2 left-1/2 bg-green-100 2xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl min-h-fit -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
+  >
+      <div class="flex justify-end items-center dark:text-stone-600">
+          <button 
+              @click="hidePanel()"
+          >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+          </button>
+      </div>
+      <div class="text-3xl text-center pb-1 dark:text-stone-600">
+          {{ changeShopDetails.label }}
+      </div>
+      <div class="w-full px-10 pb-10 dark:text-stone-600 flex flex-col gap-5">
+        <div v-if="changeShopDetails.label == 'Trending'" class="flex w-full">
+          <div class="flex flex-col w-full gap-5 items-center">
+            <div class="flex gap-5">
+              <label>
+                  <input type="radio" id="trending" v-model="changeShopDetails.input" value='true' />
+                  Yes
+              </label>
+              <label>
+                  <input type="radio" id="trending" v-model="changeShopDetails.input" value='false' />
+                  No
+              </label>
+            </div>
+          </div>
+        </div>  
+        <div v-else-if="changeShopDetails.label == 'Image'" class="w-full flex flex-col items-center">
+          <!-- <ImageViewer :imageData="changeShopDetails.input" class=" w-72"/> -->
+          <img class="w-72" :src="changeShopDetails.input" alt="Profile Picture">
+          <button class="" @click="openFileInput()">
+            <input type="file" ref="fileInput" style="display: none" @change="handleFileChange">
+            <div>Choose Image</div>
+          </button>
+        </div>
+        <div v-else class="flex w-full">
+          <div class="flex flex-col gap-5 w-1/3">
+              <label class="block font-medium text-slate-600">New Shop {{ changeShopDetails.label }}:</label>
+          </div>
+          <div class="flex flex-col w-2/3 gap-5">
+            <input type="text" v-model="changeShopDetails.input">
+          </div>
+        </div>
+        <div class="w-full flex items-center justify-center">
+            <button @click="updateShop()" class="action-button edit-button border px-5 py-3 rounded-lg bg-stone-300">
+                Update
+            </button>
+        </div>
+      </div>
+  </div>
+
   <!-- Add service panel -->
   <div 
   v-if="showAddServicePanel"
@@ -143,7 +220,7 @@
   >
       <div class="flex justify-end items-center pr-5 dark:text-stone-600">
           <button 
-              @click="hideAddServicePanel()"
+              @click="hidePanel()"
           >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -181,7 +258,7 @@
   >
       <div class="flex justify-end items-center pr-5 dark:text-stone-600">
           <button 
-              @click="hideAddPackagePanel()"
+              @click="hidePanel()"
           >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -210,7 +287,7 @@
               </div>
           </div>
           <div class="w-full flex items-center justify-center">
-              <button @click="AddPackage()" class="action-button edit-button">
+              <button @click="addPackage()" class="action-button edit-button">
                   Add
               </button>
           </div>
@@ -224,7 +301,7 @@
   >
       <div class="flex justify-end items-center pr-5 dark:text-stone-600">
           <button 
-              @click="hideServiceDetailsPanel()"
+              @click="hidePanel()"
           >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -248,11 +325,11 @@
                   <input type="number" v-model="selectedService.unitPrice">
                   <div class="flex gap-5">
                       <label>
-                          <input type="radio" id="trending" v-model="selectedService.isTrending" value="true" />
+                          <input type="radio" id="trending" v-model="selectedService.trending" value="true" />
                           Yes
                       </label>
                       <label>
-                          <input type="radio" id="trending" v-model="selectedService.isTrending" value="false" />
+                          <input type="radio" id="trending" v-model="selectedService.trending" value="false" />
                           No
                       </label>
                   </div>
@@ -273,7 +350,7 @@
   >
       <div class="flex justify-end items-center pr-5 dark:text-stone-600">
           <button 
-              @click="hidePackageDetailsPanel()"
+              @click="hidePanel()"
           >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -317,6 +394,7 @@ import http from "@/services/httpService";
 import { useUserStore } from "@/store/userStore";
 import ImageViewer from '@/components/ImageViewer.vue'
 import AddPackage from "../admin/AddPackage.vue";
+import convertImageToBlob from "@/services/convertImageToBlob";
 
 export default {
   components: {
@@ -335,6 +413,7 @@ export default {
       services: [],
       reviews: [],
       packages: [],
+      showChangeShopDetailsPanel: false,
       showAddServicePanel: false,
       showAddPackagePanel: false,
       showServiceDetailsPanel: false,
@@ -354,6 +433,10 @@ export default {
       selectedPackage: {
         serviceIds: [],
       },
+      changeShopDetails: {
+        label: '',
+        input: null
+      }
     };
   },
   methods: {
@@ -397,14 +480,57 @@ export default {
       const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
       return new Date(dateString).toLocaleDateString(undefined, options);
     },
-    displayAddServicePanel() {
-      this.showAddServicePanel = true;
+    displayPanel(panelName, data) {
+      if (panelName == 'addServicePanel') {
+        this.showAddServicePanel = true;
+      } else if (panelName == 'addPackagePanel') {
+        this.showAddPackagePanel = true;
+      } else if (panelName == 'serviceDetailsPanel') {
+        this.showServiceDetailsPanel = true;
+        this.selectedService = data;
+        console.log(this.selectedService)
+        console.log(this.selectedService.name)
+      } else if (panelName == 'packageDetailsPanel') {
+        this.showPackageDetailsPanel = true;
+        this.selectedPackage.serviceIds = data.services.map(service => service.id);
+        this.selectedPackage = { ...this.selectedPackage, ...data }
+      } else if (panelName == 'changeShopNamePanel') {
+        this.showChangeShopDetailsPanel = true;
+        this.changeShopDetails.label = 'Name';
+        this.changeShopDetails.input = data;
+      } else if (panelName == 'changeShopDescriptionPanel') {
+        this.showChangeShopDetailsPanel = true;
+        this.changeShopDetails.label = 'Description';
+        this.changeShopDetails.input = data;
+      } else if (panelName == 'changeShopTrendingPanel') {
+        this.showChangeShopDetailsPanel = true;
+        this.changeShopDetails.label = 'Trending';
+        this.changeShopDetails.input = data;
+      } else if (panelName == 'changeShopImagePanel') {
+        this.showChangeShopDetailsPanel = true;
+        this.changeShopDetails.label = 'Image';
+      }
     },
-    hideAddServicePanel() {
+    hidePanel() {
       this.showAddServicePanel = false;
       this.serviceInput.name = null;
       this.serviceInput.description = null;
       this.serviceInput.unitPrice = null;
+
+      this.showAddPackagePanel = false;
+      this.packageInput.name = null;
+      this.packageInput.description = null;
+      this.packageInput.serviceIds = [];
+
+      this.showServiceDetailsPanel = false;
+      this.selectedService = {};
+
+      this.showPackageDetailsPanel = false;
+      this.selectedPackage = {};
+
+      this.showChangeShopDetailsPanel = false;
+      this.changeShopDetails.label = '';
+      this.changeShopDetails.input = null;
     },
     async addService() {
       if (confirm("Are you sure to add this service?")) {
@@ -417,22 +543,13 @@ export default {
             });
             alert("Service added successfully!");
             this.fetchServices(this.shop.id);
-            this.hideAddServicePanel();
+            this.hidePanel();
         } catch (error) {
             console.log(error);
         }
       }
     },
-    displayAddPackagePanel() {
-      this.showAddPackagePanel = true;
-    },
-    hideAddPackagePanel() {
-      this.showAddPackagePanel = false;
-      this.packageInput.name = null;
-      this.packageInput.description = null;
-      this.packageInput.serviceIds = [];
-    },
-    async AddPackage() {
+    async addPackage() {
       if (confirm("Are you sure to add this package?")) {
         try {
           await http.post(`api/packages/add`, {
@@ -444,21 +561,11 @@ export default {
       
           alert("Package added successfuly!");
           this.fetchPackages(this.shop.id);
-          this.hideAddPackagePanel();
+          this.hidePanel();
         } catch (error) {
             console.log(error);
         }
       }
-    },
-    displayServiceDetailsPanel(service) {
-      this.showServiceDetailsPanel = true;
-      this.selectedService = service;
-      console.log(this.selectedService)
-      console.log(this.selectedService.name)
-    },
-    hideServiceDetailsPanel() {
-      this.showServiceDetailsPanel = false;
-      this.selectedService = {};
     },
     async updateService() {
       if (confirm("Are you sure to update this service?")) {
@@ -473,25 +580,16 @@ export default {
             });
             alert("Service updated successfully!");
             this.fetchServices();
-            this.hideServiceDetailsPanel();
+            this.hidePanel();
         } catch (error) {
             console.log(error);
         }
       }
     },
-    displayPackageDetailsPanel(pkg) {
-      this.showPackageDetailsPanel = true;
-      this.selectedPackage.serviceIds = pkg.services.map(service => service.id);
-      this.selectedPackage = { ...this.selectedPackage, ...pkg };
-    },
-    hidePackageDetailsPanel() {
-      this.showPackageDetailsPanel = false;
-      this.selectedPackage = {};
-    },
     async updatePackage() {
       if (confirm("Are you sure to update this package?")) {
         try {
-          http.put(`api/packages/update/${this.selectedPackage.id}`, { 
+          await http.put(`api/packages/update/${this.selectedPackage.id}`, { 
             "packageName": this.selectedPackage.name,
             "description": this.selectedPackage.description,
             "shopId": this.selectedPackage.shop.id,
@@ -500,12 +598,59 @@ export default {
       
           alert("Package updated successfuly!");
           this.fetchPackages(this.selectedPackage.shop.id);
-          this.hidePackageDetailsPanel();
+          this.hidePanel();
         } catch (error) {
           console.error(error);
         }
       }
-    }
+    },
+    async updateShop() {
+      try {
+        if (this.changeShopDetails.label == 'Name') {
+          await http.put(`api/shops/update/${this.shop.id}`, {
+            "shopName": this.changeShopDetails.input, 
+          });
+        } else if(this.changeShopDetails.label == 'Description') {
+          await http.put(`api/shops/update/${this.shop.id}`, {
+            "description": this.changeShopDetails.input,
+          });
+        } else if (this.changeShopDetails.label == 'Trending') {
+          await http.put(`api/shops/update/${this.shop.id}`, {
+            "isTrending": this.changeShopDetails.input,
+          });
+        } else if (this.changeShopDetails.label == 'Image') {
+          const formData = new FormData();
+          formData.append('file', convertImageToBlob(this.changeShopDetails.input), 'image.jpg')
+
+          await http.post(`api/shops/${this.shop.id}/image/upload`, formData);
+        }
+
+        alert("Shop updated successfuly!");
+        this.fetchShopDetails(this.shop.id);
+        this.hidePanel();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    openFileInput() {
+        // this.changeShopDetails.input = null
+        this.$refs.fileInput.value = null
+        this.$refs.fileInput.click()
+    },
+    handleFileChange(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                this.changeShopDetails.input = e.target.result;
+                this.displayPanel('changeShopImagePanel')
+            };
+
+            reader.readAsDataURL(file);
+        }
+    },
   },
   mounted() {
       const userStore = useUserStore();
