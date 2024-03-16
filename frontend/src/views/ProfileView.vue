@@ -62,8 +62,13 @@
                     <div class="px-4 h-full">
                         <div class="flex space-x-4 h-full text-2xl">
                             <!-- Loop through your shop cards -->
-                            <div v-for="favorite in userStore.favorites" :key="favorite.id" class="flex-none w-64 bg-green-400 flex justify-center items-center rounded-lg">
-                                {{ favorite.shop.name }}
+                            <div 
+                            v-for="favorite in userStore.favorites" 
+                            :key="favorite.id" 
+                            class="flex-none w-64 flex justify-center items-center rounded-lg relative overflow-hidden"
+                            >
+                                <div class="size-full opacity-70"><ImageViewer :imageData="favorite.shop.imageUrl" /></div>
+                                <div class="absolute font-bold text-2xl bg-white bg-opacity-70 text-black">{{ favorite.shop.name }}</div>
                             </div>
                         </div>
                     </div>
@@ -85,12 +90,22 @@
                         <div class="px-4 h-full">
                         <div class="flex space-x-4 h-full text-2xl">
                             <!-- Loop through your shop cards -->
-                            <div v-for="card in userStore.cards" :key="card.id" class="flex-col w-64 bg-green-400 flex justify-center items-center rounded-lg">
-                                <div class="">
-                                    {{ card.service.name }}
+                            <div v-for="card in userStore.cards" :key="card.id" class="flex-col border-2 w-64 flex justify-center items-center rounded-lg relative">
+                                <div class="absolute size-full opacity-70">
+                                    <div class="h-full">
+                                        <ImageViewer :imageData="card.service.image" />
+                                    </div>
                                 </div>
-                                <div class="">
-                                    {{ card.service.description }}
+                                <div class="absolute px-3 flex flex-col items-center justify-center font-bold text-2xl bg-white bg-opacity-60 text-black h-full w-full">
+                                    <div class="">
+                                        {{ card.service.name }}
+                                    </div>
+                                    <!-- <div class="text-lg">
+                                        {{ card.service.description }}
+                                    </div> -->
+                                    <div class="text-lg">
+                                        {{ card.service.shop.name }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -466,7 +481,12 @@ onMounted(() => {
 </script>
 
 <script>
+import ImageViewer from '@/components/ImageViewer.vue'
+
 export default {
+    components: {
+        ImageViewer,
+    },
     data() {
         return {
             showChangeInfoPanel: false,
