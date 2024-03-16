@@ -19,10 +19,10 @@
       </div>
       <div class="justify-center flex-grow text-xl">
         <nav class="nav-links flex gap-5">
-          <router-link to="/">Home</router-link>
-          <router-link to="/about">About</router-link>
-          <router-link to="/services">Services</router-link>
-          <router-link to="/contact">Contact</router-link>
+          <router-link to="/" title="Home">Home</router-link>
+          <router-link to="/about" title="About">About</router-link>
+          <router-link to="/services" title="Services">Services</router-link>
+          <router-link to="/contact" title="Contact">Contact</router-link>
         </nav>
       </div>
       <div class="justify-end flex py-5">

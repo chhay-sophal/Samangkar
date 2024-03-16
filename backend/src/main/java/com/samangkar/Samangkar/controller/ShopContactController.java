@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("/api/shop-contacts")
+@RequestMapping("/api/contacts")
 public class ShopContactController {
     
     @Autowired

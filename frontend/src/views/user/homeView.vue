@@ -16,14 +16,20 @@
         <h2 class="text-2xl p-5 dark:text-stone-300">See all</h2>
       </div>
       <div class="shop-list" id="popularShopList">
-        <div class="shop-item" v-for="(shop, index) in popularShops" :key="index">
-          <div class="">
-            <ImageViewer :imageData="shop.imageUrl" class="flex aspect-square object-fill"/>
-          </div>
-          <div class="shop-details">
-            <div class="items">{{ shop.name }}</div>
-            <p>{{ shop.description }}</p>
-          </div>
+        <div 
+        class="shop-item" 
+        v-for="(shop, index) in popularShops" 
+        :key="index"
+        >
+          <router-link :to="`/shop/${shop.id}/details`">
+            <div class="">
+              <ImageViewer :imageData="shop.imageUrl" class="flex aspect-square object-fill"/>
+            </div>
+            <div class="shop-details">
+              <div class="items">{{ shop.name }}</div>
+              <p>{{ shop.description }}</p>
+            </div>
+          </router-link>
         </div>
       </div>
     </section>
@@ -45,14 +51,15 @@
       </div>
       <div class="shop-list">
         <div class="shop-item" v-for="(shop, index) in shops" :key="index">
-          <div class="">
-            <ImageViewer :imageData="shop.imageUrl" class="flex aspect-square object-fill"/>
-          </div>
-          <!-- <img :src="shop.image" :alt="shop.name"> -->
-          <div class="shop-details">
-            <div class="items">{{ shop.name }}</div>
-            <p>{{ shop.description }}</p>
-          </div>
+          <router-link :to="`/shop/${shop.id}/details`">
+            <div class="">
+              <ImageViewer :imageData="shop.imageUrl" class="flex aspect-square object-fill"/>
+            </div>
+            <div class="shop-details">
+              <div class="items">{{ shop.name }}</div>
+              <p>{{ shop.description }}</p>
+            </div>
+          </router-link>
         </div>
       </div>
     </section>
@@ -62,8 +69,8 @@
         <h2 class="text-2xl p-5 dark:text-stone-300 grow">Packages</h2>
         <h2 class="text-2xl p-5 dark:text-stone-300">See all</h2>
       </div>
-      <div class="package-list" id="packageList">
-        <div class="package-item" v-for="(pkg, index) in packages" :key="index">
+      <div class="grid grid-cols-3 gap-2" id="packageList">
+        <router-link class="package-item" v-for="pkg in packages" :key="pkg.id" :to="`/shop/${pkg.shop.id}/package/${pkg.id}/details`">
           <div class="">
             <ImageViewer :imageData="pkg.image" />
           </div>
@@ -71,8 +78,9 @@
             <div class="items">{{ pkg.name }}</div>
             <div>$ {{ pkg.price }}</div>
             <p>{{ pkg.description }}</p>
+            <p>Shop: {{ pkg.shop.name }}</p>
           </div>
-        </div>
+        </router-link>
       </div>
     </section>
   </div>
@@ -100,9 +108,9 @@ export default {
         { name: "Popular Shop 3", category: "Books", image: "https://via.placeholder.com/150" }
       ],
       packages: [
-        { name: "Package 1", price: "$10", details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", image: "https://i.pinimg.com/564x/f3/4d/2b/f34d2bc33c132f07d8e18265d24a78ec.jpg" },
-        { name: "Package 2", price: "$20", details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", image: "https://i.pinimg.com/564x/f3/4d/2b/f34d2bc33c132f07d8e18265d24a78ec.jpg" },
-        { name: "Package 3", price: "$30", details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", image: "https://i.pinimg.com/564x/f3/4d/2b/f34d2bc33c132f07d8e18265d24a78ec.jpg" }
+        // { name: "Package 1", price: "$10", details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", image: "https://i.pinimg.com/564x/f3/4d/2b/f34d2bc33c132f07d8e18265d24a78ec.jpg" },
+        // { name: "Package 2", price: "$20", details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", image: "https://i.pinimg.com/564x/f3/4d/2b/f34d2bc33c132f07d8e18265d24a78ec.jpg" },
+        // { name: "Package 3", price: "$30", details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", image: "https://i.pinimg.com/564x/f3/4d/2b/f34d2bc33c132f07d8e18265d24a78ec.jpg" }
       ],
       searchText: '',
       selectedCategory: '',
@@ -158,9 +166,9 @@ export default {
     },
     async fetchPackages() {
       try {
-        // const response = await http.get(`api/packages/get-all/with-services?page=0&size=10`);
-        const response = await http.get(`api/packages/get-all`);
-        this.packages = response.data;
+        const response = await http.get(`api/packages/get-all/with-services?page=0&size=10`);
+        // const response = await http.get(`api/packages/get-all`);
+        this.packages = response.data.content;
         console.log(this.packages)
       } catch (error) {
         console.error("Error:", error);
@@ -175,7 +183,7 @@ export default {
     // Initialize any data or perform initial actions here
     // this.filteredShops = this.shops;
     this.fetchShops();
-    this.fetchPackages()
+    this.fetchPackages();
   }
 };
 </script>
@@ -354,10 +362,18 @@ h2 {
   justify-content: space-around;
 }
 
-.shop-item,
-.package-item {
+.shop-item {
   width: 30%;
-  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.package-item {
+  width: auto;
+  padding-bottom: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;

@@ -171,12 +171,12 @@ const routes = [
     },
     {
         name: "ShopDetail",
-        path: "/shop/detail",
+        path: "/shop/:shopId/details",
         component: ShopDetail,
     },
     {
         name: "PackageDetail",
-        path: "/shop/package/detail",
+        path: "/shop/:shopId/package/:packageId/details",
         component: PackageDetail,
     },
     {
