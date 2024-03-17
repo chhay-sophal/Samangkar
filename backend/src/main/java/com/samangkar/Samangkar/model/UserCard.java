@@ -60,10 +60,17 @@ public class UserCard {
 
     public UserCard() {}
 
-    public UserCard(UserEntity user, ServiceModel service, PackageModel pkg, double total, int quantity) {
+    public UserCard(UserEntity user, ServiceModel service, double total, int quantity) {
         this.user = user;
         // this.shop = shop;
         this.service = service;
+        this.total = total;
+        this.quantity = quantity;
+    }
+
+    public UserCard(UserEntity user, PackageModel pkg, double total, int quantity) {
+        this.user = user;
+        // this.shop = shop;
         this.pkg = pkg;
         this.total = total;
         this.quantity = quantity;

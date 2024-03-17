@@ -42,4 +42,6 @@ public interface PackageRepository extends PagingAndSortingRepository<PackageMod
 
     @Query("SELECT p FROM PackageModel p WHERE SIZE(p.services) > 0 AND p.deletedAt IS NULL")
     Page<PackageModel> findPackagesWithServicesAndDeletedAtIsNull(Pageable pageable);
+
+    PackageModel findFirstById(Long id);
 }

@@ -12,6 +12,7 @@ import lombok.Setter;
 public class CardDto {
     private Long id;
     private ServiceDto service;
+    private PackageDto pkg;
     private UserDto user;
     private int quantity;
     private double total;
@@ -20,10 +21,11 @@ public class CardDto {
     private Date updatedAt;
     private Date deletedAt;
 
-    public CardDto(Long id, ServiceDto service, UserDto user, int quantity,
-            double total, boolean paid, Date createdAt, Date updatedAt, Date deletedAt) {
+    public CardDto(Long id, ServiceDto service, PackageDto pkg, UserDto user, int quantity, double total, boolean paid,
+            Date createdAt, Date updatedAt, Date deletedAt) {
         this.id = id;
         this.service = service;
+        this.pkg = pkg;
         this.user = user;
         this.quantity = quantity;
         this.total = total;

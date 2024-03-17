@@ -50,51 +50,77 @@ public class CardController {
     private PackageRepository packageRepository;
 
     @GetMapping("get-all/{userId}")
-    public ResponseEntity<List<CardDto>> getUserCards(@PathVariable Long userId) {
-        List<CardDto> userCards = cardService.getUserCards(userId);
-        return ResponseEntity.ok(userCards);
+    public ResponseEntity<?> getUserCards(@PathVariable Long userId) {
+        try {
+            List<CardDto> userCards = cardService.getUserCards(userId);
+            return ResponseEntity.ok(userCards);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
+        }
     }
 
-    @PostMapping("remove")
-    public ResponseEntity<?> removeCard(@RequestBody RemoveCardRequest request) {
+    @SuppressWarnings("null")
+    @PostMapping("remove/{cardId}")
+    public ResponseEntity<?> removeCard(@PathVariable Long cardId) {
         try {
-            @SuppressWarnings("null")
-            UserCard userCard = userCardRepository.findById(request.getCardId()).orElseThrow(() -> new EntityNotFoundException("Card no found"));
+            UserCard userCard = userCardRepository.findById(cardId)
+                            .orElseThrow(EntityNotFoundException::new);
 
-            userCard.setDeletedAt(new Date());
-            userCardRepository.save(userCard);
+            // Optionally, you can set the deletion timestamp here if needed
+            // userCard.setDeletedAt(new Date());
 
-            List<CardDto> userCards = cardService.getUserCards(request.getUserId());
-            return ResponseEntity.ok(userCards);
+            userCardRepository.delete(userCard);
+
+            return ResponseEntity.ok("Card removed successfully!");
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
         }
     }
     
+    // @SuppressWarnings("null")
     @PostMapping("add")
     public ResponseEntity<?> addCard(@RequestBody AddCardDto request) {
+        UserEntity user = userRepository.findFirstById(request.getUserId());
+        if (user == null) {
+            return ResponseEntity.badRequest().body("User not found.");
+        }
         try {
-            UserEntity user = userRepository.findFirstById(request.getUserId());
-            ServiceModel serviceModel;
-            PackageModel packageModel;
-            double total;
-
             if (request.getServiceId() != null) {
-                serviceModel = serviceRepository.findFirstById(request.getServiceId());
-                packageModel = null;
-                total = serviceModel.getUnitPrice() * request.getQuantity();
+                ServiceModel serviceModel = serviceRepository.findFirstById(request.getServiceId());
+                if (serviceModel == null) {
+                    return ResponseEntity.badRequest().body("Service not found.");
+                }
+
+                if (userCardRepository.findByUserAndService(user, serviceModel).isPresent()) {
+                    return ResponseEntity.badRequest().body("Card entry for this service already exists for the user.");
+                }
+
+                double total = serviceModel.getUnitPrice() * request.getQuantity();
+                UserCard userCard = new UserCard();
+                userCard.setUser(user);
+                userCard.setService(serviceModel);
+                userCard.setQuantity(request.getQuantity());
+                userCard.setTotal(total);
+                userCardRepository.save(userCard);
             } else {
-                packageModel = packageRepository.findById(request.getServiceId()).get();
-                serviceModel = null;
-                total = packageModel.getPrice();
+                PackageModel packageModel = packageRepository.findFirstById(request.getPackageId());
+                if (packageModel == null) {
+                    return ResponseEntity.badRequest().body("Package not found.");
+                }
+
+                if (userCardRepository.findByUserAndPkg(user, packageModel).isPresent()) {
+                    return ResponseEntity.badRequest().body("Card entry for this package already exists for the user.");
+                }
+
+                UserCard userCard = new UserCard();
+                double total = packageModel.getPrice() * request.getQuantity();
+                userCard.setUser(user);
+                userCard.setPkg(packageModel);
+                userCard.setQuantity(request.getQuantity());
+                userCard.setTotal(total);
+                userCardRepository.save(userCard);
             }
-
-
-            UserCard userCard = new UserCard(user, serviceModel, packageModel, total, request.getQuantity());
-            userCardRepository.save(userCard);
-
-            List<CardDto> userCards = cardService.getUserCards(request.getUserId());
-            return ResponseEntity.ok(userCards);
+            return ResponseEntity.ok("userCard added!");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
         }

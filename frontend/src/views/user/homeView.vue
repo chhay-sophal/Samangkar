@@ -96,17 +96,46 @@
         <h2 class="text-2xl p-5 dark:text-stone-300">See all</h2>
       </div>
       <div class="grid grid-cols-3 gap-2" id="packageList">
-        <router-link class="package-item" v-for="pkg in packages" :key="pkg.id" :to="`/shop/${pkg.shop.id}/package/${pkg.id}/details`">
-          <div class="">
-            <ImageViewer :imageData="pkg.image" />
-          </div>
-          <div class="package-details">
-            <div class="items">{{ pkg.name }}</div>
-            <div>$ {{ pkg.price }}</div>
-            <p>{{ pkg.description }}</p>
-            <p>Shop: {{ pkg.shop.name }}</p>
-          </div>
-        </router-link>
+        <div class="relative  package-item" v-for="pkg in packages" :key="pkg.id">
+          <button 
+          class="absolute right-2 top-2" 
+          >
+            <svg 
+              @click="removeFromCard(pkg.id)"
+              v-if="cards?.some(card => card.pkg.id === pkg.id)"
+              xmlns="http://www.w3.org/2000/svg" 
+              fill="red" 
+              viewBox="0 0 24 24" 
+              stroke-width="1.5" 
+              stroke="currentColor" 
+              class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <svg 
+              @click="addToCard(pkg.id)"
+              v-else
+              xmlns="http://www.w3.org/2000/svg" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke-width="1.5" 
+              stroke="currentColor" 
+              class="w-6 h-6"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+          </button>
+          <router-link :to="`/shop/${pkg.shop.id}/package/${pkg.id}/details`">
+            <div class="">
+              <ImageViewer :imageData="pkg.image" />
+            </div>
+            <div class="package-details">
+              <div class="items">{{ pkg.name }}</div>
+              <div>$ {{ pkg.price }}</div>
+              <p>{{ pkg.description }}</p>
+              <p>Shop: {{ pkg.shop.name }}</p>
+            </div>
+          </router-link>
+        </div>
       </div>
     </section>
   </div>
@@ -142,7 +171,7 @@ export default {
       searchText: '',
       selectedCategory: '',
       filteredShops: [],
-      userCards: [],
+      cards: [],
       favorites: [],
     };
   },
@@ -206,8 +235,10 @@ export default {
     async fetchUserCards() {
       try {
         const response = await http.get(`api/cards/get-all/${this.userId}`);
-        this.userCards = response.data;
-        console.log(this.userCards);
+        // this.cards = response.data.filter(response.data.pkg != null);
+        this.cards = response.data.filter(card => card.pkg != null);
+        // this.cards = response.data;
+        console.log(this.cards);
       } catch (error) {
         console.log(error)
       }
@@ -242,24 +273,45 @@ export default {
       const favorite = this.favorites.find(favoriteShop => favoriteShop.shop.id === shopId);
       return favorite ? { isFavorite: true, favoriteId: favorite.id } : { isFavorite: false, favoriteId: null };
     },
+    async addToCard(pkgId) {
+      try {
+        await http.post(`api/cards/add`, {
+          "userId": this.userId,
+          "serviceId": null,
+          "packageId": pkgId,
+          "quantity": 1,
+        });
+        this.fetchUserCards();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async removeFromCard(pkgId) {
+      try {
+        // Find the first card that has the specified package ID
+        const cardToRemove = this.cards.find(card => card.pkg.id === pkgId);
+        
+        // If a card is found, make an HTTP request to remove it by its ID
+        if (cardToRemove) {
+          const response = await http.post(`api/cards/remove/${cardToRemove.id}`);
+          console.log(response.data); // Handle the response as needed
+          this.fetchUserCards();
+        } else {
+          console.log("Card not found"); // Log a message if no matching card is found
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   mounted() {
     const userStore = useUserStore()
     this.userId = userStore.user.id;
+
     if (!userStore.user.username) {
         this.$router.push({ name: 'loginPageRoute' })
     }
-    // const userStore = useUserStore()
-    // const user = userStore.getUser
 
-    // console.log(userStore.favorites)
-
-    // const userFavorites = ref(userStore.favorites)
-    // const userCards = ref(userStore.cards)
-    // console.log(userCards)
-
-    // Initialize any data or perform initial actions here
-    // this.filteredShops = this.shops;
     this.fetchShops();
     this.fetchPackages();
     this.fetchUserCards();
