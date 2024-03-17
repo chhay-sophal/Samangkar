@@ -51,16 +51,20 @@ public class UserCard {
     @ManyToOne
     private ServiceModel service;
 
+    @ManyToOne
+    private PackageModel pkg;
+
     private boolean paid;
     private double total;
     private int quantity;
 
     public UserCard() {}
 
-    public UserCard(UserEntity user, ServiceModel service, double total, int quantity) {
+    public UserCard(UserEntity user, ServiceModel service, PackageModel pkg, double total, int quantity) {
         this.user = user;
         // this.shop = shop;
         this.service = service;
+        this.pkg = pkg;
         this.total = total;
         this.quantity = quantity;
     }

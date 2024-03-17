@@ -46,8 +46,8 @@ public class FavoriteController {
     }
     
     @SuppressWarnings("null")
-    @PostMapping("remove/{userId}/{favoriteId}")
-    public ResponseEntity<?> removeFavoriteShop(@PathVariable Long userId, @PathVariable Long favoriteId) {
+    @PostMapping("remove/{favoriteId}")
+    public ResponseEntity<?> removeFavoriteShop(@PathVariable Long favoriteId) {
         try {
             if (userFavoriteRepository.findById(favoriteId).isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Favorite with id " + favoriteId + " does not exists.");
@@ -55,9 +55,8 @@ public class FavoriteController {
                 UserFavorite favorite = userFavoriteRepository.findById(favoriteId).get();
                 favorite.setDeletedAt(new Date());
                 userFavoriteRepository.save(favorite);
-    
-                List<FavoriteDto> favoriteShops = shopService.getUserFavoriteShops(userId);
-                return ResponseEntity.ok(favoriteShops);
+
+                return ResponseEntity.ok("Favorite removed!");
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");

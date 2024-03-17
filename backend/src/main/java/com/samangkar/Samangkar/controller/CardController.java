@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.samangkar.Samangkar.dto.AddCardDto;
 import com.samangkar.Samangkar.dto.CardDto;
 import com.samangkar.Samangkar.dto.RemoveCardRequest;
+import com.samangkar.Samangkar.model.PackageModel;
 import com.samangkar.Samangkar.model.ServiceModel;
 import com.samangkar.Samangkar.model.UserCard;
 import com.samangkar.Samangkar.model.UserEntity;
+import com.samangkar.Samangkar.repository.PackageRepository;
 import com.samangkar.Samangkar.repository.ServiceRepository;
 import com.samangkar.Samangkar.repository.UserCardRepository;
 import com.samangkar.Samangkar.repository.UserRepository;
@@ -44,6 +46,9 @@ public class CardController {
     @Autowired
     private ServiceRepository serviceRepository;
 
+    @Autowired
+    private PackageRepository packageRepository;
+
     @GetMapping("get-all/{userId}")
     public ResponseEntity<List<CardDto>> getUserCards(@PathVariable Long userId) {
         List<CardDto> userCards = cardService.getUserCards(userId);
@@ -70,11 +75,22 @@ public class CardController {
     public ResponseEntity<?> addCard(@RequestBody AddCardDto request) {
         try {
             UserEntity user = userRepository.findFirstById(request.getUserId());
-            ServiceModel serviceModel = serviceRepository.findFirstById(request.getServiceId());
+            ServiceModel serviceModel;
+            PackageModel packageModel;
+            double total;
 
-            double total = serviceModel.getUnitPrice() * request.getQuantity();
+            if (request.getServiceId() != null) {
+                serviceModel = serviceRepository.findFirstById(request.getServiceId());
+                packageModel = null;
+                total = serviceModel.getUnitPrice() * request.getQuantity();
+            } else {
+                packageModel = packageRepository.findById(request.getServiceId()).get();
+                serviceModel = null;
+                total = packageModel.getPrice();
+            }
 
-            UserCard userCard = new UserCard(user, serviceModel, total, request.getQuantity());
+
+            UserCard userCard = new UserCard(user, serviceModel, packageModel, total, request.getQuantity());
             userCardRepository.save(userCard);
 
             List<CardDto> userCards = cardService.getUserCards(request.getUserId());
