@@ -4,19 +4,19 @@
         <div class="2xl:w-1/5 xl:w-1/4 w-full">
             <div class="p-5 pb-0 flex justify-center">
                 <div class="dark:bg-slate-600 bg-gray-100 overflow-hidden flex items-center rounded-full w-48 h-48">
-                    <img v-if="userStore.getUser.profile" :src="getUserImageUrl(userStore.getUser.profile)" alt="">
+                    <img v-if="user.profile" :src="getUserImageUrl(user.profile)" alt="">
                     <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                     </svg>
                 </div>
             </div>
             <div class="flex justify-center text-4xl p-3">
-                {{ userStore.getUser.username }}
+                {{ user.username }}
             </div>
             <div class="flex flex-col items-center gap-2 text-2xl">
                 <div class="flex gap-3">
                     <div class="">    
-                        {{ userStore.getUser.email }}
+                        {{ user.email }}
                     </div>
                 </div>
                 <div class="flex flex-col gap-2">
@@ -63,11 +63,24 @@
                         <div class="flex space-x-4 h-full text-2xl">
                             <!-- Loop through your shop cards -->
                             <div 
-                            v-for="favorite in userStore.favorites" 
+                            v-for="favorite in favorites" 
                             :key="favorite.id" 
                             class="flex-none w-64 flex justify-center items-center rounded-lg relative overflow-hidden"
                             >
-                                <div class="size-full opacity-70"><ImageViewer :imageData="favorite.shop.imageUrl" /></div>
+                                <button class="absolute right-2 top-2">
+                                    <svg 
+                                    xmlns="http://www.w3.org/2000/svg" 
+                                    :fill="'red'" 
+                                    viewBox="0 0 24 24" 
+                                    stroke-width="1.5" 
+                                    stroke="currentColor" 
+                                    class="w-6 h-6"
+                                    @click="removeFavorite(favorite.id)"
+                                    >
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                                    </svg>
+                                </button>
+                                <div class="size-full"><ImageViewer :imageData="favorite.shop.imageUrl" /></div>
                                 <div class="absolute font-bold text-2xl bg-white bg-opacity-70 text-black">{{ favorite.shop.name }}</div>
                             </div>
                         </div>
@@ -90,7 +103,7 @@
                         <div class="px-4 h-full">
                         <div class="flex space-x-4 h-full text-2xl">
                             <!-- Loop through your shop cards -->
-                            <div v-for="card in userStore.cards" :key="card.id" class="flex-col border-2 w-64 flex justify-center items-center rounded-lg relative">
+                            <div v-for="card in cards" :key="card.id" class="flex-col border-2 w-64 flex justify-center items-center rounded-lg relative">
                                 <div class="absolute size-full opacity-70">
                                     <div class="h-full">
                                         <ImageViewer :imageData="card.service.image" />
@@ -437,51 +450,11 @@
     </div>
 </template>
 
-<script setup>
+<script>
 import { useUserStore } from '@/store/userStore'
 import http from '@/services/httpService'
 import { login, logout } from '@/services/authService'
 import { ref, onMounted } from 'vue'
-
-const userStore = useUserStore()
-const user = userStore.getUser
-
-console.log(userStore.favorites)
-
-const userFavorites = ref(userStore.favorites)
-const userCards = ref(userStore.cards)
-console.log(userCards)
-
-const fetchUserFavorites = async () => {
-    try {
-        const response = await http.get(`api/favorites/get-all/${user.id}`)
-        userStore.setFavorites(response.data)
-    } catch (error) {
-        console.error(error)
-    }
-}
-
-const fetchUserCards = async () => {
-    try {
-        const response = await http.get(`api/cards/get-all/${user.id}`)
-        userStore.setCards(response.data)
-    } catch (error) {
-        console.error(error)
-    }
-}
-
-// Fetch data when the component is mounted
-onMounted(() => {
-    if (!userFavorites.value.length) {
-        fetchUserFavorites();
-    }
-    if (!userCards.value.length) {
-        fetchUserCards();
-    }
-});
-</script>
-
-<script>
 import ImageViewer from '@/components/ImageViewer.vue'
 
 export default {
@@ -490,6 +463,9 @@ export default {
     },
     data() {
         return {
+            user: [],
+            favorites: [],
+            cards: [],
             showChangeInfoPanel: false,
             showChangePasswordPanel: false,
             userInput: {
@@ -506,6 +482,16 @@ export default {
         }
     },
     methods: {
+        async removeFavorite(favoriteId) {
+            try {
+                console.log(`Remove from favorites with ID: ${favoriteId}`);
+                const response = await http.post(`api/favorites/remove/${favoriteId}`);
+                console.log(response.data);
+                this.fetchUserFavorites();
+            } catch (error) {
+                console.log(error);
+            }
+        },
         handleShowChangeInfoPanel() {
             const userStore = useUserStore()
 
@@ -684,6 +670,22 @@ export default {
                 console.error('Error getting image data:', error)
             }
         },
+        async fetchUserFavorites() {
+            try {
+                const response = await http.get(`api/favorites/get-all/${this.user.id}`)
+                this.favorites = response.data;
+            } catch (error) {
+                console.error(error)
+            }
+        },
+        async fetchUserCards() {
+            try {
+                const response = await http.get(`api/cards/get-all/${this.user.id}`)
+                this.cards = response.data;
+            } catch (error) {
+                console.error(error)
+            }
+        }
     },
     mounted() {
         const userStore = useUserStore()
@@ -694,6 +696,10 @@ export default {
         if (userStore.user.role == "SHOP_OWNER") {
             this.$router.push({ name: 'ShopOwnerProfile' })
         }
+        
+        this.user = userStore.user;
+        this.fetchUserFavorites();
+        this.fetchUserCards();
     },
     computed() {
     },
