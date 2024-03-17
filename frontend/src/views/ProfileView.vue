@@ -100,9 +100,9 @@
                                     <div class="">
                                         {{ card.service.name }}
                                     </div>
-                                    <!-- <div class="text-lg">
-                                        {{ card.service.description }}
-                                    </div> -->
+                                    <div class="text-lg">
+                                        ${{ card.service.unitPrice }}
+                                    </div>
                                     <div class="text-lg">
                                         {{ card.service.shop.name }}
                                     </div>
@@ -450,6 +450,7 @@ console.log(userStore.favorites)
 
 const userFavorites = ref(userStore.favorites)
 const userCards = ref(userStore.cards)
+console.log(userCards)
 
 const fetchUserFavorites = async () => {
     try {

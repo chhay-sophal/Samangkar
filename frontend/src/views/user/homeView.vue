@@ -17,10 +17,23 @@
       </div>
       <div class="shop-list" id="popularShopList">
         <div 
-        class="shop-item" 
+        class="shop-item relative" 
         v-for="(shop, index) in popularShops" 
         :key="index"
         >
+          <button class="absolute right-2 top-2">
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              :fill="favorites?.some(favoriteShop => favoriteShop.id === shop.id) ? 'red' : 'white'" 
+              viewBox="0 0 24 24" 
+              stroke-width="1.5" 
+              stroke="currentColor" 
+              class="w-6 h-6"
+              @click="updateFavorite(shop.id, favorites?.some(favoriteShop => favoriteShop.id === shop.id))"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+            </svg>
+          </button>
           <router-link :to="`/shop/${shop.id}/details`">
             <div class="">
               <ImageViewer :imageData="shop.imageUrl" class="flex aspect-square object-fill"/>
@@ -50,7 +63,20 @@
         <h2 class="text-2xl p-5 dark:text-stone-300">See all</h2>
       </div>
       <div class="shop-list">
-        <div class="shop-item" v-for="(shop, index) in shops" :key="index">
+        <div class="shop-item relative" v-for="(shop, index) in shops" :key="index">
+          <button class="absolute right-2 top-2">
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              :fill="favorites?.some(favorite => favorite.shop.id === shop.id) ? 'red' : 'white'" 
+              viewBox="0 0 24 24" 
+              stroke-width="1.5" 
+              stroke="currentColor" 
+              class="w-6 h-6"
+              @click="updateFavorite(shop.id, findFavoriteId(shop.id))"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+            </svg>
+          </button>
           <router-link :to="`/shop/${shop.id}/details`">
             <div class="">
               <ImageViewer :imageData="shop.imageUrl" class="flex aspect-square object-fill"/>
@@ -97,6 +123,7 @@ export default {
   },
   data() {
     return {
+      userId: null,
       shops: [
         { name: "Shop A", category: "Premium", image: "https://z-p3-scontent.fpnh5-3.fna.fbcdn.net/v/t39.30808-6/428153665_791689982989980_6073961733013835102_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeG1MUA7vJDcBm9IiF8urEuE-jdovJ1I5bD6N2i8nUjlsEa03xSyAJ_zG_UOuQwxG0rU8LDBlKQKYew-9SwDlYjR&_nc_ohc=gQoGVfGg4LwAX8QsL7w&_nc_zt=23&_nc_ht=z-p3-scontent.fpnh5-3.fna&oh=00_AfANqkn6ZwC9NPF_Svd6jeNkKQjZ_h_a0PtSVGeS1M6hnQ&oe=65F4AE32" },
         { name: "Shop B", category: "MiddleClass", image: "https://z-p3-scontent.fpnh5-3.fna.fbcdn.net/v/t39.30808-6/425244851_18329928646128706_2411480114611815302_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeFm4aPmZM3ZADh5CT4L-6RSfCpdaYHG8AR8Kl1pgcbwBJkGa7-Nh0xX_kXwVsFK8XGWD-a-Syy1T_moYm0uQcu7&_nc_ohc=s9yb-t7yIysAX8pLDN9&_nc_zt=23&_nc_ht=z-p3-scontent.fpnh5-3.fna&oh=00_AfDAr2Kaq4qUxludAGmwYWhLzGQQ85JEnA9a_hOJR95meA&oe=65F56C9A" },
@@ -114,7 +141,9 @@ export default {
       ],
       searchText: '',
       selectedCategory: '',
-      filteredShops: []
+      filteredShops: [],
+      userCards: [],
+      favorites: [],
     };
   },
   methods: {
@@ -174,16 +203,67 @@ export default {
         console.error("Error:", error);
       }
     },
+    async fetchUserCards() {
+      try {
+        const response = await http.get(`api/cards/get-all/${this.userId}`);
+        this.userCards = response.data;
+        console.log(this.userCards);
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async fetchFavorites() {
+      try {
+        const response = await http.get(`api/favorites/get-all/${this.userId}`);
+        this.favorites = response.data;
+        console.log(this.favorites);
+        console.log('hsldf')
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async updateFavorite(shopId, { isFavorite, favoriteId }) {
+      try {
+        if (isFavorite) {
+          console.log(`Remove from favorites with ID: ${favoriteId}`);
+          const response = await http.post(`api/favorites/remove/${favoriteId}`);
+          console.log(response.data);
+        } else {
+          console.log(`Add to favorites, shop ID: ${shopId}`);
+          const response = await http.post(`api/favorites/add/${this.userId}/${shopId}`);
+          console.log(response.data);
+        }
+        this.fetchFavorites();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    findFavoriteId(shopId) {
+      const favorite = this.favorites.find(favoriteShop => favoriteShop.shop.id === shopId);
+      return favorite ? { isFavorite: true, favoriteId: favorite.id } : { isFavorite: false, favoriteId: null };
+    },
   },
   mounted() {
     const userStore = useUserStore()
+    this.userId = userStore.user.id;
     if (!userStore.user.username) {
         this.$router.push({ name: 'loginPageRoute' })
     }
+    // const userStore = useUserStore()
+    // const user = userStore.getUser
+
+    // console.log(userStore.favorites)
+
+    // const userFavorites = ref(userStore.favorites)
+    // const userCards = ref(userStore.cards)
+    // console.log(userCards)
+
     // Initialize any data or perform initial actions here
     // this.filteredShops = this.shops;
     this.fetchShops();
     this.fetchPackages();
+    this.fetchUserCards();
+    this.fetchFavorites();
   }
 };
 </script>
