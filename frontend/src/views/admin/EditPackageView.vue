@@ -86,7 +86,7 @@ export default {
         const response = await http.get(`api/packages/get/${this.packageInfo.id}`);
         this.packageInfo.name = response.data.name;
         this.packageInfo.description = response.data.description;
-        this.packageInfo.shopId = response.data.shop.id;
+        this.packageInfo.shopId = response.data.shopId;
         this.packageInfo.serviceIds = response.data.services.map(service => service.id);
         console.log(response.data);
       } catch (error) {

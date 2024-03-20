@@ -116,7 +116,7 @@
       try {
         const response = await http.get(`api/shops/get/${this.shopInfo.shopId}`);
         this.shopInfo.name = response.data.name;
-        this.shopInfo.ownerId = response.data.owner.id;
+        this.shopInfo.ownerId = response.data.ownerId;
         this.shopInfo.description = response.data.description;
         this.shopInfo.isTrending = response.data.isTrending;
         console.log(response.data);

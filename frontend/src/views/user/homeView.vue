@@ -131,7 +131,7 @@
               <div class="items">{{ service.name }}</div>
               <div>$ {{ service.unitPrice }}</div>
               <p>{{ service.description }}</p>
-              <p>Shop: {{ service.shop.name }}</p>
+              <p>Shop: {{ service.shopName }}</p>
             </div>
           <!-- </router-link> -->
         </div>
@@ -172,7 +172,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
           </button>
-          <router-link :to="`/shop/${pkg.shop.id}/package/${pkg.id}/details`">
+          <router-link :to="`/shop/${pkg.shopId}/package/${pkg.id}/details`">
             <div class="">
               <ImageViewer :imageData="pkg.image" />
             </div>
@@ -180,7 +180,7 @@
               <div class="items">{{ pkg.name }}</div>
               <div>$ {{ pkg.price }}</div>
               <p>{{ pkg.description }}</p>
-              <p>Shop: {{ pkg.shop.name }}</p>
+              <p>Shop: {{ pkg.shopName }}</p>
             </div>
           </router-link>
         </div>

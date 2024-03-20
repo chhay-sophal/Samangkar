@@ -159,7 +159,7 @@ public class ShopController {
     @PostMapping("/deactivate/{shopId}")
     public ResponseEntity<?> deactivateShop(@PathVariable(required = true) Long shopId){
         try{
-            Long ownerId = shopService.getShopById(shopId).getOwner().getId();
+            Long ownerId = shopService.getShopById(shopId).getOwnerId();
             shopService.activateOrReactivateShop(shopId);
             System.out.println("Shop deleted successfully");
             List<ShopDto> shopDTOs = shopService.getShopsByUserId(ownerId);
@@ -174,7 +174,7 @@ public class ShopController {
     @PostMapping("/activate/{shopId}")
     public ResponseEntity<?> activateShop(@PathVariable(required = true) Long shopId){
         try{
-            Long ownerId = shopService.getShopById(shopId).getOwner().getId();
+            Long ownerId = shopService.getShopById(shopId).getOwnerId();
             shopService.activateOrReactivateShop(shopId);
             System.out.println("Shop deleted successfully");
             List<ShopDto> shopDTOs = shopService.getShopsByUserId(ownerId);

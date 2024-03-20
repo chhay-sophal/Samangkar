@@ -12,7 +12,6 @@ import com.samangkar.Samangkar.repository.UserFavoriteRepository;
 import com.samangkar.Samangkar.repository.UserRepository;
 import com.samangkar.Samangkar.service.FavoriteShopService;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,9 +51,7 @@ public class FavoriteController {
             if (userFavoriteRepository.findById(favoriteId).isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Favorite with id " + favoriteId + " does not exists.");
             } else {
-                UserFavorite favorite = userFavoriteRepository.findById(favoriteId).get();
-                favorite.setDeletedAt(new Date());
-                userFavoriteRepository.save(favorite);
+                userFavoriteRepository.deleteById(favoriteId);
 
                 return ResponseEntity.ok("Favorite removed!");
             }

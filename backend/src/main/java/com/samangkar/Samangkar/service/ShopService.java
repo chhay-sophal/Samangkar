@@ -32,9 +32,6 @@ public class ShopService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private UserService userService;
-
     public Page<ShopDto> getAllShops(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Shop> shops = shopRepository.findAll(pageable);
@@ -81,7 +78,8 @@ public class ShopService {
                 shop.getId(), 
                 shop.getName(), 
                 base64Image, 
-                userService.getUserById(shop.getOwner().getId()),
+                shop.getOwner().getId(),
+                shop.getOwner().getUsername(),
                 shop.getDescription(),
                 shop.isTrending(),
                 shop.getCreatedAt(),
@@ -93,7 +91,8 @@ public class ShopService {
                 shop.getId(), 
                 shop.getName(), 
                 null, 
-                userService.getUserById(shop.getOwner().getId()),
+                shop.getOwner().getId(),
+                shop.getOwner().getUsername(),
                 shop.getDescription(),
                 shop.isTrending(),
                 shop.getCreatedAt(),

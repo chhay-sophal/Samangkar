@@ -12,20 +12,22 @@ public class ServiceDto {
     private String description;
     private double unitPrice;
     private boolean isTrending;
-    private ShopDto shop;
+    private Long shopId;
+    private String shopName;
     private String image;
     private Date createdAt;
     private Date updatedAt;
     private Date deletedAt;
 
-    public ServiceDto(Long id, String name, String description, double unitPrice, boolean isTrending, ShopDto shop,
-            String image, Date createdAt, Date updatedAt, Date deletedAt) {
+    public ServiceDto(Long id, String name, String description, double unitPrice, boolean isTrending, Long shopId,
+            String shopName, String image, Date createdAt, Date updatedAt, Date deletedAt) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.unitPrice = unitPrice;
         this.isTrending = isTrending;
-        this.shop = shop;
+        this.shopId = shopId;
+        this.shopName = shopName;
         this.image = image;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
