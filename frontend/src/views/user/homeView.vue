@@ -90,6 +90,54 @@
       </div>
     </section>
     <section class="packages">
+      <div class="flex">
+        <h2 class="text-2xl p-5 dark:text-stone-300 grow">Services</h2>
+        <h2 class="text-2xl p-5 dark:text-stone-300">See all</h2>
+      </div>
+      <div class="grid grid-cols-3 gap-2" id="packageList">
+        <div class="relative  package-item" v-for="service in services" :key="service.id">
+          <button 
+          class="absolute right-2 top-2" 
+          >
+            <svg 
+              @click="removeFromCard('service', service.id)"
+              v-if="serviceCarts?.some(card => card.service?.id === service?.id)"
+              xmlns="http://www.w3.org/2000/svg" 
+              fill="red" 
+              viewBox="0 0 24 24" 
+              stroke-width="1.5" 
+              stroke="currentColor" 
+              class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <svg 
+              @click="addToCard('service', service.id)"
+              v-else
+              xmlns="http://www.w3.org/2000/svg" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke-width="1.5" 
+              stroke="currentColor" 
+              class="w-6 h-6"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+          </button>
+          <!-- <router-link :to="`/shop/${service.shop.id}/service/${service.id}/details`"> -->
+            <div class="">
+              <ImageViewer :imageData="service.image" />
+            </div>
+            <div class="package-details">
+              <div class="items">{{ service.name }}</div>
+              <div>$ {{ service.unitPrice }}</div>
+              <p>{{ service.description }}</p>
+              <p>Shop: {{ service.shop.name }}</p>
+            </div>
+          <!-- </router-link> -->
+        </div>
+      </div>
+    </section>
+    <section class="packages">
       <!-- <h2>Packages</h2> -->
       <div class="flex">
         <h2 class="text-2xl p-5 dark:text-stone-300 grow">Packages</h2>
@@ -101,8 +149,8 @@
           class="absolute right-2 top-2" 
           >
             <svg 
-              @click="removeFromCard(pkg.id)"
-              v-if="cards?.some(card => card.pkg.id === pkg.id)"
+              @click="removeFromCard('package', pkg.id)"
+              v-if="packageCarts?.some(card => card.pkg.id === pkg.id)"
               xmlns="http://www.w3.org/2000/svg" 
               fill="red" 
               viewBox="0 0 24 24" 
@@ -112,7 +160,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
             <svg 
-              @click="addToCard(pkg.id)"
+              @click="addToCard('package', pkg.id)"
               v-else
               xmlns="http://www.w3.org/2000/svg" 
               fill="none" 
@@ -168,10 +216,12 @@ export default {
         // { name: "Package 2", price: "$20", details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", image: "https://i.pinimg.com/564x/f3/4d/2b/f34d2bc33c132f07d8e18265d24a78ec.jpg" },
         // { name: "Package 3", price: "$30", details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", image: "https://i.pinimg.com/564x/f3/4d/2b/f34d2bc33c132f07d8e18265d24a78ec.jpg" }
       ],
+      services: [],
       searchText: '',
       selectedCategory: '',
       filteredShops: [],
-      cards: [],
+      packageCarts: [],
+      serviceCarts: [],
       favorites: [],
     };
   },
@@ -236,9 +286,12 @@ export default {
       try {
         const response = await http.get(`api/cards/get-all/${this.userId}`);
         // this.cards = response.data.filter(response.data.pkg != null);
-        this.cards = response.data.filter(card => card.pkg != null);
+        this.packageCarts = response.data.filter(card => card.pkg != null);
+        this.serviceCarts = response.data.filter(card => card.service != null);
         // this.cards = response.data;
-        console.log(this.cards);
+        console.log('user carts:');
+        console.log(this.packageCarts);
+        console.log(this.serviceCarts);
       } catch (error) {
         console.log(error)
       }
@@ -273,24 +326,47 @@ export default {
       const favorite = this.favorites.find(favoriteShop => favoriteShop.shop.id === shopId);
       return favorite ? { isFavorite: true, favoriteId: favorite.id } : { isFavorite: false, favoriteId: null };
     },
-    async addToCard(pkgId) {
+    async addToCard(productType, id) {
       try {
-        await http.post(`api/cards/add`, {
-          "userId": this.userId,
-          "serviceId": null,
-          "packageId": pkgId,
-          "quantity": 1,
-        });
+        if (productType == 'package') {
+          await http.post(`api/cards/add`, {
+            "userId": this.userId,
+            "serviceId": null,
+            "packageId": id,
+            "quantity": 1,
+          });
+        } else if (productType == 'service') {
+          console.log(id)
+          console.log(this.userId)
+          await http.post(`api/cards/add`, {
+            "userId": this.userId,
+            "serviceId": id,
+            "packageId": null,
+            "quantity": 1,
+          });
+        } else {
+          console.log('Product type not found!');
+        }
+
         this.fetchUserCards();
       } catch (error) {
         console.log(error);
       }
     },
-    async removeFromCard(pkgId) {
+    async removeFromCard(productType, id) {
       try {
-        // Find the first card that has the specified package ID
-        const cardToRemove = this.cards.find(card => card.pkg.id === pkgId);
-        
+        let cardToRemove = null;
+        if (productType == 'package') {
+          // Find the first card that has the specified package ID
+          cardToRemove = this.packageCarts.find(card => card.pkg.id === id);
+        } else if (productType == 'service') {
+          // Find the first card that has the specified package ID
+          cardToRemove = this.serviceCarts.find(card => card.service.id === id);
+        } else {
+          console.log('Product type not found!');
+          return;
+        }
+
         // If a card is found, make an HTTP request to remove it by its ID
         if (cardToRemove) {
           const response = await http.post(`api/cards/remove/${cardToRemove.id}`);
@@ -301,6 +377,15 @@ export default {
         }
       } catch (error) {
         console.log(error);
+      }
+    },
+    async fetchServices() {
+      try {
+        const response = await http.get(`api/services/get-all/pageable?page=0&size=6`);
+        this.services = response.data.content;
+        console.log(this.services);
+      } catch (error) {
+        console.log(error)
       }
     },
   },
@@ -316,6 +401,7 @@ export default {
     this.fetchPackages();
     this.fetchUserCards();
     this.fetchFavorites();
+    this.fetchServices();
   }
 };
 </script>
