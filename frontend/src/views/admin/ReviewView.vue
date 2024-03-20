@@ -11,6 +11,7 @@
                 <th>Shop ID</th>
                 <th>Title</th>
                 <th>Stars</th>
+                <th>Created At</th>
                 <th>Description</th>
                 <!-- <th>Deleted</th> -->
                 <th>Actions</th>
@@ -18,10 +19,11 @@
             </thead>
             <tbody>
               <tr v-for="review in reviews" :key="review.id">
-                <td>{{ review.user_id }}</td>
+                <td>{{ review.user.id }}</td>
                 <td>{{ review.shop_id }}</td>
                 <td>{{ review.title }}</td>
                 <td>{{ review.stars }}</td>
+                <td>{{ formatDate(review.createdAt) }}</td>
                 <td>{{ review.description }}</td>
                 <!-- <td>{{ review.deleteAt ? "Yes" : "No" }}</td> -->
                 <td>
@@ -53,13 +55,39 @@ export default {
         // Add more sidebar links as needed
       ],
       reviews: [
-        { id: 1, user_id: 'User1', shop_id: 'Shop1', rating: 4, comment: 'Great service!' },
-        { id: 2, user_id: 'User2', shop_id: 'Shop2', rating: 5, comment: 'Excellent experience!' },
+        // { id: 1, user_id: 'User1', shop_id: 'Shop1', rating: 4, comment: 'Great service!' },
+        // { id: 2, user_id: 'User2', shop_id: 'Shop2', rating: 5, comment: 'Excellent experience!' },
         // Add more reviews as needed
       ]
     };
   },
   methods: {
+    formatDate(dateString) {
+      // Convert the date string to a Date object
+      const date = new Date(dateString);
+
+      // Check if the date is valid
+      if (isNaN(date.getTime())) {
+        // Handle invalid date (optional)
+        return 'Invalid Date';
+      }
+
+      // Format options including the day of the week
+      const options = { 
+        weekday: 'long', // full name of the day of the week
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric', 
+        hour: 'numeric', 
+        minute: 'numeric', 
+        second: 'numeric' 
+      };
+
+      // Format the date as desired
+      const formattedDate = date.toLocaleString('en-US', options);
+
+      return formattedDate;
+    },
     handleDelete(review) {
       if (confirm(`Are you sure to delete review with title "${review.title}"?`)) {
         this.deleteReview(review.id);
@@ -80,7 +108,7 @@ export default {
     },
     async fetchReviews() {
       try {
-        const response = await http.get(`api/users/reviews/all`);
+        const response = await http.get(`api/users/reviews/all/star`);
         this.reviews = response.data;
         console.log(this.reviews)
       } catch (error) {

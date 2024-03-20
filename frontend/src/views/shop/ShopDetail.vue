@@ -161,25 +161,28 @@
       <h2 class="text-3xl p-5 dark:text-stone-300">Shop Reviews</h2>
       <div class="w-full flex flex-col gap-3">
         <div
-          v-for="(review, index) in shopReviews"
+          v-for="(review, index) in reviews"
           :key="index"
           class="rounded-xl p-3 border-2"
         >
           <div class="flex items-center w-full">
-            <div class="size-12 bg-red-300 rounded-full mr-3 overflow-hidden">
-              <img :src="review.userAvatar" alt="User Avatar" />
+            <div class="size-12 rounded-full mr-3 overflow-hidden">
+              <ImageViewer :imageData="review.user.profile" alt="User Avatar" />
             </div>
             <div class="grow">
-              <h3>{{ review.userName }}</h3>
-              <p>{{ review.date }}</p>
+              <div class="flex">
+                <div class="pr-2 font-bold">{{ review.user.username }}: </div>
+                <div class="font-semibold">{{ review.title }}</div>
+              </div>
+              <p>{{ formatDate(review.createdAt) }}</p>
             </div>
             <div class="text-lg">
               <span
                 v-for="n in 5"
                 :key="n"
                 :class="{
-                  'text-yellow-500': n <= review.rating,
-                  'text-gray-300': n > review.rating,
+                  'text-yellow-500': n <= review.stars,
+                  'text-gray-300': n > review.stars,
                 }"
               >
                 &#9733;
@@ -187,7 +190,7 @@
             </div>
           </div>
           <div class="pt-2">
-            {{ review.comment }}
+            {{ review.description }}
           </div>
         </div>
       </div>
@@ -197,32 +200,32 @@
     <section class="mt-10">
       <div class="container">
         <h2 class="sub-heading">Add Your Review</h2>
-        <form @submit.prevent="submitComment" class="w-full flex flex-col gap-2">
+        <form @submit.prevent="submitReview" class="w-full flex flex-col gap-2">
           <div class="flex flex-col">
-            <label for="comment">Title:</label>
-            <input
-              id="comment"
-              v-model="newComment"
-              class="border-2 p-3"
-            ></input>
-          </div>
-          <div class="flex flex-col">
-            <label for="comment">Comment:</label>
-            <textarea
-              id="comment"
-              v-model="newComment"
-              class="border-2 p-3"
-            ></textarea>
-          </div>
-          <div class="flex flex-col">
-            <label for="rating">Rating:</label>
-            <select id="rating" v-model="newRating" class="h-fit p-3 border-2">
+            <label for="rating">Stars:</label>
+            <select id="rating" v-model="newRating.stars" class="h-fit p-3 border-2">
               <option value="1">1 Star</option>
               <option value="2">2 Stars</option>
               <option value="3">3 Stars</option>
               <option value="4">4 Stars</option>
               <option value="5">5 Stars</option>
             </select>
+          </div>
+          <div class="flex flex-col">
+            <label for="comment">Title:</label>
+            <input
+              id="comment"
+              v-model="newRating.title"
+              class="border-2 p-3"
+            ></input>
+          </div>
+          <div class="flex flex-col">
+            <label for="comment">Descriptions:</label>
+            <textarea
+              id="comment"
+              v-model="newRating.description"
+              class="border-2 p-3"
+            ></textarea>
           </div>
           <button type="submit" class="h-10" style="background-color: #DD6895 ; color:white ;margin-bottom:10px">Submit</button>
         </form>
@@ -259,27 +262,30 @@ export default {
       packages: [],
       packageCarts: [],
       serviceCarts: [],
-      newComment: "",
-      newRating: null,
-      shopReviews: [
-        {
-          userName: "User1",
-          userAvatar: "avatar1.jpg",
-          date: "March 15, 2024",
-          comment: "Great service! Will definitely come back again.",
-        },
-        {
-          userName: "User2",
-          userAvatar: "avatar2.jpg",
-          date: "March 12, 2024",
-          comment: "Average experience. Could be better.",
-        },
-        {
-          userName: "User3",
-          userAvatar: "avatar3.jpg",
-          date: "March 10, 2024",
-          comment: "Absolutely fantastic! Highly recommend this shop.",
-        },
+      newRating: {
+        stars: null,
+        title: '',
+        description: '',
+      },
+      reviews: [
+        // {
+        //   userName: "User1",
+        //   userAvatar: "avatar1.jpg",
+        //   date: "March 15, 2024",
+        //   comment: "Great service! Will definitely come back again.",
+        // },
+        // {
+        //   userName: "User2",
+        //   userAvatar: "avatar2.jpg",
+        //   date: "March 12, 2024",
+        //   comment: "Average experience. Could be better.",
+        // },
+        // {
+        //   userName: "User3",
+        //   userAvatar: "avatar3.jpg",
+        //   date: "March 10, 2024",
+        //   comment: "Absolutely fantastic! Highly recommend this shop.",
+        // },
         // Add more reviews as needed
       ],
     };
@@ -293,7 +299,7 @@ export default {
       );
     },
     moreReviews() {
-      return this.shopReviews.slice(
+      return this.reviews.slice(
         this.displayedReviews.length,
         this.displayedReviews.length + 3
       );
@@ -309,7 +315,7 @@ export default {
           comment: this.newComment,
           rating: parseInt(this.newRating),
         };
-        this.shopReviews.push(newReview);
+        this.reviews.push(newReview);
         // Reset form fields after submission
         this.newComment = "";
         this.newRating = null;
@@ -319,7 +325,7 @@ export default {
     },
     submitComment() {
       // Submit comment logic, add new comment to shopReviews and reset newComment and newRating
-      this.shopReviews.push({
+      this.reviews.push({
         comment: this.newComment,
         rating: this.newRating,
       });
@@ -444,6 +450,59 @@ export default {
         console.log(error);
       }
     },
+    async fetchReviews(shopId) {
+      try {
+        const response = await http.get(`api/users/reviews/all/${shopId}`);
+        this.reviews = response.data;
+        console.log(this.reviews);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    },
+    formatDate(dateString) {
+      // Convert the date string to a Date object
+      const date = new Date(dateString);
+
+      // Check if the date is valid
+      if (isNaN(date.getTime())) {
+        // Handle invalid date (optional)
+        return 'Invalid Date';
+      }
+
+      // Format options including the day of the week
+      const options = { 
+        weekday: 'long', // full name of the day of the week
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric', 
+        hour: 'numeric', 
+        minute: 'numeric', 
+        second: 'numeric' 
+      };
+
+      // Format the date as desired
+      const formattedDate = date.toLocaleString('en-US', options);
+
+      return formattedDate;
+    },
+    async submitReview() {
+      try {
+        const response = await http.post(`api/users/reviews/insert`, {
+          'userId': this.userId,
+          'shopId': this.shop.id,
+          'title': this.newRating.title,
+          'description': this.newRating.description,
+          'stars': this.newRating.stars,
+        });
+        console.log(response.data);
+        this.fetchReviews(this.shop.id);
+        this.newRating.title = '';
+        this.newRating.description = '';
+        this.newRating.stars = null;
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   mounted() {
     const shopId = this.$route.params.shopId;
@@ -454,6 +513,7 @@ export default {
     this.fetchContacts(shopId);
     this.fetchServices(shopId);
     this.fetchPackages(shopId);
+    this.fetchReviews(shopId);
     this.fetchUserCards();
   },
 };

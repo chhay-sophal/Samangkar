@@ -260,9 +260,9 @@ public class UserController {
 
     //INSERT REVIEW
     @PostMapping("reviews/insert")
-    public ResponseEntity<?> createUserReview(@RequestBody UserReviewDto userReviewDto){
+    public ResponseEntity<?> createUserReview(@RequestBody AddReviewDto addReviewDto){
         try {
-            userReviewService.saveUserReview(userReviewDto);
+            userReviewService.saveUserReview(addReviewDto);
             return ResponseEntity.status(HttpStatus.CREATED).body("Review added successfully");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

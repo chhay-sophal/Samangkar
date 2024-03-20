@@ -1,5 +1,6 @@
 package com.samangkar.Samangkar.service;
 
+import com.samangkar.Samangkar.dto.AddReviewDto;
 import com.samangkar.Samangkar.dto.UserReviewDto;
 import com.samangkar.Samangkar.model.Role;
 import com.samangkar.Samangkar.model.Shop;
@@ -79,17 +80,17 @@ public class UserReviewService {
 
     //INSERT REVIEW BY SHOP_ID AND USER_ID
     @SuppressWarnings("null")
-    public void saveUserReview(UserReviewDto userReviewDto) {
+    public void saveUserReview(AddReviewDto addReviewDto) {
 
-        if(userReviewDto.getUser() == null){
+        if(addReviewDto.getUserId() == null){
             throw new IllegalStateException("user_id can not be null");
         }
-        if(userReviewDto.getShop_id() == null){
+        if(addReviewDto.getShopId() == null){
             throw new IllegalStateException("shop_id can not be null");
         }
-        Optional<UserEntity> userOptional = userRepository.findById(userReviewDto.getUser().getId());
+        Optional<UserEntity> userOptional = userRepository.findById(addReviewDto.getUserId());
         if (userOptional.isEmpty()) {
-            throw new EntityNotFoundException("User with ID " + userReviewDto.getUser().getId() + " not found");
+            throw new EntityNotFoundException("User with ID " + addReviewDto.getUserId() + " not found");
         }else{
             UserEntity user = userOptional.get();
             Role userRole = user.getUserRole();
@@ -98,20 +99,20 @@ public class UserReviewService {
                 throw new IllegalStateException("User does not have role ID 2");
             }
         }
-        Optional<Shop> shopOptional = shopRepository.findById(userReviewDto.getShop_id());
+        Optional<Shop> shopOptional = shopRepository.findById(addReviewDto.getShopId());
         if (shopOptional.isEmpty()) {
-            throw new EntityNotFoundException("Shop with ID " + userReviewDto.getShop_id() + " not found");
+            throw new EntityNotFoundException("Shop with ID " + addReviewDto.getShopId() + " not found");
         }
-        if(userReviewDto.getStars() > 5){
+        if(addReviewDto.getStars() > 5){
             throw new IllegalStateException("stars can not be greater than 5");
         }
 
         UserReview urw = new UserReview();
         urw.setUser(userOptional.get());
         urw.setShop(shopOptional.get());
-        urw.setTitle(userReviewDto.getTitle());
-        urw.setDescription(userReviewDto.getDescription());
-        urw.setStars(userReviewDto.getStars());
+        urw.setTitle(addReviewDto.getTitle());
+        urw.setDescription(addReviewDto.getDescription());
+        urw.setStars(addReviewDto.getStars());
         urw.setCreatedAt(new Date());
         userReviewRepository.save(urw);
 
