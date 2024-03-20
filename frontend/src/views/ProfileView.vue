@@ -45,8 +45,8 @@
         </div>
 
         <!-- User overview on the right -->
-        <div class="lg:w-4/5 w-full flex flex-col"  style="height: 80vh;">
-            <div class="h-1/2">
+        <div class="lg:w-4/5 w-full flex flex-col">
+            <div>
                 <div class="font-medium h-1/6 p-5 flex items-center">
                     <p class="text-4xl flex-grow">
                         Favorite Shops
@@ -78,8 +78,8 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                                     </svg>
                                 </button>
-                                <router-link :to="`/shop/${favorite.shop.id}/details`" class="h-full">
-                                    <div class="h-3/4"><ImageViewer :imageData="favorite.shop.imageUrl" /></div>
+                                <router-link :to="`/shop/${favorite.shop.id}/details`" class="h-full w-full">
+                                    <div class="h-3/4 w-full"><ImageViewer :imageData="favorite.shop.imageUrl" /></div>
                                     <div class="h-1/4 w-full absolute font-bold text-2xl bg-stone-200 bg-opacity-70 text-black flex items-center justify-center">{{ favorite.shop.name }}</div>
                                 </router-link>
                             </div>
@@ -87,7 +87,7 @@
                     </div>
                 </div>
             </div>
-            <div class="h-1/2">
+            <div >
                 <div class="font-medium h-1/6 p-5 flex items-center">
                     <p class="text-4xl flex-grow">
                         Cart
@@ -98,7 +98,7 @@
                         </button>
                     </button>
                 </div>
-                <div class="h-5/6 overflow-x-auto flex items-center relative pb-3">
+                <div class="h-fit overflow-x-auto flex items-center relative pb-3">
                     <!-- Cart Cards Container -->
                     <div class="px-4 h-full">
                         <div class="flex space-x-4 h-full text-2xl">
@@ -121,12 +121,8 @@
                                     :to="`/shop/${cart.service.shopId}/package/${cart.service.id}/details`"
                                     class="w-full h-full"
                                 >
-                                    <div class="">
-                                        <div class="h-full w-full">
-                                            <div class="h-full w-full">
-                                                <ImageViewer :imageData="cart.service.image" />
-                                            </div>
-                                        </div>
+                                    <div class="h-full w-full">
+                                        <ImageViewer :imageData="cart.service.image" />
                                     </div>
                                     <div class="">
                                         <div class="flex flex-col items-center justify-center">
@@ -147,12 +143,8 @@
                                     :to="`/shop/${cart.pkg.shopId}/package/${cart.pkg.id}/details`"
                                     class="w-full h-full"
                                 >
-                                    <div class="">
-                                        <div class="h-full w-full">
-                                            <div class="h-full w-full">
-                                                <ImageViewer :imageData="cart.pkg.image" />
-                                            </div>
-                                        </div>
+                                    <div class="h-full w-full">
+                                        <ImageViewer :imageData="cart.pkg.image" />
                                     </div>
                                     <div class="w-full">
                                         <div class="flex flex-col items-center justify-center">
