@@ -1,46 +1,219 @@
 <template>
-    <div class="service">
-      <section class="slideshow-container">
-        <div class="slides">
-          <div class="slide" v-for="(service, index) in defaultServices" :key="index">
-            <!-- <ImageViewer :imageData="service.image" /> -->
-            <img :src="service.image" :alt="service.name">
+  <div class="pb-20 flex flex-col gap-7 font-serif">
+    <div class="w-full flex items-center justify-center text-6xl font-bold">
+      What do we offer?
+    </div>
+
+    <!-- For users -->
+    <div class="w-full flex flex-col gap-20 items-center justify-center">
+      <div class="text-5xl font-bold pt-10">For Users</div>
+      <!-- Browse and Discover -->
+      <div class="grid grid-cols-2 w-full">
+        <div class="w-full bg-red-500">
+          <img src="@\components\pictures\browse-and-discover.jpg" alt="">
+        </div>
+        <div class="w-full p-10">
+          <div class="text-2xl font-bold w-fully flex justify-center p-10">
+            Browse and Discover
+          </div>
+          <div class="px-10 text-xl">
+            Users can explore a diverse range of services and products tailored to their wedding needs. From venues to attire, decorations to catering, our platform offers an extensive array of choices.
           </div>
         </div>
-        <!-- <button class="prev" @click="prevSlide">&#10094;</button>
-        <button class="next" @click="nextSlide">&#10095;</button> -->
-      </section>
-      <section class="popular-services">
-        <h2 style="text-align: center;">Popular Services</h2>
-        <div class="service-list">
-          <div class="service-item" v-for="(service, index) in services" :key="index">
-            <div class="flex h-80 object-cover items-center">
-              <ImageViewer :imageData="service.image" />
-              <!-- <img :src="service.image" :alt="service.name" class="w-full"> -->
-            </div>
-            <div class="service-details">
-              <div class="items">{{ service.name }}</div>
-              <p>{{ service.description }}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-      <div class="title"> All Services</div>
-      <div class="search-filter">
-        <input type="text" v-model="searchText" placeholder="Search...">
       </div>
-      <div class="service-list">
-        <div class="service-item" v-for="(service, index) in services" :key="index">
-          <ImageViewer :imageData="service.image" />
-          <!-- <img :src="service.image" :alt="service.name"> -->
-          <div class="service-details">
-            <div class="items">{{ service.name }}</div>
-            <p>{{ service.description }}</p>
+
+      <!-- Service Packages -->
+      <div class="grid grid-cols-2 w-full h-80">
+        <div class="w-full p-10">
+          <div class="text-2xl font-bold w-fully flex justify-center p-10">
+            Service Packages
+          </div>
+          <div class="px-10 text-xl">
+            Users have the option to select curated packages that cater to various wedding themes and budgets. These packages include essential services bundled together, providing convenience and savings.
+          </div>
+        </div>
+        <div class="size-full overflow-hidden flex">
+          <div class="w-full flex justify-center">
+            <img class="object-cover" src="@\components\pictures\service-packages.jpg" alt="">
+          </div>
+        </div>
+      </div>
+
+      <!-- Shop Selection -->
+      <div class="grid grid-cols-2 w-full">
+        <div class="w-full bg-red-500">
+          <div class="w-full h-full flex justify-center">
+            <img class="object-cover" src="@\components\pictures\shop-selection.jpg" alt="">
+          </div>
+        </div>
+        <div class="w-full p-10">
+          <div class="text-2xl font-bold w-fully flex justify-center p-10">
+            Shop Selection
+          </div>
+          <div class="px-10 text-xl">
+            Whether users are looking for Khmer traditional or Western-themed wedding elements, our platform hosts a plethora of shops catering to different preferences. From affordable options to luxury boutiques, users can find a shop that aligns with their taste and budget.
+          </div>
+        </div>
+      </div>
+
+      <!-- Vendor Reviews and Ratings -->
+      <div class="grid grid-cols-2 w-full h-80">
+        <div class="w-full p-10">
+          <div class="text-2xl font-bold w-fully flex justify-center p-10">
+            Vendor Reviews and Ratings
+          </div>
+          <div class="px-10 text-xl">
+            Users can access reviews and ratings from other customers to make informed decisions about the services and shops they choose. This feature ensures transparency and helps users select the best options for their special day.
+          </div>
+        </div>
+        <div class="size-full overflow-hidden flex">
+          <div class="w-full flex justify-center">
+            <img class="object-cover" src="@\components\pictures\review.webp" alt="">
+          </div>
+        </div>
+      </div>
+
+      <!-- Customization Options -->
+      <div class="grid grid-cols-2 w-full">
+        <div class="w-full bg-red-500">
+          <div class="w-full h-full flex justify-center">
+            <img class="object-cover" src="@\components\pictures\customization.jpg" alt="">
+          </div>
+        </div>
+        <div class="w-full p-10">
+          <div class="text-2xl font-bold w-fully flex justify-center p-10">
+            Customization Options
+          </div>
+          <div class="px-10 text-xl">
+            Users can personalize their wedding experience by customizing services and products according to their preferences. Whether it's adding unique decorations or tailoring catering menus, our platform facilitates seamless customization.
+          </div>
+        </div>
+      </div>
+
+      <!-- Customer Support -->
+      <div class="grid grid-cols-2 w-full h-80">
+        <div class="w-full p-10">
+          <div class="text-2xl font-bold w-fully flex justify-center p-10">
+            Customer Support
+          </div>
+          <div class="px-10 text-xl">
+            Our dedicated customer support team is available to assist users throughout their wedding planning journey. From inquiries about services to resolving any issues, users can rely on our support team for prompt assistance.
+          </div>
+        </div>
+        <div class="size-full overflow-hidden flex">
+          <div class="w-full flex justify-center">
+            <img class="object-cover" src="@\components\pictures\support.avif" alt="">
           </div>
         </div>
       </div>
     </div>
-  </template>
+
+    <!-- For Shop Owners -->
+    <div class="w-full flex flex-col gap-20 items-center justify-center">
+      <div class="text-5xl font-bold pt-20">For Shop Owners</div>
+      <!-- Platform Access -->
+      <div class="grid grid-cols-2 w-full">
+        <div class="w-full">
+          <img src="@\components\pictures\dashboard.avif" alt="">
+        </div>
+        <div class="w-full p-10">
+          <div class="text-2xl font-bold w-fully flex justify-center p-10">
+            Platform Access
+          </div>
+          <div class="px-10 text-xl">
+            As a partner shop owner, you gain access to our extensive platform, reaching a wide audience of potential customers nationwide across Cambodia. Our platform serves as a powerful marketing tool to showcase your products and services.
+          </div>
+        </div>
+      </div>
+
+      <!-- Increased Visibility -->
+      <div class="grid grid-cols-2 w-full h-80">
+        <div class="w-full p-10">
+          <div class="text-2xl font-bold w-fully flex justify-center p-10">
+            Increased Visibility
+          </div>
+          <div class="px-10 text-xl">
+            By listing your shop on our website, you can enhance your visibility and attract more customers. Our platform provides exposure to a diverse audience seeking wedding-related products and services.
+          </div>
+        </div>
+        <div class="size-full overflow-hidden flex">
+          <div class="w-full flex justify-center">
+            <img class="object-cover" src="@\components\pictures\increase-visibility.webp" alt="">
+          </div>
+        </div>
+      </div>
+
+      <!-- Boosting Options -->
+      <div class="grid grid-cols-2 w-full">
+        <div class="w-full bg-red-500">
+          <div class="w-full h-full flex justify-center">
+            <img class="object-cover" src="@\components\pictures\boost.jpg" alt="">
+          </div>
+        </div>
+        <div class="w-full p-10">
+          <div class="text-2xl font-bold w-fully flex justify-center p-10">
+            Boosting Options
+          </div>
+          <div class="px-10 text-xl">
+            Shop owners have the opportunity to boost their shop listings, increasing their visibility and reaching even more potential customers. Our boosting options help shops stand out in a competitive market, driving more traffic and sales.
+          </div>
+        </div>
+      </div>
+
+      <!-- Marketing Support -->
+      <div class="grid grid-cols-2 w-full h-80">
+        <div class="w-full p-10">
+          <div class="text-2xl font-bold w-fully flex justify-center p-10">
+            Marketing Support
+          </div>
+          <div class="px-10 text-xl">
+            We offer marketing support to our partner shop owners, helping them promote their products and services effectively. From social media promotions to targeted advertising campaigns, we work closely with shop owners to maximize their online presence.
+          </div>
+        </div>
+        <div class="size-full overflow-hidden flex">
+          <div class="w-full flex justify-center">
+            <img class="object-cover" src="@\components\pictures\marketing-support.png" alt="">
+          </div>
+        </div>
+      </div>
+
+      <!-- Analytics and Insights -->
+      <div class="grid grid-cols-2 w-full">
+        <div class="w-full bg-red-500">
+          <div class="w-full h-full flex justify-center">
+            <img class="object-cover" src="@\components\pictures\analytics-and-insights.webp" alt="">
+          </div>
+        </div>
+        <div class="w-full p-10">
+          <div class="text-2xl font-bold w-fully flex justify-center p-10">
+            Analytics and Insights
+          </div>
+          <div class="px-10 text-xl">
+            Gain valuable insights into customer behavior and preferences through our analytics tools. Track performance metrics, such as website traffic and conversion rates, to optimize your marketing strategies and enhance your shop's success.
+          </div>
+        </div>
+      </div>
+
+      <!-- Partnership Benefits -->
+      <div class="grid grid-cols-2 w-full h-80">
+        <div class="w-full p-10">
+          <div class="text-2xl font-bold w-fully flex justify-center p-10">
+            Partnership Benefits
+          </div>
+          <div class="px-10 text-xl">
+            Partnering with us offers various benefits, including networking opportunities, collaborative marketing initiatives, and access to exclusive events and promotions. Join our community of shop owners and unlock new growth opportunities for your business.
+          </div>
+        </div>
+        <div class="size-full overflow-hidden flex">
+          <div class="w-full flex justify-center">
+            <img class="object-cover" src="@\components\pictures\partnership.png" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</template>
   
 <script>
 import http from "@/services/httpService";
