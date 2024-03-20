@@ -13,20 +13,23 @@ public class ShopDto {
     private Long id;
     private String name;
     private String imageUrl;
-    private UserDto owner;
+    private Long ownerId;
+    private String ownerUsername;
     private String description;
     private Boolean isTrending;
     private Date createdAt;
     private Date updatedAt;
     private Date deletedAt;
 
-    public ShopDto(Long id, String name, String imageUrl, UserDto owner, String description, Boolean isTreading, Date createdAt, Date updatedAt, Date deletedAt) {
+    public ShopDto(Long id, String name, String imageUrl, Long ownerId, String ownerUsername, String description,
+            Boolean isTrending, Date createdAt, Date updatedAt, Date deletedAt) {
         this.id = id;
         this.name = name;
         this.imageUrl = imageUrl;
-        this.owner = owner;
+        this.ownerId = ownerId;
+        this.ownerUsername = ownerUsername;
         this.description = description;
-        this.isTrending = isTreading;
+        this.isTrending = isTrending;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;

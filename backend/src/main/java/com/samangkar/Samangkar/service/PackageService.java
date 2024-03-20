@@ -27,9 +27,6 @@ public class PackageService {
     @Autowired
     private ServiceService serviceService;
 
-    @Autowired
-    private ShopService shopService;
-
     @SuppressWarnings("null")
     public PackageDto getPackageById(Long Id) {
         PackageModel pkg = packageRepository.findById(Id).get();
@@ -86,7 +83,8 @@ public class PackageService {
                 packageModel.getDescription(),
                 base64Image,
                 packageModel.getPrice(),
-                shopService.getShopById(packageModel.getShop().getId()),
+                packageModel.getShop().getId(),
+                packageModel.getShop().getName(),
                 serviceService.getServicesByPackageId(packageModel.getId()),
                 packageModel.getCreatedAt(),
                 packageModel.getUpdatedAt(),
@@ -102,7 +100,8 @@ public class PackageService {
                 packageModel.getDescription(),
                 null,
                 packageModel.getPrice(),
-                shopService.getShopById(packageModel.getShop().getId()),
+                packageModel.getShop().getId(),
+                packageModel.getShop().getName(),
                 serviceService.getServicesByPackageId(packageModel.getId()),
                 packageModel.getCreatedAt(),
                 packageModel.getUpdatedAt(),

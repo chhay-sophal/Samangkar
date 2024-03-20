@@ -26,9 +26,6 @@ public class FavoriteShopService {
     @Autowired
     private ShopService shopService;
 
-    @Autowired
-    private UserService userService;
-
     @SuppressWarnings("null")
     public List<FavoriteDto> getUserFavoriteShops(Long id) {
         UserEntity user = userRepository.findById(id)
@@ -39,7 +36,8 @@ public class FavoriteShopService {
         List<FavoriteDto> favorites = userFavorites.stream()
                 .map(favorite -> new FavoriteDto(
                         favorite.getId(), 
-                        userService.getUserById(favorite.getUser().getId()),
+                        favorite.getUser().getId(),
+                        favorite.getUser().getUsername(),
                         shopService.getShopById(favorite.getShop().getId()),
                         favorite.getCreatedAt(), 
                         favorite.getUpdatedAt(),
