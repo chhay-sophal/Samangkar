@@ -93,48 +93,62 @@
                         Cart
                     </p>
                     <button class="text-2xl">
-                        <router-link to="/profile/cards" title="See all" class="font-bold">
-                            See all
-                        </router-link>
+                        <button class="font-bold" @click="routeToCartView()">
+                            See All
+                        </button>
                     </button>
                 </div>
                 <div class="h-5/6 overflow-x-auto flex items-center relative pb-3">
-                        <!-- Cart Cards Container -->
-                        <div class="px-4 h-full">
+                    <!-- Cart Cards Container -->
+                    <div class="px-4 h-full">
                         <div class="flex space-x-4 h-full text-2xl">
                             <!-- Loop through your shop cards -->
-                            <div v-for="card in cards" :key="card.id" class="flex-col border-2 w-64 flex justify-center items-center rounded-lg relative">
-                                <div class="absolute size-full opacity-70">
-                                    <div class="h-full flex items-center overflow-hidden">
-                                        <div>
-                                            <ImageViewer v-if="card.service" :imageData="card.service.image" />
-                                            <ImageViewer v-else :imageData="card.pkg.image" />
+                            <div v-for="c in cart" :key="c.id" class="flex flex-col w-64 bg-stone-200 justify-center items-center rounded-lg h-full relative">
+                                <button class="absolute right-2 top-2">
+                                    <svg 
+                                        @click="removeFromCard(c.id)"
+                                        xmlns="http://www.w3.org/2000/svg" 
+                                        fill="red" 
+                                        viewBox="0 0 24 24" 
+                                        stroke-width="1.5" 
+                                        stroke="currentColor" 
+                                        class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                </button>
+                                <div class="overflow-hidden size-full">
+                                    <div class="h-full w-full">
+                                        <div class="h-full w-full">
+                                            <ImageViewer v-if="c.service" :imageData="c.service.image" />
+                                            <ImageViewer v-else :imageData="c.pkg.image" />
                                         </div>
                                     </div>
                                 </div>
-                                <div v-if="card.service" class="absolute px-3 flex flex-col items-center justify-center font-bold text-2xl bg-white bg-opacity-60 text-black h-full w-full">
-                                    <div>
-                                        {{ card.service.name }}
+                                <div class="">
+                                    <div v-if="c.service" class="flex flex-col items-center justify-center">
+                                        <div class="">
+                                            {{ c.service.name }}
+                                        </div>
+                                        <div class="">
+                                            ${{ c.service.unitPrice }}
+                                        </div>
+                                        <div class="">
+                                            {{ c.service.shop.name }}
+                                        </div>
                                     </div>
-                                    <div class="text-lg">
-                                        ${{ card.service.unitPrice }}
-                                    </div>
-                                    <div class="text-lg">
-                                        {{ card.service.shop.name }}
+                                    <div v-else class="flex flex-col items-center justify-center">
+                                        <div class="">
+                                            {{ c.pkg.name }}
+                                        </div>
+                                        <div class="">
+                                            ${{ c.pkg.price }}
+                                        </div>
+                                        <div class="">
+                                            {{ c.pkg.shop.name }}
+                                        </div>
                                     </div>
                                 </div>
-                                <div v-else class="absolute px-3 flex flex-col items-center justify-center font-bold text-2xl bg-white bg-opacity-60 text-black h-full w-full">
-                                    <div class="">
-                                        {{ card.pkg.name }}
-                                    </div>
-                                    <div class="text-lg">
-                                        ${{ card.pkg.price }}
-                                    </div>
-                                    <div class="text-lg">
-                                        {{ card.pkg.shop.name }}
-                                    </div>
-                                </div>
-                            </div>
+                            </div> 
                         </div>
                     </div>
                 </div>
@@ -479,7 +493,7 @@ export default {
         return {
             user: [],
             favorites: [],
-            cards: [],
+            cart: [],
             showChangeInfoPanel: false,
             showChangePasswordPanel: false,
             userInput: {
@@ -695,11 +709,26 @@ export default {
         async fetchUserCards() {
             try {
                 const response = await http.get(`api/cards/get-all/${this.user.id}`)
-                this.cards = response.data;
+                this.cart = response.data;
             } catch (error) {
                 console.error(error)
             }
-        }
+        },
+        routeToCartView() {
+            console.log(this.cart)
+            localStorage.setItem('cart', JSON.stringify(this.cart));
+            this.$router.push({ path: '/profile/cards' });
+        },
+        async removeFromCard(id) {
+            try {
+                const response = await http.post(`api/cards/remove/${id}`);
+                console.log(response.data); // Handle the response as needed
+                localStorage.setItem('cart', JSON.stringify(response.data));
+                this.fetchUserCards();
+            } catch (error) {
+                console.log(error);
+            }
+        },
     },
     mounted() {
         const userStore = useUserStore()
