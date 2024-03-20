@@ -28,12 +28,36 @@
     <!-- Services Section -->
     <section class="packages">
       <div class="container">
-        <!-- <div class="search-package">
-          <input type="text" placeholder="Search Service..." class="search-input" v-model="searchText" @input="search">
-        </div> -->
         <h2 class="sub-heading">Services</h2>
-        <div class="grid grid-cols-3 gap-2">
-          <div class="package-item" v-for="(service, index) in services" :key="index">
+        <div v-if="services.length" class="grid grid-cols-3 gap-2">
+          <div class="package-item relative" v-for="(service, index) in services" :key="index">
+            <button 
+            class="absolute right-2 top-2" 
+            >
+              <svg 
+                @click="removeFromCard('service', service.id)"
+                v-if="serviceCarts?.some(card => card.service?.id === service.id)"
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="red" 
+                viewBox="0 0 24 24" 
+                stroke-width="1.5" 
+                stroke="currentColor" 
+                class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
+              <svg 
+                @click="addToCard('service', service.id)"
+                v-else
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke-width="1.5" 
+                stroke="currentColor" 
+                class="w-6 h-6"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
+            </button>
             <div class=""><ImageViewer :imageData="service.image" /></div>
             <!-- <img :src="service.image" :alt="service.name" class="package-image"> -->
             <div class="package-details">
@@ -43,27 +67,62 @@
             </div>
           </div>
         </div>
+        <div v-else class="w-full flex items-center justify-center">
+          No service available!
+        </div>
       </div>
     </section>
 
     <!-- Package Section -->
-    <section class="packages">
+    <section class="packages pb-16">
       <div class="container">
         <!-- <div class="search-package">
           <input type="text" placeholder="Search Package..." class="search-input" v-model="searchText" @input="search">
         </div> -->
         <h2 class="sub-heading">Packages</h2>
-        <div class="grid grid-cols-3 gap-2">
-          <div class="package-item" v-for="(pkg, index) in packages" :key="index">
-            <div class="">
-              <ImageViewer :imageData="pkg.image" />
-            </div>
-            <div class="package-details">
-              <h3>{{ pkg.name }}</h3>
-              <div class="package-price">{{ pkg.price }}$</div>
-              <p>{{ pkg.description }}</p>
-            </div>
+        <div v-if="packages.length" class="grid grid-cols-3 gap-2">
+          <div class="package-item relative" v-for="(pkg, index) in packages" :key="index">
+            <button 
+            class="absolute right-2 top-2" 
+            >
+              <svg 
+                @click="removeFromCard('package', pkg.id)"
+                v-if="packageCarts?.some(card => card.pkg.id === pkg.id)"
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="red" 
+                viewBox="0 0 24 24" 
+                stroke-width="1.5" 
+                stroke="currentColor" 
+                class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
+              <svg 
+                @click="addToCard('package', pkg.id)"
+                v-else
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke-width="1.5" 
+                stroke="currentColor" 
+                class="w-6 h-6"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
+            </button>
+            <router-link class="w-full flex flex-col items-center justify-center" :to="`/shop/${pkg.shopId}/package/${pkg.id}/details`">
+              <div class="w-fit">
+                <ImageViewer :imageData="pkg.image" />
+              </div>
+              <div class="package-details">
+                <h3>{{ pkg.name }}</h3>
+                <div class="package-price">{{ pkg.price }}$</div>
+                <p>{{ pkg.description }}</p>
+              </div>
+            </router-link>
           </div>
+        </div>
+        <div v-else class="w-full flex items-center justify-center">
+          No package available!
         </div>
       </div>
     </section>
@@ -73,6 +132,7 @@
 <script>
 import http from '@/services/httpService';
 import ImageViewer from '@/components/ImageViewer.vue';
+import { useUserStore } from '@/store/userStore';
 
 export default {
   components: {
@@ -80,6 +140,7 @@ export default {
   },
   data() {
     return {
+      userId: null,
       searchText: '',
       shop: {
         name: "Sample Shop",
@@ -91,12 +152,10 @@ export default {
         email: "sample@example.com",
         address: "123 Main Street, City, Country"
       },
-      services: ["Service 1", "Service 2", "Service 3"],
-      packages: [
-        { name: "Package 1", price: "$10", details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", image: "https://via.placeholder.com/150" },
-        { name: "Package 2", price: "$20", details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", image: "https://via.placeholder.com/150" },
-        { name: "Package 3", price: "$30", details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", image: "https://via.placeholder.com/150" }
-      ]
+      services: [],
+      packages: [],
+      packageCarts: [],
+      serviceCarts: [],
     };
   },
   computed: {
@@ -146,19 +205,90 @@ export default {
     async fetchPackages(shopId) {
       try {
         const response = await http.get(`api/packages/get-all/${shopId}`);
-        this.packages = response.data;
+        this.packages = response.data.filter(pkg => pkg.services.length > 0);
         console.log(this.packages);
       } catch (error) {
         console.log(error);
       }
-    }
+    },
+    async fetchUserCards() {
+      try {
+        const response = await http.get(`api/cards/get-all/${this.userId}`);
+        // this.cards = response.data.filter(response.data.pkg != null);
+        this.packageCarts = response.data.filter(card => card.pkg != null);
+        this.serviceCarts = response.data.filter(card => card.service != null);
+        // this.cards = response.data;
+        console.log('user carts:');
+        console.log(this.packageCarts);
+        console.log(this.serviceCarts);
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async addToCard(productType, id) {
+      try {
+        if (productType == 'package') {
+          await http.post(`api/cards/add`, {
+            "userId": this.userId,
+            "serviceId": null,
+            "packageId": id,
+            "quantity": 1,
+          });
+        } else if (productType == 'service') {
+          console.log(id)
+          console.log(this.userId)
+          await http.post(`api/cards/add`, {
+            "userId": this.userId,
+            "serviceId": id,
+            "packageId": null,
+            "quantity": 1,
+          });
+        } else {
+          console.log('Product type not found!');
+        }
+
+        this.fetchUserCards();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async removeFromCard(productType, id) {
+      try {
+        let cardToRemove = null;
+        if (productType == 'package') {
+          // Find the first card that has the specified package ID
+          cardToRemove = this.packageCarts.find(card => card.pkg.id === id);
+        } else if (productType == 'service') {
+          // Find the first card that has the specified package ID
+          cardToRemove = this.serviceCarts.find(card => card.service.id === id);
+        } else {
+          console.log('Product type not found!');
+          return;
+        }
+
+        // If a card is found, make an HTTP request to remove it by its ID
+        if (cardToRemove) {
+          const response = await http.post(`api/cards/remove/${cardToRemove.id}`);
+          console.log(response.data); // Handle the response as needed
+          this.fetchUserCards();
+        } else {
+          console.log("Card not found"); // Log a message if no matching card is found
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   mounted() {
     const shopId = this.$route.params.shopId;
+    const userStore = useUserStore();
+    this.userId = userStore.user.id;
+
     this.fetchShopsDetails(shopId);
     this.fetchContacts(shopId);
     this.fetchServices(shopId);
     this.fetchPackages(shopId);
+    this.fetchUserCards();
   }
 };
 </script>

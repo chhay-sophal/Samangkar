@@ -275,7 +275,6 @@ export default {
     async fetchPackages() {
       try {
         const response = await http.get(`api/packages/get-all/with-services?page=0&size=10`);
-        // const response = await http.get(`api/packages/get-all`);
         this.packages = response.data.content;
         console.log(this.packages)
       } catch (error) {
