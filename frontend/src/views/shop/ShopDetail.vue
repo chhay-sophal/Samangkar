@@ -157,23 +157,23 @@
     </section>
 
     <!-- Review Section -->
-    <section class="review-section">
-      <h2 class="text-2xl p-5 dark:text-stone-300">Shop Reviews</h2>
-      <div class="review-list">
+    <section class="w-full">
+      <h2 class="text-3xl p-5 dark:text-stone-300">Shop Reviews</h2>
+      <div class="w-full flex flex-col gap-3">
         <div
           v-for="(review, index) in shopReviews"
           :key="index"
-          class="review-item"
+          class="rounded-xl p-3 border-2"
         >
-          <div class="flex items-center">
-            <div class="avatar">
+          <div class="flex items-center w-full">
+            <div class="size-12 bg-red-300 rounded-full mr-3 overflow-hidden">
               <img :src="review.userAvatar" alt="User Avatar" />
             </div>
-            <div class="user-info">
+            <div class="grow">
               <h3>{{ review.userName }}</h3>
               <p>{{ review.date }}</p>
             </div>
-            <div class="star-rating">
+            <div class="text-lg">
               <span
                 v-for="n in 5"
                 :key="n"
@@ -181,31 +181,42 @@
                   'text-yellow-500': n <= review.rating,
                   'text-gray-300': n > review.rating,
                 }"
-                >&#9733;</span
               >
+                &#9733;
+              </span>
             </div>
           </div>
-          <p>{{ review.comment }}</p>
+          <div class="pt-2">
+            {{ review.comment }}
+          </div>
         </div>
       </div>
     </section>
 
     <!-- Comment Form -->
-    <section class="comment-form">
+    <section class="mt-10">
       <div class="container">
         <h2 class="sub-heading">Add Your Review</h2>
-        <form @submit.prevent="submitComment" class="comment-form">
-          <div class="form-group">
+        <form @submit.prevent="submitComment" class="w-full flex flex-col gap-2">
+          <div class="flex flex-col">
+            <label for="comment">Title:</label>
+            <input
+              id="comment"
+              v-model="newComment"
+              class="border-2 p-3"
+            ></input>
+          </div>
+          <div class="flex flex-col">
             <label for="comment">Comment:</label>
             <textarea
               id="comment"
               v-model="newComment"
-              class="form-control"
+              class="border-2 p-3"
             ></textarea>
           </div>
-          <div class="form-group">
+          <div class="flex flex-col">
             <label for="rating">Rating:</label>
-            <select id="rating" v-model="newRating" class="form-control">
+            <select id="rating" v-model="newRating" class="h-fit p-3 border-2">
               <option value="1">1 Star</option>
               <option value="2">2 Stars</option>
               <option value="3">3 Stars</option>
@@ -213,7 +224,7 @@
               <option value="5">5 Stars</option>
             </select>
           </div>
-          <button type="submit" class="btn" style="background-color: #DD6895 ; color:white ;margin-bottom:10px">Submit</button>
+          <button type="submit" class="h-10" style="background-color: #DD6895 ; color:white ;margin-bottom:10px">Submit</button>
         </form>
       </div>
     </section>
@@ -449,183 +460,92 @@ export default {
 </script>
 
 <style>
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
 
-.main-heading {
-  text-align: center;
-  margin-bottom: 30px;
-  font-size: 2.5em;
-}
+  .main-heading {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+  }
 
-.sub-heading {
-  font-size: 2em;
-  margin-bottom: 20px;
-}
+  .sub-heading {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
 
-.shop-detail .shop-info {
-  display: flex;
-}
+  .shop-detail .shop-info {
+    display: flex;
+  }
 
-.shop-image img {
-  width: 300px;
-  height: auto;
-  border-radius: 5px;
-  padding-right: 20px;
-}
+  .shop-image img {
+    width: 300px;
+    height: auto;
+    border-radius: 5px;
+    padding-right: 20px;
+  }
 
-.contact-info h3,
-.services h3 {
-  margin-top: 0;
-}
+  .contact-info h3,
+  .services h3 {
+    margin-top: 0;
+  }
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
 
-ul li {
-  margin-bottom: 5px;
-}
+  ul li {
+    margin-bottom: 5px;
+  }
 
-.packages {
-  margin-top: 50px;
-}
+  .packages {
+    margin-top: 50px;
+  }
 
-.search-package {
-  text-align: center;
-  margin-bottom: 20px;
-}
+  .search-package {
+    text-align: center;
+    margin-bottom: 20px;
+  }
 
-.search-input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
+  .search-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
 
-.search-button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
+  .search-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 
-.package-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
+  .package-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
 
-.package-item {
-  /* width: calc(33.333% - 20px); */
-  width: auto;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
+  .package-item {
+    /* width: calc(33.333% - 20px); */
+    width: auto;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
 
-.package-image {
-  width: 100%;
-  border-radius: 5px 5px 0 0;
-}
+  .package-image {
+    width: 100%;
+    border-radius: 5px 5px 0 0;
+  }
 
-.package-details {
-  padding: 20px;
-}
-/* Your existing styles */
-.review-section {
-  margin-top: 20px;
-}
-
-.review-item {
-  border: 1px solid #cbd5e0;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 10px;
-}
-
-.avatar img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-.user-info h3 {
-  margin: 0;
-  font-size: 1.2rem;
-}
-
-.user-info p {
-  margin: 0;
-  color: #718096;
-}
-
-.star-rating {
-  margin-left: auto;
-}
-
-.star-rating span {
-  font-size: 1.2rem;
-}
-
-.dark:text-stone-300 {
-  color: #a0aec0;
-}
-
-.text-yellow-500 {
-  color: #eace30;
-}
-
-.text-gray-300 {
-  color: #cbd5e0;
-}
-.comment-form {
-  margin-top: 50px;
-}
-
-.container {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.sub-heading {
-  text-align: center;
-  font-size: 1.5em;
-  margin-bottom: 20px;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-label {
-  font-weight: bold;
-}
-
-textarea,
-select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-button {
-  padding: 10px 20px;
-  background-color: #0079fa;
-  color: #000000;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #98b7d9a0;
-}
+  .package-details {
+    padding: 20px;
+  }
 </style>
