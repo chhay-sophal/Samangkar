@@ -28,7 +28,7 @@
                 <tbody>
                 <tr v-for="service in services" :key="service.id">
                     <td>{{ service.name }}</td>
-                    <td>{{ service.shop.name }}</td>
+                    <td>{{ service.shopName }}</td>
                     <td>{{ service.description }}</td>
                     <td>{{ service.unitPrice }}</td>
                     <!-- <td>{{ service.image }}</td> -->
@@ -92,7 +92,7 @@
                 </div>
                 <div class="flex flex-col w-2/3 gap-5">
                     <p>{{ selectedService.name }}</p>
-                    <p>{{ selectedService.shop.name }}</p>
+                    <p>{{ selectedService.shopName }}</p>
                     <p>{{ selectedService.description }}</p>
                     <p>{{ selectedService.unitPrice }}</p>
                     <p>{{ selectedService.trending ? "Yes" : "No" }}</p>
@@ -289,7 +289,7 @@ export default {
         this.serviceInput.name = service.name;
         this.serviceInput.description = service.description;
         this.serviceInput.unitPrice = service.unitPrice;
-        this.serviceInput.shopName = service.shop.name;
+        this.serviceInput.shopName = service.shopName;
         this.serviceInput.isTrending = service.trending;
         this.fetchShops();
     },

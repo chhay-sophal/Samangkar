@@ -22,7 +22,7 @@
             <tbody>
               <tr v-for="pkg in packages" :key="pkg.id">
                 <td>{{ pkg.name }}</td>
-                <td>{{ pkg.shop.name }}</td>
+                <td>{{ pkg.shopName }}</td>
                 <td>{{ pkg.description }}</td>
                 <td>
                   <ul>
@@ -72,7 +72,7 @@
               </div>
               <div class="flex gap-4">
                 <label for="old-password" class="block font-medium text-slate-600">Shop name:</label>
-                <div class="">{{ selectedPackage.shop.name }}</div>
+                <div class="">{{ selectedPackage.shopName }}</div>
               </div>
               <div class="flex gap-4">
                 <label for="old-password" class="block font-medium text-slate-600">Description:</label>

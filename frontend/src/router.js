@@ -150,7 +150,7 @@ const routes = [
         component: ProfileView,
     },
     {
-        path: '/profile/favorite',
+        path: '/profile/favorites',
         name: 'favoritePageRoute',
         component: FavoriteShopsView,
     },

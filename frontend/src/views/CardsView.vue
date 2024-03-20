@@ -51,7 +51,7 @@
                                 ${{ c.service.unitPrice }}
                             </div>
                             <div class="">
-                                {{ c.service.shop.name }}
+                                {{ c.service.shopName }}
                             </div>
                         </div>
                         <div v-else class="flex flex-col items-center justify-center">
@@ -62,7 +62,7 @@
                                 ${{ c.pkg.price }}
                             </div>
                             <div class="">
-                                {{ c.pkg.shop.name }}
+                                {{ c.pkg.shopName }}
                             </div>
                         </div>
                     </div>
@@ -102,6 +102,7 @@ export default {
             console.log('user carts:');
             console.log(this.packageCarts);
             console.log(this.serviceCarts);
+            localStorage.setItem('cart', JSON.stringify(response.data));
             } catch (error) {
             console.log(error)
             }
@@ -110,7 +111,6 @@ export default {
             try {
                 const response = await http.post(`api/cards/remove/${id}`);
                 console.log(response.data); // Handle the response as needed
-                localStorage.setItem('cart', JSON.stringify(response.data));
                 this.fetchUserCards();
             } catch (error) {
                 console.log(error);

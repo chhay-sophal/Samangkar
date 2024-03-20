@@ -51,10 +51,8 @@
                     <p class="text-4xl flex-grow">
                         Favorite Shops
                     </p>
-                    <button class="text-2xl">
-                        <router-link to="/profile/favorite" title="See all" class="font-bold">
-                            See all
-                        </router-link>
+                    <button @click="routeToFavoritesView()" class="text-2xl font-bold">
+                        See All
                     </button>
                 </div>
                 <div class="h-5/6 overflow-x-auto flex items-center relative pb-3">
@@ -62,7 +60,7 @@
                     <div class="px-4 h-full">
                         <div class="flex space-x-4 h-full text-2xl">
                             <!-- Loop through your shop cards -->
-                            <div 
+                            <div
                             v-for="favorite in favorites" 
                             :key="favorite.id" 
                             class="flex-none w-64 flex justify-center items-center rounded-lg relative overflow-hidden"
@@ -80,8 +78,10 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                                     </svg>
                                 </button>
-                                <div class="size-full"><ImageViewer :imageData="favorite.shop.imageUrl" /></div>
-                                <div class="absolute font-bold text-2xl bg-white bg-opacity-70 text-black">{{ favorite.shop.name }}</div>
+                                <router-link :to="`/shop/${favorite.shop.id}/details`" class="h-full">
+                                    <div class="h-3/4"><ImageViewer :imageData="favorite.shop.imageUrl" /></div>
+                                    <div class="h-1/4 w-full absolute font-bold text-2xl bg-stone-200 bg-opacity-70 text-black flex items-center justify-center">{{ favorite.shop.name }}</div>
+                                </router-link>
                             </div>
                         </div>
                     </div>
@@ -133,7 +133,7 @@
                                             ${{ c.service.unitPrice }}
                                         </div>
                                         <div class="">
-                                            {{ c.service.shop.name }}
+                                            {{ c.service.shopName }}
                                         </div>
                                     </div>
                                     <div v-else class="flex flex-col items-center justify-center">
@@ -144,7 +144,7 @@
                                             ${{ c.pkg.price }}
                                         </div>
                                         <div class="">
-                                            {{ c.pkg.shop.name }}
+                                            {{ c.pkg.shopName }}
                                         </div>
                                     </div>
                                 </div>
@@ -718,6 +718,11 @@ export default {
             console.log(this.cart)
             localStorage.setItem('cart', JSON.stringify(this.cart));
             this.$router.push({ path: '/profile/cards' });
+        },
+        routeToFavoritesView() {
+            console.log(this.favorites)
+            localStorage.setItem('favorites', JSON.stringify(this.favorites));
+            this.$router.push({ path: '/profile/favorites' });
         },
         async removeFromCard(id) {
             try {

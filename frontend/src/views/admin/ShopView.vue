@@ -39,7 +39,7 @@
                 <ImageViewer :imageData="shop.imageUrl" />
               </div>
             </td>
-            <td>{{ shop.owner.username }}</td>
+            <td>{{ shop.ownerUsername }}</td>
             <td>{{ !shop.deletedAt ? "Active" : "Inactive" }}</td>
             <td>{{ shop.isTrending ? "Yes" : "No" }}</td>
             <td>
