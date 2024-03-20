@@ -16,8 +16,10 @@
             <div class="contact-info">
               <h3 class="text-xl pt-3 pb-1">Contact Information</h3>
               <p v-for="contact in contacts">
-                <strong>{{ contact.contactType }}:</strong> 
-                <a :href="contact.url" @click.prevent="openLink(contact.url)">{{ contact.url }}</a>
+                <strong>{{ contact.contactType }}:</strong>
+                <a :href="contact.url" @click.prevent="openLink(contact.url)">{{
+                  contact.url
+                }}</a>
               </p>
             </div>
           </div>
@@ -30,32 +32,45 @@
       <div class="container">
         <h2 class="sub-heading">Services</h2>
         <div v-if="services.length" class="grid grid-cols-3 gap-2">
-          <div class="package-item relative" v-for="(service, index) in services" :key="index">
-            <button 
-            class="absolute right-2 top-2" 
-            >
-              <svg 
+          <div
+            class="package-item relative"
+            v-for="(service, index) in services"
+            :key="index"
+          >
+            <button class="absolute right-2 top-2">
+              <svg
                 @click="removeFromCard('service', service.id)"
-                v-if="serviceCarts?.some(card => card.service?.id === service.id)"
-                xmlns="http://www.w3.org/2000/svg" 
-                fill="red" 
-                viewBox="0 0 24 24" 
-                stroke-width="1.5" 
-                stroke="currentColor" 
-                class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-              </svg>
-              <svg 
-                @click="addToCard('service', service.id)"
-                v-else
-                xmlns="http://www.w3.org/2000/svg" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke-width="1.5" 
-                stroke="currentColor" 
+                v-if="
+                  serviceCarts?.some((card) => card.service?.id === service.id)
+                "
+                xmlns="http://www.w3.org/2000/svg"
+                fill="red"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
                 class="w-6 h-6"
               >
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+              <svg
+                @click="addToCard('service', service.id)"
+                v-else
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
               </svg>
             </button>
             <div class=""><ImageViewer :imageData="service.image" /></div>
@@ -81,35 +96,49 @@
         </div> -->
         <h2 class="sub-heading">Packages</h2>
         <div v-if="packages.length" class="grid grid-cols-3 gap-2">
-          <div class="package-item relative" v-for="(pkg, index) in packages" :key="index">
-            <button 
-            class="absolute right-2 top-2" 
-            >
-              <svg 
+          <div
+            class="package-item relative"
+            v-for="(pkg, index) in packages"
+            :key="index"
+          >
+            <button class="absolute right-2 top-2">
+              <svg
                 @click="removeFromCard('package', pkg.id)"
-                v-if="packageCarts?.some(card => card.pkg.id === pkg.id)"
-                xmlns="http://www.w3.org/2000/svg" 
-                fill="red" 
-                viewBox="0 0 24 24" 
-                stroke-width="1.5" 
-                stroke="currentColor" 
-                class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-              </svg>
-              <svg 
-                @click="addToCard('package', pkg.id)"
-                v-else
-                xmlns="http://www.w3.org/2000/svg" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke-width="1.5" 
-                stroke="currentColor" 
+                v-if="packageCarts?.some((card) => card.pkg.id === pkg.id)"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="red"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
                 class="w-6 h-6"
               >
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+              <svg
+                @click="addToCard('package', pkg.id)"
+                v-else
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
               </svg>
             </button>
-            <router-link class="w-full flex flex-col items-center justify-center" :to="`/shop/${pkg.shopId}/package/${pkg.id}/details`">
+            <router-link
+              class="w-full flex flex-col items-center justify-center"
+              :to="`/shop/${pkg.shopId}/package/${pkg.id}/details`"
+            >
               <div class="w-fit">
                 <ImageViewer :imageData="pkg.image" />
               </div>
@@ -126,13 +155,75 @@
         </div>
       </div>
     </section>
+
+    <!-- Review Section -->
+    <section class="review-section">
+      <h2 class="text-2xl p-5 dark:text-stone-300">Shop Reviews</h2>
+      <div class="review-list">
+        <div
+          v-for="(review, index) in shopReviews"
+          :key="index"
+          class="review-item"
+        >
+          <div class="flex items-center">
+            <div class="avatar">
+              <img :src="review.userAvatar" alt="User Avatar" />
+            </div>
+            <div class="user-info">
+              <h3>{{ review.userName }}</h3>
+              <p>{{ review.date }}</p>
+            </div>
+            <div class="star-rating">
+              <span
+                v-for="n in 5"
+                :key="n"
+                :class="{
+                  'text-yellow-500': n <= review.rating,
+                  'text-gray-300': n > review.rating,
+                }"
+                >&#9733;</span
+              >
+            </div>
+          </div>
+          <p>{{ review.comment }}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comment Form -->
+    <section class="comment-form">
+      <div class="container">
+        <h2 class="sub-heading">Add Your Review</h2>
+        <form @submit.prevent="submitComment" class="comment-form">
+          <div class="form-group">
+            <label for="comment">Comment:</label>
+            <textarea
+              id="comment"
+              v-model="newComment"
+              class="form-control"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="rating">Rating:</label>
+            <select id="rating" v-model="newRating" class="form-control">
+              <option value="1">1 Star</option>
+              <option value="2">2 Stars</option>
+              <option value="3">3 Stars</option>
+              <option value="4">4 Stars</option>
+              <option value="5">5 Stars</option>
+            </select>
+          </div>
+          <button type="submit" class="btn" style="background-color: #DD6895 ; color:white ;margin-bottom:10px">Submit</button>
+        </form>
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
-import http from '@/services/httpService';
-import ImageViewer from '@/components/ImageViewer.vue';
-import { useUserStore } from '@/store/userStore';
+import http from "@/services/httpService";
+import ImageViewer from "@/components/ImageViewer.vue";
+import { useUserStore } from "@/store/userStore";
 
 export default {
   components: {
@@ -141,31 +232,89 @@ export default {
   data() {
     return {
       userId: null,
-      searchText: '',
+      searchText: "",
       shop: {
         name: "Sample Shop",
         image: "https://via.placeholder.com/300",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vestibulum diam eget nunc consectetur condimentum. Sed sed lacus quis libero elementum egestas.",
+        description:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vestibulum diam eget nunc consectetur condimentum. Sed sed lacus quis libero elementum egestas.",
       },
       contacts: {
         phone: "123-456-7890",
         email: "sample@example.com",
-        address: "123 Main Street, City, Country"
+        address: "123 Main Street, City, Country",
       },
       services: [],
       packages: [],
       packageCarts: [],
       serviceCarts: [],
+      newComment: "",
+      newRating: null,
+      shopReviews: [
+        {
+          userName: "User1",
+          userAvatar: "avatar1.jpg",
+          date: "March 15, 2024",
+          comment: "Great service! Will definitely come back again.",
+        },
+        {
+          userName: "User2",
+          userAvatar: "avatar2.jpg",
+          date: "March 12, 2024",
+          comment: "Average experience. Could be better.",
+        },
+        {
+          userName: "User3",
+          userAvatar: "avatar3.jpg",
+          date: "March 10, 2024",
+          comment: "Absolutely fantastic! Highly recommend this shop.",
+        },
+        // Add more reviews as needed
+      ],
     };
   },
   computed: {
     filteredPackages() {
       if (!this.searchText) return this.packages;
-      const searchRegex = new RegExp(this.searchText.trim(), 'i');
-      return this.packages.filter(pkg => searchRegex.test(pkg.name) || searchRegex.test(pkg.details));
-    }
+      const searchRegex = new RegExp(this.searchText.trim(), "i");
+      return this.packages.filter(
+        (pkg) => searchRegex.test(pkg.name) || searchRegex.test(pkg.details)
+      );
+    },
+    moreReviews() {
+      return this.shopReviews.slice(
+        this.displayedReviews.length,
+        this.displayedReviews.length + 3
+      );
+    },
   },
   methods: {
+    submitComment() {
+      if (this.newComment && this.newRating) {
+        const newReview = {
+          userName: "User", // Replace with the actual username of the logged-in user
+          userAvatar: "avatar.jpg", // Replace with the actual avatar URL of the logged-in user
+          date: new Date().toLocaleDateString(), // Use the current date
+          comment: this.newComment,
+          rating: parseInt(this.newRating),
+        };
+        this.shopReviews.push(newReview);
+        // Reset form fields after submission
+        this.newComment = "";
+        this.newRating = null;
+      } else {
+        alert("Please fill in both the comment and rating fields.");
+      }
+    },
+    submitComment() {
+      // Submit comment logic, add new comment to shopReviews and reset newComment and newRating
+      this.shopReviews.push({
+        comment: this.newComment,
+        rating: this.newRating,
+      });
+      this.newComment = "";
+      this.newRating = null;
+    },
     openLink(link) {
       if (link.startsWith("http://") || link.startsWith("https://")) {
         // If it's an absolute URL, open it directly
@@ -205,7 +354,7 @@ export default {
     async fetchPackages(shopId) {
       try {
         const response = await http.get(`api/packages/get-all/${shopId}`);
-        this.packages = response.data.filter(pkg => pkg.services.length > 0);
+        this.packages = response.data.filter((pkg) => pkg.services.length > 0);
         console.log(this.packages);
       } catch (error) {
         console.log(error);
@@ -215,36 +364,38 @@ export default {
       try {
         const response = await http.get(`api/cards/get-all/${this.userId}`);
         // this.cards = response.data.filter(response.data.pkg != null);
-        this.packageCarts = response.data.filter(card => card.pkg != null);
-        this.serviceCarts = response.data.filter(card => card.service != null);
+        this.packageCarts = response.data.filter((card) => card.pkg != null);
+        this.serviceCarts = response.data.filter(
+          (card) => card.service != null
+        );
         // this.cards = response.data;
-        console.log('user carts:');
+        console.log("user carts:");
         console.log(this.packageCarts);
         console.log(this.serviceCarts);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
     async addToCard(productType, id) {
       try {
-        if (productType == 'package') {
+        if (productType == "package") {
           await http.post(`api/cards/add`, {
-            "userId": this.userId,
-            "serviceId": null,
-            "packageId": id,
-            "quantity": 1,
+            userId: this.userId,
+            serviceId: null,
+            packageId: id,
+            quantity: 1,
           });
-        } else if (productType == 'service') {
-          console.log(id)
-          console.log(this.userId)
+        } else if (productType == "service") {
+          console.log(id);
+          console.log(this.userId);
           await http.post(`api/cards/add`, {
-            "userId": this.userId,
-            "serviceId": id,
-            "packageId": null,
-            "quantity": 1,
+            userId: this.userId,
+            serviceId: id,
+            packageId: null,
+            quantity: 1,
           });
         } else {
-          console.log('Product type not found!');
+          console.log("Product type not found!");
         }
 
         this.fetchUserCards();
@@ -255,20 +406,24 @@ export default {
     async removeFromCard(productType, id) {
       try {
         let cardToRemove = null;
-        if (productType == 'package') {
+        if (productType == "package") {
           // Find the first card that has the specified package ID
-          cardToRemove = this.packageCarts.find(card => card.pkg.id === id);
-        } else if (productType == 'service') {
+          cardToRemove = this.packageCarts.find((card) => card.pkg.id === id);
+        } else if (productType == "service") {
           // Find the first card that has the specified package ID
-          cardToRemove = this.serviceCarts.find(card => card.service.id === id);
+          cardToRemove = this.serviceCarts.find(
+            (card) => card.service.id === id
+          );
         } else {
-          console.log('Product type not found!');
+          console.log("Product type not found!");
           return;
         }
 
         // If a card is found, make an HTTP request to remove it by its ID
         if (cardToRemove) {
-          const response = await http.post(`api/cards/remove/${cardToRemove.id}`);
+          const response = await http.post(
+            `api/cards/remove/${cardToRemove.id}`
+          );
           console.log(response.data); // Handle the response as needed
           this.fetchUserCards();
         } else {
@@ -289,10 +444,9 @@ export default {
     this.fetchServices(shopId);
     this.fetchPackages(shopId);
     this.fetchUserCards();
-  }
+  },
 };
 </script>
-
 
 <style>
 .container {
@@ -323,7 +477,8 @@ export default {
   padding-right: 20px;
 }
 
-.contact-info h3, .services h3 {
+.contact-info h3,
+.services h3 {
   margin-top: 0;
 }
 
@@ -381,5 +536,96 @@ ul li {
 
 .package-details {
   padding: 20px;
+}
+/* Your existing styles */
+.review-section {
+  margin-top: 20px;
+}
+
+.review-item {
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.avatar img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.user-info h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.user-info p {
+  margin: 0;
+  color: #718096;
+}
+
+.star-rating {
+  margin-left: auto;
+}
+
+.star-rating span {
+  font-size: 1.2rem;
+}
+
+.dark:text-stone-300 {
+  color: #a0aec0;
+}
+
+.text-yellow-500 {
+  color: #eace30;
+}
+
+.text-gray-300 {
+  color: #cbd5e0;
+}
+.comment-form {
+  margin-top: 50px;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.sub-heading {
+  text-align: center;
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+}
+
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #0079fa;
+  color: #000000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #98b7d9a0;
 }
 </style>
