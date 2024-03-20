@@ -26,7 +26,8 @@ import ShopDetail from './views/shop/ShopDetail.vue'
 import PackageDetail from './views/shop/PackageDetail.vue'
 import ShopDashboard from './views/shop-owner/ShopDashboard.vue'
 import ShopOwnerProfile from './views/shop-owner/ShopOwnerProfile.vue'
-
+import ServiceDetail from './views/shop/ServiceDetail.vue'
+import Review from './views/shop/Review.vue'
 const routes = [
     {
         path: '/admin',
@@ -189,6 +190,16 @@ const routes = [
         name: "ShopOwnerProfile",
         component: ShopOwnerProfile
     },
+    {
+        path: "/shop/service/detail",
+        name: "ServiceDetail",
+        component: ServiceDetail
+    },
+    {
+        path: "/shop/review",
+        name: "Review",
+        component: Review
+    }
 ];
 
 const router = createRouter({
