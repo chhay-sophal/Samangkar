@@ -58,7 +58,7 @@
                     </button>
                 </div>
                 <div class="h-5/6 overflow-x-auto flex items-center relative pb-3">
-                    <!-- Shop Cards Container -->
+                    <!-- Favorite Cards Container -->
                     <div class="px-4 h-full">
                         <div class="flex space-x-4 h-full text-2xl">
                             <!-- Loop through your shop cards -->
@@ -90,7 +90,7 @@
             <div class="h-1/2">
                 <div class="font-medium h-1/6 p-5 flex items-center">
                     <p class="text-4xl flex-grow">
-                        Cards
+                        Cart
                     </p>
                     <button class="text-2xl">
                         <router-link to="/profile/cards" title="See all" class="font-bold">
@@ -99,18 +99,21 @@
                     </button>
                 </div>
                 <div class="h-5/6 overflow-x-auto flex items-center relative pb-3">
-                        <!-- Favorite Cards Container -->
+                        <!-- Cart Cards Container -->
                         <div class="px-4 h-full">
                         <div class="flex space-x-4 h-full text-2xl">
                             <!-- Loop through your shop cards -->
                             <div v-for="card in cards" :key="card.id" class="flex-col border-2 w-64 flex justify-center items-center rounded-lg relative">
                                 <div class="absolute size-full opacity-70">
-                                    <div class="h-full">
-                                        <ImageViewer :imageData="card.service.image" />
+                                    <div class="h-full flex items-center overflow-hidden">
+                                        <div>
+                                            <ImageViewer v-if="card.service" :imageData="card.service.image" />
+                                            <ImageViewer v-else :imageData="card.pkg.image" />
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="absolute px-3 flex flex-col items-center justify-center font-bold text-2xl bg-white bg-opacity-60 text-black h-full w-full">
-                                    <div class="">
+                                <div v-if="card.service" class="absolute px-3 flex flex-col items-center justify-center font-bold text-2xl bg-white bg-opacity-60 text-black h-full w-full">
+                                    <div>
                                         {{ card.service.name }}
                                     </div>
                                     <div class="text-lg">
@@ -118,6 +121,17 @@
                                     </div>
                                     <div class="text-lg">
                                         {{ card.service.shop.name }}
+                                    </div>
+                                </div>
+                                <div v-else class="absolute px-3 flex flex-col items-center justify-center font-bold text-2xl bg-white bg-opacity-60 text-black h-full w-full">
+                                    <div class="">
+                                        {{ card.pkg.name }}
+                                    </div>
+                                    <div class="text-lg">
+                                        ${{ card.pkg.price }}
+                                    </div>
+                                    <div class="text-lg">
+                                        {{ card.pkg.shop.name }}
                                     </div>
                                 </div>
                             </div>
