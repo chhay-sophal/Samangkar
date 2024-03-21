@@ -297,9 +297,9 @@
   <!-- Service details panel -->
   <div 
   v-if="showServiceDetailsPanel"
-  class="top-1/2 left-1/2 bg-green-100 2xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl sm:h-1/3 h-2/5 -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
+  class="top-1/2 left-1/2 bg-green-100 2xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl min-h-fit -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
   >
-      <div class="flex justify-end items-center pr-5 dark:text-stone-600">
+      <div class="flex justify-end items-center dark:text-stone-600">
           <button 
               @click="hidePanel()"
           >
@@ -318,6 +318,7 @@
                   <label class="block font-medium text-slate-600">Description:</label>
                   <label class="block font-medium text-slate-600">Unit price:</label>
                   <label class="block font-medium text-slate-600">Trending:</label>
+                  <label class="block font-medium text-slate-600">Image:</label>
               </div>
               <div class="flex flex-col w-2/3 gap-5">
                   <input type="text" v-model="selectedService.name">
@@ -333,6 +334,7 @@
                           No
                       </label>
                   </div>
+                  <input type="file" id="image" accept="image/*" @change="onFileChange">
               </div>
           </div>
           <div class="w-full flex items-center justify-center">
@@ -429,7 +431,9 @@ export default {
         description: '',
         serviceIds: [],
       },
-      selectedService: {},
+      selectedService: {
+        newImage: null,
+      },
       selectedPackage: {
         serviceIds: [],
       },
@@ -487,13 +491,13 @@ export default {
         this.showAddPackagePanel = true;
       } else if (panelName == 'serviceDetailsPanel') {
         this.showServiceDetailsPanel = true;
-        this.selectedService = data;
+        this.selectedService = { ...this.selectedService, ...data };
         console.log(this.selectedService)
         console.log(this.selectedService.name)
       } else if (panelName == 'packageDetailsPanel') {
         this.showPackageDetailsPanel = true;
         this.selectedPackage.serviceIds = data.services.map(service => service.id);
-        this.selectedPackage = { ...this.selectedPackage, ...data }
+        this.selectedPackage = { ...this.selectedPackage, ...data };
       } else if (panelName == 'changeShopNamePanel') {
         this.showChangeShopDetailsPanel = true;
         this.changeShopDetails.label = 'Name';
@@ -575,16 +579,37 @@ export default {
                 'name': this.selectedService.name,
                 'description': this.selectedService.description,
                 'unitPrice': this.selectedService.unitPrice,
-                'shopId': this.selectedService.shop.id,
+                'shopId': this.selectedService.shopId,
                 'isTrending': this.selectedService.isTrending,
             });
+
+            if (this.selectedService.newImage) {
+              const formData = new FormData();
+              formData.append('file', convertImageToBlob(this.selectedService.newImage), 'image.jpg')
+
+              await http.post(`api/services/${this.selectedService.id}/image/upload`, formData);
+            }
+
             alert("Service updated successfully!");
-            this.fetchServices();
+            this.fetchServices(this.selectedService.shopId);
             this.hidePanel();
         } catch (error) {
             console.log(error);
         }
       }
+    },
+    onFileChange(event) {
+      const file = event.target.files[0];
+
+          if (file) {
+              const reader = new FileReader();
+
+              reader.onload = (e) => {
+                this.selectedService.newImage = e.target.result;
+              };
+
+              reader.readAsDataURL(file);
+          }
     },
     async updatePackage() {
       if (confirm("Are you sure to update this package?")) {
