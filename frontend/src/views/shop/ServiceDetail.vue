@@ -1,40 +1,19 @@
 <template>
     <div>
       <!-- Your existing sections -->
-      <section class="service-detail pb-20">
-        <div class="flex w-full items-center justify-center">
+      <section class="pb-20">
+        <div class="flex w-full items-center pb-10 justify-center">
           <h2 class="text-5xl font-bold dark:text-stone-300">{{ service.name }}</h2>
         </div>
-        <div class="flex items-center justify-center w-full" style="height: 700px;">
-          <div class="" >
-            <ImageViewer class="" :imageData="service.image" />
-          </div>
-          <!-- <div class="w-1/2 flex flex-col">
-            <div class="text-4xl font-bold w-full flex items-center justify-center p-5">{{ service.name }}</div>
-            <div class="grid grid-cols-3 pb-5 text-xl grow">
-              <div class="font-bold">Provider</div>
-              <div class="col-span-2">{{ service.shopName }}</div>
-
-              <div class="font-bold">Price</div>
-              <div class="col-span-2">${{ service.unitPrice }}</div>
-
-              <div v-if="!service.trending" class="col-span-3 flex items-center justify-center font-bold text-3xl text-yellow-500">
-                Popular Now!
-              </div>
-            </div>
-            <div class="w-full flex items-center justify-center">
-              <div class="h-20 w-40 flex items-center justify-center border-2 hover:bg-blue-500 hover:text-stone-100">
-                <button class="w-full text-xl font-semibold">Book Now</button>
-              </div>
-            </div>
-          </div> -->
+        <div class="items-center justify-center mb-20 w-full" style="height: 700px;">
+          <ImageViewer class="flex object-fill" :imageData="service.image" />
         </div>
-        <div v-if="service.trending" class="w-full flex flex-col items-center justify-center p-10">
+        <div v-if="service.trending" class="w-full flex flex-col items-center justify-center pb-20">
           <div  class="text-5xl font-bold text-yellow-500">
             Popular Now!
           </div>
         </div>
-        <div class="w-full flex flex-col items-center justify-center p-20">
+        <div class="w-full flex flex-col items-center justify-center pb-20">
           <div class="text-5xl font-bold pb-5">
             What is it?
           </div>
@@ -42,7 +21,7 @@
             {{ service.description }}
           </div>
         </div>
-        <div class="w-full flex p-20 gap-5">
+        <div class="w-full flex pb-20 gap-5">
           <div class="w-1/4"></div>
           <div class="w-1/4 text-5xl font-bold flex items-center justify-center">At just</div>
           <div class="w-1/4 font-bold flex items-center justify-center" style="font-size: 100px;">${{ service.unitPrice }}</div>

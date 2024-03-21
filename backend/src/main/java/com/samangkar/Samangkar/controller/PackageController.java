@@ -3,6 +3,7 @@ package com.samangkar.Samangkar.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.samangkar.Samangkar.dto.AddOrUpdatePackageDto;
 import com.samangkar.Samangkar.dto.PackageDto;
@@ -14,10 +15,14 @@ import com.samangkar.Samangkar.repository.ServiceRepository;
 import com.samangkar.Samangkar.repository.ShopRepository;
 import com.samangkar.Samangkar.service.PackageService;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -194,6 +199,43 @@ public class PackageController {
             }
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
+        }
+    }
+
+    @SuppressWarnings("null")
+    @PostMapping("{packageId}/image/upload")
+    public ResponseEntity<?> handleFileUpload(@PathVariable Long packageId, @RequestParam("file") MultipartFile file) {
+        try {
+            Path uploadDirectory = Path.of("src/main/resources/package-images");
+
+            // Ensure the directory exists, create it if not
+            Files.createDirectories(uploadDirectory);
+
+            PackageModel pkg = packageRepository.findFirstById(packageId);
+
+            // Delete the existing profile image if it exists
+            if (pkg.getImage() != null) {
+                Path existingImagePath = uploadDirectory.resolve(pkg.getImage());
+                Files.deleteIfExists(existingImagePath);
+            }
+
+            // Append a unique identifier to the filename
+            String originalFilename = file.getOriginalFilename();
+            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            String uniqueFilename = UUID.randomUUID().toString() + "." + fileExtension;
+            Path targetPath = uploadDirectory.resolve(uniqueFilename);
+
+            // Save the file to the server
+            Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+
+            // Update the user's profileUrl
+            pkg.setImage(uniqueFilename);
+            packageRepository.save(pkg);
+
+            PackageDto pkgDto = packageService.getPackageById(packageId);
+            return ResponseEntity.ok(pkgDto);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error uploading file: " + e.getMessage());
         }
     }
     

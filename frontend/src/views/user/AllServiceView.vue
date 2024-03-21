@@ -9,46 +9,44 @@
         <div class=""></div>
     </div>
 
-    <section class="shop-list flex flex-col" id="shopList">
-      <div class="shop-list">
-        <div class="shop-item relative" v-for="(service, index) in services" :key="index">
-          <button class="absolute right-2 top-2">
-            <svg 
-              @click="removeFromCard(service.id)"
-              v-if="serviceCarts?.some(card => card.service?.id === service?.id)"
-              xmlns="http://www.w3.org/2000/svg" 
-              fill="red" 
-              viewBox="0 0 24 24" 
-              stroke-width="1.5" 
-              stroke="currentColor" 
-              class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg>
-            <svg 
-              @click="addToCard(service.id)"
-              v-else
-              xmlns="http://www.w3.org/2000/svg" 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke-width="1.5" 
-              stroke="currentColor" 
-              class="w-6 h-6"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg>
-          </button>
-          <router-link :to="`/shop/${service.shopId}/service/${service.id}/details`">
-            <div class="">
-              <ImageViewer :imageData="service.image" class="flex aspect-square object-fill"/>
-            </div>
-            <div class="shop-details">
-              <div class="items">{{ service.name }}</div>
-              <p>{{ service.description }}</p>
-            </div>
-          </router-link>
-        </div>
+    <div class="grid grid-cols-4 gap-5">
+      <div class="relative border" v-for="(service, index) in services" :key="index">
+        <button class="absolute right-2 top-2">
+          <svg 
+            @click="removeFromCard(service.id)"
+            v-if="serviceCarts?.some(card => card.service?.id === service?.id)"
+            xmlns="http://www.w3.org/2000/svg" 
+            fill="red" 
+            viewBox="0 0 24 24" 
+            stroke-width="1.5" 
+            stroke="currentColor" 
+            class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+          <svg 
+            @click="addToCard(service.id)"
+            v-else
+            xmlns="http://www.w3.org/2000/svg" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke-width="1.5" 
+            stroke="currentColor" 
+            class="w-6 h-6"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+        </button>
+        <router-link :to="`/shop/${service.shopId}/service/${service.id}/details`">
+          <div class="flex h-64 items-center justify-center">
+            <ImageViewer class="flex object-fill" :imageData="service.image" />
+          </div>
+          <div class="shop-details">
+            <div class="items">{{ service.name }}</div>
+            <p>{{ service.description }}</p>
+          </div>
+        </router-link>
       </div>
-    </section>
+    </div>
 </template>
 
 <script>

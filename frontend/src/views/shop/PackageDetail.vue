@@ -1,21 +1,19 @@
 <template>
     <div>
       <!-- Your existing sections -->
-      <section class="service-detail pb-20">
-        <div class="flex w-full items-center justify-center">
+      <section class="pb-20">
+        <div class="flex w-full items-center pb-10 justify-center">
           <h2 class="text-5xl font-bold dark:text-stone-300">{{ pkg.name }}</h2>
         </div>
-        <div class="flex items-center justify-center w-full" style="height: 700px;">
-          <div class="" >
-            <ImageViewer class="" :imageData="pkg.image" />
-          </div>
+        <div class="items-center justify-center mb-20 w-full" style="height: 700px;">
+          <ImageViewer class="flex object-fill" :imageData="pkg.image" />
         </div>
-        <div v-if="pkg.trending" class="w-full flex flex-col items-center justify-center p-10">
+        <div v-if="pkg.trending" class="w-full flex flex-col items-center justify-center pb-20">
           <div  class="text-5xl font-bold text-yellow-500">
             Popular Now!
           </div>
         </div>
-        <div class="w-full flex flex-col items-center justify-center p-20">
+        <div class="w-full flex flex-col items-center justify-center pb-20">
           <div class="text-5xl font-bold pb-5">
             What is it?
           </div>
@@ -23,8 +21,8 @@
             {{ pkg.description }}
           </div>
         </div>
-        <div class="w-full flex flex-col items-center justify-center p-20">
-          <div class="text-5xl font-bold pb-5">
+        <div class="w-full flex flex-col items-center justify-center pb-20">
+          <div class="text-5xl font-bold pb-10">
             What does it include?
           </div>
           <div 
@@ -51,13 +49,13 @@
             </div>
           </div>
         </div>
-        <div class="w-full flex p-20 gap-5">
+        <div class="w-full flex pb-20 gap-5">
           <div class="w-1/4"></div>
           <div class="w-1/4 text-5xl font-bold flex items-center justify-center pr-10">At just</div>
           <div class="w-1/4 font-bold flex items-center justify-center" style="font-size: 100px;">${{ pkg.price }}</div>
           <div class="w-1/4"></div>
         </div>
-        <div class="w-full p-20">
+        <div class="w-full pb-20">
           <div class="text-5xl font-bold flex items-center justify-center">Provided by</div>
           <div class="font-bold flex items-center justify-center" style="font-size: 100px;">{{ pkg.shopName }}</div>
         </div>
@@ -90,44 +88,6 @@
         </div>
       </section>
     </div>
-  <!-- <div class="w-full flex items-center justify-center font-bold text-4xl">Package Details</div>
-  <div class="package-detail">
-    <div class="container">
-      <div class="grid grid-cols-3">
-        <div class="col-md-6 col-span-2">
-          <div class="package-image">
-            <div class=" w-96">
-              <ImageViewer :imageData="pkg.image" />
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="flex flex-col gap-2">
-            <div class="text-3xl font-bold">{{ pkg.name }}</div>
-            <div class="text-xl"><span class="font-semibold">Descriptions:</span> {{ pkg.description }}</div>
-            <div class="package-price"><span class="font-semibold">Price:</span> ${{ pkg.price }}</div>
-            <p>{{ pkg.details }}</p>
-            <router-link class="contact-button" :to="`/shop/${pkg.shopId}/details`" v-if="pkg.shopId">Contact Provider</router-link>
-          </div>
-        </div>
-      </div>
-      <section class="packages">
-        <div class="container">
-          <div class="w-full flex items-center justify-center font-semibold text-3xl p-3">List of Services</div>
-          <div class="grid grid-cols-3 gap-2">
-            <router-link class="package-item" :to="`/shop/${service.shopId}/service/${service.id}/details`" v-for="(service, index) in pkg.services" :key="index">
-              <div class=""><ImageViewer :imageData="service.image" /></div>
-              <div class="package-details">
-                <h3>{{ service.name }}</h3>
-                <div class="package-price">${{ service.unitPrice }}</div>
-                <p>{{ service.description }}</p>
-              </div>
-            </router-link>
-          </div>
-        </div>
-      </section>
-    </div>
-  </div> -->
 </template>
 
 <script>

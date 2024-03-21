@@ -134,8 +134,10 @@
             </svg>
           </button>
           <router-link :to="`/shop/${service.shopId}/service/${service.id}/details`">
-            <div class="">
-              <ImageViewer :imageData="service.image" />
+            <div class="flex items-center justify-center">
+              <div class="">
+                <ImageViewer :imageData="service.image" />
+              </div>
             </div>
             <div class="package-details">
               <div class="items">{{ service.name }}</div>
@@ -184,8 +186,10 @@
             </svg>
           </button>
           <router-link :to="`/shop/${pkg.shopId}/package/${pkg.id}/details`">
-            <div class="">
-              <ImageViewer :imageData="pkg.image" />
+            <div class="flex items-center justify-center">
+              <div class="">
+                <ImageViewer :imageData="pkg.image" />
+              </div>
             </div>
             <div class="package-details">
               <div class="items">{{ pkg.name }}</div>

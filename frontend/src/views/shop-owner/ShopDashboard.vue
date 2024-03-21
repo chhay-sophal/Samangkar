@@ -78,7 +78,7 @@
                       @click="displayPanel('serviceDetailsPanel', service)"
                       v-for="service in services" 
                       :key="service.id" 
-                      class="flex-none w-64 bg-green-400 p-3 flex flex-col justify-center items-center rounded-lg"
+                      class="flex-none w-64 dark:bg-gray-700 border-2 p-3 flex flex-col justify-center items-center rounded-lg"
                       >
                           {{ service.name }}
                           <ImageViewer :imageData="service.image" class=" w-1/2 h-fit rounded-xl overflow-hidden"/>
@@ -103,7 +103,11 @@
               <div class="px-4 h-full">
                   <div class="flex space-x-4 h-full text-2xl">
                       <!-- Loop through your shop cards -->
-                      <button @click="displayPanel('packageDetailsPanel', pkg)" v-for="pkg in packages" :key="pkg.id" class="flex-none w-64 bg-green-400 p-3 flex flex-col justify-center items-center rounded-lg">
+                      <button 
+                        @click="displayPanel('packageDetailsPanel', pkg)" 
+                        v-for="pkg in packages" :key="pkg.id" 
+                        class="flex-none w-64 dark:bg-gray-700 border-2 p-3 flex flex-col justify-center items-center rounded-lg"
+                      >
                           {{ pkg.name }}
                           <ImageViewer :imageData="pkg.image" class=" w-1/2 h-fit rounded-xl overflow-hidden"/>
                       </button>
@@ -124,7 +128,10 @@
               <div class="px-4 h-full">
                   <div class="flex space-x-4 h-full text-2xl">
                       <!-- Loop through your shop cards -->
-                      <div v-for="review in reviews" :key="review.id" class="flex-none gap-2 w-64 bg-green-400 p-5 flex flex-col justify-center items-center rounded-lg">
+                      <div 
+                        v-for="review in reviews" :key="review.id" 
+                        class="flex-none gap-2 w-64 dark:bg-gray-700 border-2 p-5 flex flex-col justify-center items-center rounded-lg"
+                      >
                           <div class="flex gap-2">
                               <div v-for="star in review.stars">
                                   <svg xmlns="http://www.w3.org/2000/svg" fill="red" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -160,7 +167,7 @@
   <!-- Change Shop Details panel -->
   <div 
   v-if="showChangeShopDetailsPanel"
-  class="top-1/2 left-1/2 bg-green-100 2xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl min-h-fit -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
+  class="top-1/2 left-1/2 bg-slate-400 2xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl min-h-fit -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
   >
       <div class="flex justify-end items-center dark:text-stone-600">
           <button 
@@ -216,7 +223,7 @@
   <!-- Add service panel -->
   <div 
   v-if="showAddServicePanel"
-  class="top-1/2 left-1/2 bg-green-100 2xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl sm:h-1/3 h-2/5 -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
+  class="top-1/2 left-1/2 bg-slate-400 2xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl sm:h-1/3 h-2/5 -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
   >
       <div class="flex justify-end items-center pr-5 dark:text-stone-600">
           <button 
@@ -254,7 +261,7 @@
   <!-- Add package panel -->
   <div 
   v-if="showAddPackagePanel"
-  class="top-1/2 left-1/2 min-h-fit bg-green-100 2xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
+  class="top-1/2 left-1/2 min-h-fit bg-slate-400 2xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
   >
       <div class="flex justify-end items-center pr-5 dark:text-stone-600">
           <button 
@@ -297,7 +304,7 @@
   <!-- Service details panel -->
   <div 
   v-if="showServiceDetailsPanel"
-  class="top-1/2 left-1/2 bg-green-100 2xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl min-h-fit -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
+  class="top-1/2 left-1/2 bg-slate-400 2xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl min-h-fit -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
   >
       <div class="flex justify-end items-center dark:text-stone-600">
           <button 
@@ -348,7 +355,7 @@
   <!-- Package details panel -->
   <div 
   v-if="showPackageDetailsPanel"
-  class="top-1/2 left-1/2 bg-green-100 2xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl sm:h-1/3 h-2/5 -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
+  class="top-1/2 left-1/2 bg-slate-400 2xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl sm:h-1/3 h-2/5 -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
   >
       <div class="flex justify-end items-center pr-5 dark:text-stone-600">
           <button 
@@ -368,6 +375,7 @@
                   <label class="block font-medium text-slate-600">Package name:</label>
                   <label class="block font-medium text-slate-600">Description:</label>
                   <label class="block font-medium text-slate-600">Services:</label>
+                  <label class="block font-medium text-slate-600">Image:</label>
               </div>
               <div class="flex flex-col w-2/3 gap-5">
                   <input type="text" v-model="selectedPackage.name">
@@ -378,6 +386,7 @@
                       <label>{{ service.name }}</label>
                     </div>
                   </div>
+                  <input type="file" id="image" accept="image/*" @change="onFileChange">
               </div>
           </div>
           <div class="w-full flex items-center justify-center">
@@ -432,7 +441,6 @@ export default {
         serviceIds: [],
       },
       selectedService: {
-        newImage: null,
       },
       selectedPackage: {
         serviceIds: [],
@@ -440,7 +448,8 @@ export default {
       changeShopDetails: {
         label: '',
         input: null
-      }
+      },
+      newImage: null,
     };
   },
   methods: {
@@ -583,11 +592,12 @@ export default {
                 'isTrending': this.selectedService.isTrending,
             });
 
-            if (this.selectedService.newImage) {
+            if (this.newImage) {
               const formData = new FormData();
-              formData.append('file', convertImageToBlob(this.selectedService.newImage), 'image.jpg')
+              formData.append('file', convertImageToBlob(this.newImage), 'image.jpg')
 
               await http.post(`api/services/${this.selectedService.id}/image/upload`, formData);
+              this.newImage = null;
             }
 
             alert("Service updated successfully!");
@@ -605,7 +615,7 @@ export default {
               const reader = new FileReader();
 
               reader.onload = (e) => {
-                this.selectedService.newImage = e.target.result;
+                this.newImage = e.target.result;
               };
 
               reader.readAsDataURL(file);
@@ -617,12 +627,20 @@ export default {
           await http.put(`api/packages/update/${this.selectedPackage.id}`, { 
             "packageName": this.selectedPackage.name,
             "description": this.selectedPackage.description,
-            "shopId": this.selectedPackage.shop.id,
+            "shopId": this.selectedPackage.shopId,
             "serviceIds": this.selectedPackage.serviceIds,
           });
-      
+
+          if (this.newImage) {
+            const formData = new FormData();
+            formData.append('file', convertImageToBlob(this.newImage), 'image.jpg')
+
+            await http.post(`api/packages/${this.selectedPackage.id}/image/upload`, formData);
+            this.newImage = null;
+          }
+
           alert("Package updated successfuly!");
-          this.fetchPackages(this.selectedPackage.shop.id);
+          this.fetchPackages(this.shop.id);
           this.hidePanel();
         } catch (error) {
           console.error(error);
