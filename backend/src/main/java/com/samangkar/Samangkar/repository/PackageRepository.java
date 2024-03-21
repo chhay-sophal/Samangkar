@@ -25,7 +25,7 @@ public interface PackageRepository extends PagingAndSortingRepository<PackageMod
 
     List<PackageModel> findByShop_Id(Long id);
 
-    // @Query("SELECT p FROM PackageModel p WHERE p.shop = :shop AND p.deletedAt IS NULL")
+    @Query("SELECT p FROM PackageModel p WHERE p.shop.id = :shopId AND p.deletedAt IS NULL")
     List<PackageModel> findNonDeletedPackagesByShop_Id(Long shopId);
 
     List<PackageModel> findAllByDeletedAtIsNull();
