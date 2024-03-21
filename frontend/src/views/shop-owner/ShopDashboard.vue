@@ -398,9 +398,12 @@
                   <input type="text" v-model="selectedContact.url">
               </div>
           </div>
-          <div class="w-full flex items-center justify-center">
+          <div class="w-full flex gap-10 items-center justify-center">
               <button @click="updateContact()" class="action-button edit-button border px-5 py-3 rounded-lg bg-stone-300">
                   Update
+              </button>
+              <button @click="deleteObject('contact', selectedContact.id)" class="action-button edit-button border px-5 py-3 rounded-lg bg-red-500">
+                  Delete
               </button>
           </div>
       </div>
@@ -449,9 +452,12 @@
                   <input type="file" id="image" accept="image/*" @change="onFileChange">
               </div>
           </div>
-          <div class="w-full flex items-center justify-center">
+          <div class="w-full flex gap-10 items-center justify-center">
               <button @click="updateService()" class="action-button edit-button border px-5 py-3 rounded-lg bg-stone-300">
                   Update
+              </button>
+              <button @click="deleteObject('service', selectedService.id)" class="action-button edit-button border px-5 py-3 rounded-lg bg-red-500">
+                  Delete
               </button>
           </div>
       </div>
@@ -494,9 +500,12 @@
                   <input type="file" id="image" accept="image/*" @change="onFileChange">
               </div>
           </div>
-          <div class="w-full flex items-center justify-center">
+          <div class="w-full flex gap-10 items-center justify-center">
               <button @click="updatePackage()" class="action-button edit-button border px-5 py-3 rounded-lg bg-stone-300">
                   Update
+              </button>
+              <button @click="deleteObject('package', selectedPackage.id)" class="action-button edit-button border px-5 py-3 rounded-lg bg-red-500">
+                  Delete
               </button>
           </div>
       </div>
@@ -867,6 +876,32 @@ export default {
         const response = await http.get(`api/contact-types/get-all`);
         this.contactTypes = response.data;
         console.log(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async deleteObject(objectToDelete, objectId) {
+      try {
+        if (confirm('Are you sure that you want to delete?')) {
+          if (objectToDelete == 'contact') {
+            const response = await http.post(`api/contacts/delete/${objectId}`);
+            console.log(response.data);
+            this.fetchContacts(this.shop.id);
+            this.hidePanel();
+          } else if (objectToDelete == 'service') {
+            const response = await http.post(`api/services/delete/${objectId}`);
+            console.log(response.data);
+            this.fetchServices(this.shop.id);
+            this.hidePanel();
+          } else if (objectToDelete == 'package') {
+            const response = await http.post(`api/packages/delete/${objectId}`);
+            console.log(response.data);
+            this.fetchPackages(this.shop.id);
+            this.hidePanel();
+          }
+        } else {
+          return;
+        }
       } catch (error) {
         console.log(error);
       }

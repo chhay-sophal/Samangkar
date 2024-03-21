@@ -67,8 +67,8 @@ public class ShopContactController {
     }
     
     @SuppressWarnings("null")
-    @PostMapping("remove/{contactId}/{shopId}")
-    public ResponseEntity<?> removeShopContact(@PathVariable Long contactId, @PathVariable Long shopId) {
+    @PostMapping("delete/{contactId}")
+    public ResponseEntity<?> removeShopContact(@PathVariable Long contactId) {
         try {
             if (shopContactRepository.findById(contactId).isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Shop contact with url " + contactId + " does not exists.");
@@ -76,8 +76,7 @@ public class ShopContactController {
                 ShopContact shopContact = shopContactRepository.findFirstById(contactId);
                 shopContact.setDeletedAt(new Date());
                 shopContactRepository.save(shopContact);
-                List<ShopContactDto> shopContacts = shopContactService.getAllShopContact(shopId);
-                return ResponseEntity.ok(shopContacts);
+                return ResponseEntity.ok("Contact deleted successfully!");
             }
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
