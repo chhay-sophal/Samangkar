@@ -60,6 +60,35 @@
         </div>
       </div>
 
+      <!-- Shop Contacts -->
+      <div class="">
+        <div class="flex justify-between">
+          <h2>Shop Contacts</h2>
+          <button @click="displayPanel('addContactPanel')" class="text-xl">
+            Add
+          </button>
+        </div>
+        <div class="w-full h-96">
+          <div class="h-5/6 overflow-x-auto flex items-center relative pb-3">
+              <!-- Shop Cards Container -->
+              <div class="px-4 h-full">
+                  <div class="flex space-x-4 h-full text-2xl">
+                      <!-- Loop through your shop cards -->
+                      <button 
+                      @click="displayPanel('contactDetailsPanel', contact)"
+                      v-for="contact in contacts" 
+                      :key="contact.id" 
+                      class="flex-none w-64 dark:bg-gray-700 border-2 p-3 flex flex-col justify-center items-center rounded-lg"
+                      >
+                          {{ contact.contactType }}
+                          {{ contact.url }}
+                      </button>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Services -->
       <div class="section">
         <div class="flex justify-between">
@@ -301,6 +330,82 @@
       </div>
   </div>
 
+  <!-- Add contact panel -->
+  <div 
+  v-if="showAddContactPanel"
+  class="top-1/2 left-1/2 min-h-fit bg-slate-400 2xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
+  >
+      <div class="flex justify-end items-center pr-5 dark:text-stone-600">
+          <button 
+              @click="hidePanel()"
+          >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+          </button>
+      </div>
+      <div class="text-3xl text-center pb-1 dark:text-stone-600">
+          Contact
+      </div>
+      <div class="w-full px-10 pb-10 dark:text-stone-600 flex flex-col gap-5">
+          <div class="flex w-full">
+              <div class="flex flex-col gap-5 w-1/3">
+                  <label class="block font-medium text-slate-600">Contact type:</label>
+                  <label class="block font-medium text-slate-600">Url:</label>
+              </div>
+              <div class="flex flex-col w-2/3 gap-5">
+                  <select v-model="contactInput.contactTypeId" required>
+                    <option v-for="t in contactTypes" :value="t.id">{{ t.platform }}</option>
+                  </select>
+                  <input type="text" v-model="contactInput.url">
+              </div>
+          </div>
+          <div class="w-full flex items-center justify-center">
+              <button @click="addContact()" class="action-button edit-button">
+                  Add
+              </button>
+          </div>
+      </div>
+  </div>
+
+  <!-- Contact details panel -->
+  <div 
+  v-if="showContactDetailsPanel"
+  class="top-1/2 left-1/2 bg-slate-400 2xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl sm:h-1/3 h-2/5 -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
+  >
+      <div class="flex justify-end items-center pr-5 dark:text-stone-600">
+          <button 
+              @click="hidePanel()"
+          >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+          </button>
+      </div>
+      <div class="text-3xl text-center pb-1 dark:text-stone-600">
+          Contact Details
+      </div>
+      <div class="w-full px-10 pb-10 dark:text-stone-600 flex flex-col gap-5">
+          <div class="flex w-full">
+              <div class="flex flex-col gap-5 w-1/3">
+                  <label class="block font-medium text-slate-600">Contact type:</label>
+                  <label class="block font-medium text-slate-600">url:</label>
+              </div>
+              <div class="flex flex-col w-2/3 gap-5">
+                  <select v-model="selectedContact.contactTypeId" required>
+                    <option v-for="t in contactTypes" :value="t.id">{{ t.platform }}</option>
+                  </select>
+                  <input type="text" v-model="selectedContact.url">
+              </div>
+          </div>
+          <div class="w-full flex items-center justify-center">
+              <button @click="updateContact()" class="action-button edit-button border px-5 py-3 rounded-lg bg-stone-300">
+                  Update
+              </button>
+          </div>
+      </div>
+  </div>
+
   <!-- Service details panel -->
   <div 
   v-if="showServiceDetailsPanel"
@@ -421,14 +526,18 @@ export default {
         { text: 'Reviews', icon: 'mdi-message', route: '/reviews' },
       ],
       shop: [],
+      contacts: [],
+      contactTypes: [],
       services: [],
       reviews: [],
       packages: [],
       showChangeShopDetailsPanel: false,
       showAddServicePanel: false,
       showAddPackagePanel: false,
+      showAddContactPanel: false,
       showServiceDetailsPanel: false,
       showPackageDetailsPanel: false,
+      showContactDetailsPanel: false,
       showUpdateShopPanel: false,
       serviceInput: {
         name: '',
@@ -440,11 +549,17 @@ export default {
         description: '',
         serviceIds: [],
       },
+      contactInput: {
+        contactTypeId: '',
+        contactTypeName: '',
+        url: '',
+      },
       selectedService: {
       },
       selectedPackage: {
         serviceIds: [],
       },
+      selectedContact: {},
       changeShopDetails: {
         label: '',
         input: null
@@ -498,6 +613,8 @@ export default {
         this.showAddServicePanel = true;
       } else if (panelName == 'addPackagePanel') {
         this.showAddPackagePanel = true;
+      } else if (panelName == 'addContactPanel') {
+        this.showAddContactPanel = true;
       } else if (panelName == 'serviceDetailsPanel') {
         this.showServiceDetailsPanel = true;
         this.selectedService = { ...this.selectedService, ...data };
@@ -507,6 +624,9 @@ export default {
         this.showPackageDetailsPanel = true;
         this.selectedPackage.serviceIds = data.services.map(service => service.id);
         this.selectedPackage = { ...this.selectedPackage, ...data };
+      } else if (panelName == 'contactDetailsPanel') {
+        this.showContactDetailsPanel = true;
+        this.selectedContact = { ...this.selectedContact, ...data };
       } else if (panelName == 'changeShopNamePanel') {
         this.showChangeShopDetailsPanel = true;
         this.changeShopDetails.label = 'Name';
@@ -534,6 +654,14 @@ export default {
       this.packageInput.name = null;
       this.packageInput.description = null;
       this.packageInput.serviceIds = [];
+
+      this.showAddContactPanel = false;
+      this.contactInput.contactTypeId = null;
+      this.contactInput.contactTypeName = null;
+      this.contactInput.url = null;
+
+      this.showContactDetailsPanel = false;
+      this.selectedContact = {};
 
       this.showServiceDetailsPanel = false;
       this.selectedService = {};
@@ -578,6 +706,20 @@ export default {
         } catch (error) {
             console.log(error);
         }
+      }
+    },
+    async addContact() {
+      try {
+        const response = await http.post(`api/contacts/add`, { 
+            "contactTypeId": this.contactInput.contactTypeId,
+            "url": this.contactInput.url,
+            "shopId": this.shop.id,
+        });
+        console.log(response.data);
+        this.fetchContacts(this.shop.id);
+        this.hidePanel();
+      } catch (error) {
+        console.log(error);
       }
     },
     async updateService() {
@@ -647,6 +789,23 @@ export default {
         }
       }
     },
+    async updateContact() {
+      if (confirm("Are you sure to update this contact?")) {
+        try {
+          const response = await http.post(`api/contacts/update/${this.selectedContact.id}`, { 
+            "contactTypeId": this.selectedContact.contactTypeId,
+            "url": this.selectedContact.url,
+            "shopId": this.selectedContact.shopId,
+          });
+
+          alert(response.data);
+          this.fetchContacts(this.shop.id);
+          this.hidePanel();
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    },
     async updateShop() {
       try {
         if (this.changeShopDetails.label == 'Name') {
@@ -694,6 +853,24 @@ export default {
             reader.readAsDataURL(file);
         }
     },
+    async fetchContacts(shopId) {
+      try {
+        const response = await http.get(`api/contacts/get-all/${shopId}`);
+        this.contacts = response.data;
+        console.log(this.contacts);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async fetchContactTypes() {
+      try {
+        const response = await http.get(`api/contact-types/get-all`);
+        this.contactTypes = response.data;
+        console.log(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
   },
   mounted() {
       const userStore = useUserStore();
@@ -705,6 +882,8 @@ export default {
       this.fetchServices(shopId);
       this.fetchPackages(shopId);
       this.fetchReviews(shopId);
+      this.fetchContacts(shopId);
+      this.fetchContactTypes();
   },
 };
 </script>

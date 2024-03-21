@@ -21,9 +21,6 @@ public class ShopContactService {
     @Autowired
     private ShopContactRepository shopContactRepository;
 
-    @Autowired
-    private ShopService shopService;
-
     public List<ShopContactDto> getAllShopContact(Long shopId) {
         Shop shop = shopRepository.findFirstById(shopId);
         List<ShopContact> shopContact = shopContactRepository.findByShopAndDeletedAtIsNull(shop);
@@ -31,9 +28,11 @@ public class ShopContactService {
         return shopContact.stream()
                 .map(contact -> new ShopContactDto(
                     contact.getId(), 
+                    contact.getContactType().getId(), 
                     contact.getContactType().getPlatform(), 
                     contact.getUrl(),
-                    shopService.getShopById(contact.getShop().getId()),
+                    contact.getShop().getId(),
+                    contact.getShop().getName(),
                     contact.getCreatedAt(),
                     contact.getUpdatedAt(),
                     contact.getDeletedAt()

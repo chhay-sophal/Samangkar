@@ -8,14 +8,14 @@ import lombok.Data;
 public class ContactTypeDto {
     
     private Long id;
-    private String platForm;
+    private String platform;
     private Date createdAt;
     private Date updatedAt;
     private Date deletedAt;
 
-    public ContactTypeDto(Long id, String platForm, Date createdAt, Date updatedAt, Date deletedAt) {
+    public ContactTypeDto(Long id, String platform, Date createdAt, Date updatedAt, Date deletedAt) {
         this.id = id;
-        this.platForm = platForm;
+        this.platform = platform;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;

@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.samangkar.Samangkar.dto.AddShopContactDto;
+import com.samangkar.Samangkar.dto.AddOrUpdateShopContactDto;
 import com.samangkar.Samangkar.dto.ShopContactDto;
 import com.samangkar.Samangkar.model.ContactType;
 import com.samangkar.Samangkar.model.Shop;
@@ -48,7 +48,7 @@ public class ShopContactController {
     }
     
     @PostMapping("add")
-    public ResponseEntity<?> addShopContact(@RequestBody AddShopContactDto addShopContactDto) {
+    public ResponseEntity<?> addShopContact(@RequestBody AddOrUpdateShopContactDto addShopContactDto) {
         try {
             ContactType contactType = contactTypeRepository.findFirstById(addShopContactDto.getContactTypeId());
             Shop shop = shopRepository.findFirstById(addShopContactDto.getShopId());
@@ -83,5 +83,24 @@ public class ShopContactController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
         }
     }
-    
+  
+    @SuppressWarnings("null")
+    @PostMapping("update/{contactId}")
+    public ResponseEntity<?> updateShopContact(@PathVariable Long contactId, @RequestBody AddOrUpdateShopContactDto updateShopContactDto) {
+        try {
+            if (shopContactRepository.findById(contactId).isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Shop contact with url " + contactId + " does not exists.");
+            } else {
+                ShopContact shopContact = shopContactRepository.findFirstById(contactId);
+                ContactType contactType = contactTypeRepository.findFirstById(updateShopContactDto.getContactTypeId());
+                shopContact.setContactType(contactType);
+                shopContact.setUrl(updateShopContactDto.getUrl());
+                shopContactRepository.save(shopContact);
+                return ResponseEntity.ok("Contact updated successfully!");
+            }
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
+        }
+    }
+  
 }

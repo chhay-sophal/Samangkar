@@ -7,23 +7,27 @@ import lombok.Data;
 @Data
 public class ShopContactDto {
     
-    private Long contactId;
+    private Long id;
+    private Long contactTypeId;
     private String contactType;
     private String url;
-    private ShopDto shop;
+    private Long shopId;
+    private String shopName;
     private Date createdAt;
     private Date updatedAt;
     private Date deletedAt;
     
-    public ShopContactDto(Long contactId, String contactType, String url, ShopDto shop, Date createdAt,
-            Date updatedAt, Date deletedAt) {
-        this.contactId = contactId;
+    public ShopContactDto(Long id, Long contactTypeId, String contactType, String url, Long shopId,
+            String shopName, Date createdAt, Date updatedAt, Date deletedAt) {
+        this.id = id;
+        this.contactTypeId = contactTypeId;
         this.contactType = contactType;
         this.url = url;
-        this.shop = shop;
+        this.shopId = shopId;
+        this.shopName = shopName;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
     }
-
+    
 }
