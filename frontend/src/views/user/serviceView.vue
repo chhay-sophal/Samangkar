@@ -4,9 +4,25 @@
       What do we offer?
     </div>
 
+    <div class="flex text-4xl h-20 items-center border">
+      <button 
+        class="font-bold w-1/2 flex items-center justify-center h-full hover:bg-slate-700 hover:text-stone-100" 
+        :class="forUser == true ? 'bg-slate-700 text-stone-100' : '*'"
+        @click="forUser = true"
+      >
+        For Users
+      </button>
+      <button 
+        class="font-bold w-1/2 flex items-center justify-center h-full hover:bg-slate-700 hover:text-stone-100" 
+        :class="forUser == false ? 'bg-slate-700 text-stone-100' : '*'"
+        @click="forUser = false"
+      >
+        For Shop Owners
+      </button>
+    </div>
+
     <!-- For users -->
-    <div class="w-full flex flex-col gap-20 items-center justify-center">
-      <div class="text-5xl font-bold pt-10">For Users</div>
+    <div v-if="forUser" class="w-full flex flex-col gap-20 items-center justify-center">
       <!-- Browse and Discover -->
       <div class="grid grid-cols-2 w-full">
         <div class="w-full">
@@ -109,8 +125,7 @@
     </div>
 
     <!-- For Shop Owners -->
-    <div class="w-full flex flex-col gap-20 items-center justify-center">
-      <div class="text-5xl font-bold pt-20">For Shop Owners</div>
+    <div v-else class="w-full flex flex-col gap-20 items-center justify-center">
       <!-- Platform Access -->
       <div class="grid grid-cols-2 w-full">
         <div class="w-full">
@@ -226,6 +241,7 @@ export default {
   },
   data() {
     return {
+      forUser: true,
       defaultServices: [
         { name: "Service A", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", image: "https://i.pinimg.com/736x/6f/89/8e/6f898ed73565070b6278b200a15eae95.jpg" },
         { name: "Service B", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", image: "https://i.pinimg.com/564x/1b/fc/b1/1bfcb19ba87b83e6d3eaf74c5ad2798f.jpg" },
