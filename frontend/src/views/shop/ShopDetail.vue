@@ -11,7 +11,7 @@
             </div>
           </div>
           <div class="shop-description">
-            <h2 class="sub-heading">{{ shop.name }}</h2>
+            <h2 class="text-3xl dark:text-stone-300">{{ shop.name }}</h2>
             <p>{{ shop.description }}</p>
             <div class="contact-info">
               <h3 class="text-xl pt-3 pb-1">Contact Information</h3>
@@ -30,7 +30,7 @@
     <!-- Services Section -->
     <section class="packages">
       <div class="container">
-        <h2 class="sub-heading">Services</h2>
+        <h2 class="text-3xl p-5 dark:text-stone-300">Services</h2>
         <div v-if="services.length" class="grid grid-cols-3 gap-2">
           <div
             class="package-item relative"
@@ -94,7 +94,7 @@
         <!-- <div class="search-package">
           <input type="text" placeholder="Search Package..." class="search-input" v-model="searchText" @input="search">
         </div> -->
-        <h2 class="sub-heading">Packages</h2>
+        <h2 class="text-3xl p-5 dark:text-stone-300">Packages</h2>
         <div v-if="packages.length" class="grid grid-cols-3 gap-2">
           <div
             class="package-item relative"
@@ -199,11 +199,11 @@
     <!-- Comment Form -->
     <section class="mt-10">
       <div class="container">
-        <h2 class="sub-heading">Add Your Review</h2>
+        <h2 class="text-3xl p-5 dark:text-stone-300">Add Your Review</h2>
         <form @submit.prevent="submitReview" class="w-full flex flex-col gap-2">
           <div class="flex flex-col">
             <label for="rating">Stars:</label>
-            <select id="rating" v-model="newRating.stars" class="h-fit p-3 border-2">
+            <select id="rating" v-model="newRating.stars" class="h-fit p-3 border-2 dark:bg-custom-dark">
               <option value="1">1 Star</option>
               <option value="2">2 Stars</option>
               <option value="3">3 Stars</option>
@@ -216,7 +216,7 @@
             <input
               id="comment"
               v-model="newRating.title"
-              class="border-2 p-3"
+              class="border-2 p-3 dark:bg-custom-dark"
             ></input>
           </div>
           <div class="flex flex-col">
@@ -224,7 +224,7 @@
             <textarea
               id="comment"
               v-model="newRating.description"
-              class="border-2 p-3"
+              class="border-2 p-3 dark:bg-custom-dark"
             ></textarea>
           </div>
           <button type="submit" class="h-10" style="background-color: #DD6895 ; color:white ;margin-bottom:10px">Submit</button>
