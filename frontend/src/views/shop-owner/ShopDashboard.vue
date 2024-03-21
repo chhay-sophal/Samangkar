@@ -69,21 +69,18 @@
           </button>
         </div>
         <div class="w-full h-96">
-          <div class="h-5/6 overflow-x-auto flex items-center relative pb-3">
+          <div class="h-5/6 w-full overflow-auto flex items-center pb-3">
               <!-- Shop Cards Container -->
-              <div class="px-4 h-full">
-                  <div class="flex space-x-4 h-full text-2xl">
-                      <!-- Loop through your shop cards -->
-                      <button 
-                      @click="displayPanel('contactDetailsPanel', contact)"
-                      v-for="contact in contacts" 
-                      :key="contact.id" 
-                      class="flex-none w-64 dark:bg-gray-700 border-2 p-3 flex flex-col justify-center items-center rounded-lg"
-                      >
-                          {{ contact.contactType }}
-                          {{ contact.url }}
-                      </button>
-                  </div>
+              <div class="flex space-x-4 h-full text-2xl">
+                  <!-- Loop through your shop cards -->
+                  <button 
+                  @click="displayPanel('contactDetailsPanel', contact)"
+                  v-for="contact in contacts" 
+                  :key="contact.id" 
+                  class="gap-2 w-64 dark:bg-gray-700 border-2 p-5 rounded-lg"
+                  >
+                    {{ contact.contactType }}
+                  </button>
               </div>
           </div>
         </div>
