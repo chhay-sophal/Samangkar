@@ -68,7 +68,7 @@ public class PackageService {
             if (packageModel.getImage() != null) {
                 imagePath = Paths.get("src/main/resources/package-images/" + packageModel.getImage());
             } else {
-                imagePath = Paths.get("src/main/resources/package-image.jpg");
+                imagePath = Paths.get("src/main/resources/package-image.png");
             }
             // Read the image file into a byte array
             byte[] imageBytes = Files.readAllBytes(imagePath);

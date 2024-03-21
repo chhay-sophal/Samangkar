@@ -68,7 +68,7 @@ public class ShopService {
             if (shop.getShopImageUrl() != null) {
                 imagePath = Paths.get("src/main/resources/shop-images/" + shop.getShopImageUrl());
             } else {
-                imagePath = Paths.get("src/main/resources/default-shop-img.jpg");
+                imagePath = Paths.get("src/main/resources/default-shop-img.png");
             }
             // Read the image file into a byte array
             byte[] imageBytes = Files.readAllBytes(imagePath);
