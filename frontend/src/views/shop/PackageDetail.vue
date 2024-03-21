@@ -1,5 +1,96 @@
 <template>
-  <div class="w-full flex items-center justify-center font-bold text-4xl">Package Details</div>
+    <div>
+      <!-- Your existing sections -->
+      <section class="service-detail pb-20">
+        <div class="flex w-full items-center justify-center">
+          <h2 class="text-5xl font-bold dark:text-stone-300">{{ pkg.name }}</h2>
+        </div>
+        <div class="flex items-center justify-center w-full" style="height: 700px;">
+          <div class="" >
+            <ImageViewer class="" :imageData="pkg.image" />
+          </div>
+        </div>
+        <div v-if="pkg.trending" class="w-full flex flex-col items-center justify-center p-10">
+          <div  class="text-5xl font-bold text-yellow-500">
+            Popular Now!
+          </div>
+        </div>
+        <div class="w-full flex flex-col items-center justify-center p-20">
+          <div class="text-5xl font-bold pb-5">
+            What is it?
+          </div>
+          <div class="text-4xl">
+            {{ pkg.description }}
+          </div>
+        </div>
+        <div class="w-full flex flex-col items-center justify-center p-20">
+          <div class="text-5xl font-bold pb-5">
+            What does it include?
+          </div>
+          <div 
+            class="w-full flex"
+            v-for="(service, index) in pkg.services" 
+            :key="index"
+          >
+            <div v-if="index % 2 != 0" class="w-1/2 h-96 flex">
+              <div class="">
+                <ImageViewer :imageData="service.image" />
+              </div>
+            </div>
+            <div class="w-1/2 flex flex-col items-center justify-center gap-10">
+              <div class="text-5xl font-semibold">{{ service.name }}</div>
+              <div class="text-5xl font-semibold">${{ service.unitPrice }}</div>
+              <router-link :to="`/shop/${service.shopId}/service/${service.id}/details`" >
+                <div class="text-2xl">See details</div>
+              </router-link>
+            </div>
+            <div v-if="index % 2 == 0" class="w-1/2 h-96 flex">
+              <div class="">
+                <ImageViewer :imageData="service.image" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w-full flex p-20 gap-5">
+          <div class="w-1/4"></div>
+          <div class="w-1/4 text-5xl font-bold flex items-center justify-center pr-10">At just</div>
+          <div class="w-1/4 font-bold flex items-center justify-center" style="font-size: 100px;">${{ pkg.price }}</div>
+          <div class="w-1/4"></div>
+        </div>
+        <div class="w-full p-20">
+          <div class="text-5xl font-bold flex items-center justify-center">Provided by</div>
+          <div class="font-bold flex items-center justify-center" style="font-size: 100px;">{{ pkg.shopName }}</div>
+        </div>
+        <div class="w-full flex">
+          <button 
+            v-if="pkgCarts?.some(card => card.pkg?.id === pkg.id)" 
+            @click="routeToCartView()" 
+            class="w-1/2 flex items-center justify-center"
+          >
+            <div class="h-20 w-1/2 flex items-center justify-center border-2 bg-green-500 text-stone-100">
+              <div class="text-xl font-semibold">Added to Cart</div>
+            </div>
+          </button>
+          <button 
+            v-else 
+            @click="addToCard(pkg.id)" 
+            class="w-1/2 flex items-center justify-center"
+          >
+            <div class="h-20 w-1/2 flex items-center justify-center border-2 hover:bg-green-500 hover:text-stone-100">
+              <div class="text-xl font-semibold">Add to Cart</div>
+            </div>
+          </button>
+          <router-link class="w-1/2 flex items-center justify-center" :to="`/shop/${pkg.shopId}/details`">
+            <div class="h-20 w-1/2 flex items-center justify-center border-2 hover:bg-blue-500 hover:text-stone-100">
+              <div class="text-xl font-semibold">
+                Contact Provider
+              </div>
+            </div>
+          </router-link>
+        </div>
+      </section>
+    </div>
+  <!-- <div class="w-full flex items-center justify-center font-bold text-4xl">Package Details</div>
   <div class="package-detail">
     <div class="container">
       <div class="grid grid-cols-3">
@@ -16,7 +107,7 @@
             <div class="text-xl"><span class="font-semibold">Descriptions:</span> {{ pkg.description }}</div>
             <div class="package-price"><span class="font-semibold">Price:</span> ${{ pkg.price }}</div>
             <p>{{ pkg.details }}</p>
-            <router-link class="contact-button" :to="`/shop/${pkg.shop.id}/details`" v-if="pkg.shop">Contact Us</router-link>
+            <router-link class="contact-button" :to="`/shop/${pkg.shopId}/details`" v-if="pkg.shopId">Contact Provider</router-link>
           </div>
         </div>
       </div>
@@ -24,19 +115,19 @@
         <div class="container">
           <div class="w-full flex items-center justify-center font-semibold text-3xl p-3">List of Services</div>
           <div class="grid grid-cols-3 gap-2">
-            <div class="package-item" v-for="(service, index) in pkg.services" :key="index">
+            <router-link class="package-item" :to="`/shop/${service.shopId}/service/${service.id}/details`" v-for="(service, index) in pkg.services" :key="index">
               <div class=""><ImageViewer :imageData="service.image" /></div>
               <div class="package-details">
                 <h3>{{ service.name }}</h3>
                 <div class="package-price">${{ service.unitPrice }}</div>
                 <p>{{ service.description }}</p>
               </div>
-            </div>
+            </router-link>
           </div>
         </div>
       </section>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>

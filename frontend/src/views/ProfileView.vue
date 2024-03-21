@@ -46,6 +46,7 @@
 
         <!-- User overview on the right -->
         <div class="lg:w-4/5 w-full flex flex-col">
+            <!-- Favorite Shops -->
             <div>
                 <div class="font-medium h-1/6 p-5 flex items-center">
                     <p class="text-4xl flex-grow">
@@ -56,7 +57,6 @@
                     </button>
                 </div>
                 <div class="h-5/6 overflow-x-auto flex items-center relative pb-3">
-                    <!-- Favorite Cards Container -->
                     <div v-if="favorites.length" class="px-4 h-full">
                         <div class="flex space-x-4 h-full text-2xl">
                             <!-- Loop through your shop cards -->
@@ -92,6 +92,8 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Cart -->
             <div >
                 <div class="font-medium h-1/6 p-5 flex items-center">
                     <p class="text-4xl flex-grow">
@@ -104,7 +106,6 @@
                     </button>
                 </div>
                 <div class="h-fit overflow-x-auto flex items-center relative pb-3">
-                    <!-- Cart Cards Container -->
                     <div v-if="cart.length" class="px-4 h-full">
                         <div class="flex space-x-4 h-full text-2xl">
                             <!-- Loop through your shop cards -->
