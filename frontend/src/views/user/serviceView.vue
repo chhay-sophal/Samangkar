@@ -9,8 +9,8 @@
       <div class="text-5xl font-bold pt-10">For Users</div>
       <!-- Browse and Discover -->
       <div class="grid grid-cols-2 w-full">
-        <div class="w-full bg-red-500">
-          <img src="@\components\pictures\browse-and-discover.jpg" alt="">
+        <div class="w-full">
+          <img src="@\components\pictures\browsing.png" alt="">
         </div>
         <div class="w-full p-10">
           <div class="text-2xl font-bold w-fully flex justify-center p-10">
@@ -34,16 +34,16 @@
         </div>
         <div class="size-full overflow-hidden flex">
           <div class="w-full flex justify-center">
-            <img class="object-cover" src="@\components\pictures\service-packages.jpg" alt="">
+            <img class="object-cover" src="@\components\pictures\service.webp" alt="">
           </div>
         </div>
       </div>
 
       <!-- Shop Selection -->
       <div class="grid grid-cols-2 w-full">
-        <div class="w-full bg-red-500">
+        <div class="w-full">
           <div class="w-full h-full flex justify-center">
-            <img class="object-cover" src="@\components\pictures\shop-selection.jpg" alt="">
+            <img class="object-cover" src="@\components\pictures\shop.png" alt="">
           </div>
         </div>
         <div class="w-full p-10">
@@ -75,9 +75,9 @@
 
       <!-- Customization Options -->
       <div class="grid grid-cols-2 w-full">
-        <div class="w-full bg-red-500">
+        <div class="w-full">
           <div class="w-full h-full flex justify-center">
-            <img class="object-cover" src="@\components\pictures\customization.jpg" alt="">
+            <img class="object-cover" src="@\components\pictures\customization.png" alt="">
           </div>
         </div>
         <div class="w-full p-10">
@@ -102,7 +102,7 @@
         </div>
         <div class="size-full overflow-hidden flex">
           <div class="w-full flex justify-center">
-            <img class="object-cover" src="@\components\pictures\support.avif" alt="">
+            <img class="object-cover" src="@\components\pictures\support.png" alt="">
           </div>
         </div>
       </div>
@@ -145,9 +145,9 @@
 
       <!-- Boosting Options -->
       <div class="grid grid-cols-2 w-full">
-        <div class="w-full bg-red-500">
+        <div class="w-full">
           <div class="w-full h-full flex justify-center">
-            <img class="object-cover" src="@\components\pictures\boost.jpg" alt="">
+            <img class="object-cover" src="@\components\pictures\boost.png" alt="">
           </div>
         </div>
         <div class="w-full p-10">
@@ -179,9 +179,9 @@
 
       <!-- Analytics and Insights -->
       <div class="grid grid-cols-2 w-full">
-        <div class="w-full bg-red-500">
+        <div class="w-full">
           <div class="w-full h-full flex justify-center">
-            <img class="object-cover" src="@\components\pictures\analytics-and-insights.webp" alt="">
+            <img class="object-cover" src="@\components\pictures\analytics.png" alt="">
           </div>
         </div>
         <div class="w-full p-10">
