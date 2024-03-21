@@ -16,7 +16,7 @@
     <section class="popular-shops">
       <div class="flex">
         <h2 class="text-2xl p-5 dark:text-stone-300 grow">Popular Shops</h2>
-        <h2 class="text-2xl p-5 dark:text-stone-300">See all</h2>
+        <router-link :to="`/shop/all`" class="text-2xl p-5 dark:text-stone-300">See all</router-link>
       </div>
       <div class="shop-list" id="popularShopList">
         <div 
@@ -68,7 +68,7 @@
     <section class="shop-list flex flex-col" id="shopList">
       <div class="flex">
         <h2 class="text-2xl p-5 dark:text-stone-300 grow">Shops</h2>
-        <h2 class="text-2xl p-5 dark:text-stone-300">See all</h2>
+        <router-link :to="`/shop/all`" class="text-2xl p-5 dark:text-stone-300">See all</router-link>
       </div>
       <div class="shop-list">
         <div class="shop-item relative" v-for="(shop, index) in shops" :key="index">
@@ -102,7 +102,7 @@
     <section class="packages">
       <div class="flex">
         <h2 class="text-2xl p-5 dark:text-stone-300 grow">Services</h2>
-        <h2 class="text-2xl p-5 dark:text-stone-300">See all</h2>
+        <router-link :to="`/shop/all/service/all`" class="text-2xl p-5 dark:text-stone-300">See all</router-link>
       </div>
       <div class="grid grid-cols-3 gap-2" id="packageList">
         <div class="relative  package-item" v-for="service in services" :key="service.id">
@@ -152,7 +152,7 @@
     <section class="packages">
       <div class="flex">
         <h2 class="text-2xl p-5 dark:text-stone-300 grow">Packages</h2>
-        <h2 class="text-2xl p-5 dark:text-stone-300">See all</h2>
+        <router-link :to="`/shop/all/package/all`" class="text-2xl p-5 dark:text-stone-300">See all</router-link>
       </div>
       <div class="grid grid-cols-3 gap-2" id="packageList">
         <div class="relative  package-item" v-for="pkg in packages" :key="pkg.id">

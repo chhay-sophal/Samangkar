@@ -29,10 +29,17 @@ public class ServiceService {
     @Autowired
     private ShopRepository shopRepository;
 
-    public Page<ServiceDto> getAllServices(int page, int size) {
+    public Page<ServiceDto> getAllServicesPageable(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ServiceModel> services = serviceRepository.findAll(pageable);
         return services.map(this::createServiceDto);
+    }
+
+    public List<ServiceDto> getAllServices() {
+        Iterable<ServiceModel> services = serviceRepository.findAll();
+        return StreamSupport.stream(services.spliterator(), false)
+            .map(this::createServiceDto)
+            .collect(Collectors.toList());
     }
 
     public List<ServiceDto> getAllShopServicesByShopId(Long shopId) {

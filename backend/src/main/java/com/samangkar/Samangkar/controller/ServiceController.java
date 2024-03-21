@@ -44,7 +44,13 @@ public class ServiceController {
 
     @GetMapping("get-all/pageable")
     public ResponseEntity<?> getAllShopServices(@RequestParam int page, @RequestParam int size) {
-        Page<ServiceDto> services = serviceService.getAllServices(page, size);
+        Page<ServiceDto> services = serviceService.getAllServicesPageable(page, size);
+        return ResponseEntity.ok(services);
+    }
+
+    @GetMapping("get-all")
+    public ResponseEntity<?> getAllServices() {
+        List<ServiceDto> services = serviceService.getAllServices();
         return ResponseEntity.ok(services);
     }
 
