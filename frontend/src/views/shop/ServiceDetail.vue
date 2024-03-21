@@ -1,29 +1,100 @@
 <template>
     <div>
       <!-- Your existing sections -->
-      <section class="service-detail">
-        <div class="flex items-center justify-between">
-          <h2 class="text-2xl p-5 dark:text-stone-300">Service Details</h2>
+      <section class="service-detail pb-20">
+        <div class="flex w-full items-center justify-center">
+          <h2 class="text-5xl font-bold dark:text-stone-300">{{ service.name }}</h2>
         </div>
-        <div class="service-info">
-          <div class="service-image">
-            <ImageViewer :imageData="service.imageUrl" class="aspect-square object-fill"/>
+        <div class="flex items-center justify-center w-full" style="height: 700px;">
+          <div class="" >
+            <ImageViewer class="" :imageData="service.image" />
           </div>
-          <div class="service-details">
-            <h3 class="text-xl font-bold">{{ service.name }}</h3>
-            <p>{{ service.description }}</p>
-            <p><strong>Price:</strong> ${{ service.price }}</p>
-            <p><strong>Type:</strong> {{ service.type }} </p>
-            <button class="book-button p-3 rounded-lg mt-5">Book Now</button>
+          <!-- <div class="w-1/2 flex flex-col">
+            <div class="text-4xl font-bold w-full flex items-center justify-center p-5">{{ service.name }}</div>
+            <div class="grid grid-cols-3 pb-5 text-xl grow">
+              <div class="font-bold">Provider</div>
+              <div class="col-span-2">{{ service.shopName }}</div>
+
+              <div class="font-bold">Price</div>
+              <div class="col-span-2">${{ service.unitPrice }}</div>
+
+              <div v-if="!service.trending" class="col-span-3 flex items-center justify-center font-bold text-3xl text-yellow-500">
+                Popular Now!
+              </div>
+            </div>
+            <div class="w-full flex items-center justify-center">
+              <div class="h-20 w-40 flex items-center justify-center border-2 hover:bg-blue-500 hover:text-stone-100">
+                <button class="w-full text-xl font-semibold">Book Now</button>
+              </div>
+            </div>
+          </div> -->
+        </div>
+        <div v-if="service.trending" class="w-full flex flex-col items-center justify-center p-10">
+          <div  class="text-5xl font-bold text-yellow-500">
+            Popular Now!
           </div>
+        </div>
+        <div class="w-full flex flex-col items-center justify-center p-20">
+          <div class="text-5xl font-bold pb-5">
+            What is it?
+          </div>
+          <div class="text-4xl">
+            {{ service.description }}
+          </div>
+        </div>
+        <div class="w-full flex p-20 gap-5">
+          <div class="w-1/4"></div>
+          <div class="w-1/4 text-5xl font-bold flex items-center justify-center">At just</div>
+          <div class="w-1/4 font-bold flex items-center justify-center" style="font-size: 100px;">${{ service.unitPrice }}</div>
+          <div class="w-1/4"></div>
+        </div>
+        <div class="w-full p-20">
+          <div class="text-5xl font-bold flex items-center justify-center">Provided by</div>
+          <div class="font-bold flex items-center justify-center" style="font-size: 100px;">{{ service.shopName }}</div>
+        </div>
+        <div class="w-full flex">
+          <button 
+            v-if="serviceCarts?.some(card => card.service?.id === service.id)" 
+            @click="routeToCartView()" 
+            class="w-1/2 flex items-center justify-center"
+          >
+            <div class="h-20 w-1/2 flex items-center justify-center border-2 bg-green-500 text-stone-100">
+              <div class="text-xl font-semibold">Added to Cart</div>
+            </div>
+          </button>
+          <button 
+            v-else 
+            @click="addToCard(service.id)" 
+            class="w-1/2 flex items-center justify-center"
+          >
+            <div class="h-20 w-1/2 flex items-center justify-center border-2 hover:bg-green-500 hover:text-stone-100">
+              <div class="text-xl font-semibold">Add to Cart</div>
+            </div>
+          </button>
+          <router-link class="w-1/2 flex items-center justify-center" :to="`/shop/${service.shopId}/details`">
+            <div class="h-20 w-1/2 flex items-center justify-center border-2 hover:bg-blue-500 hover:text-stone-100">
+              <div class="text-xl font-semibold">
+                Contact Provider
+              </div>
+            </div>
+          </router-link>
         </div>
       </section>
+    </div>
+
+    <div 
+      v-if="showAlert"
+      class="bg-green-500 text-stone-100 text-xl font-medium flex justify-center fixed top-28 left-1/2 p-3 rounded-lg"
+    >
+      Added to cart!
     </div>
   </template>
   
   <script>
   import ImageViewer from "@/components/ImageViewer.vue";
-  
+  import http from "@/services/httpService";
+  import { useUserStore } from "@/store/userStore";
+
   export default {
     components: {
       ImageViewer,
@@ -31,13 +102,67 @@
     data() {
       return {
         service: {
-          name: "ហែជំនូន",
-          description: "Get our experienced barbers.",
-          price: 25,
-          type: 'flower',
-          imageUrl: "https://i.pinimg.com/564x/45/ac/f1/45acf1a37c19801181e80e031d78dfa3.jpg",
+          // name: "ហែជំនូន",
+          // description: "Get our experienced barbers.",
+          // price: 25,
+          // type: 'flower',
+          // image: "https://i.pinimg.com/564x/45/ac/f1/45acf1a37c19801181e80e031d78dfa3.jpg",
         },
+        showAlert: false,
+        serviceCarts: [],
       };
+    },
+    methods: {
+      async fetchServiceDetails(serviceId) {
+        try {
+          const response = await http.get(`api/services/details/${serviceId}`);
+          this.service = response.data;
+          console.log(this.service);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      async addToCard(id) {
+        try {
+          const userId = useUserStore().user.id;
+          console.log(id)
+          console.log(userId)
+          await http.post(`api/cards/add`, {
+            "userId": userId,
+            "serviceId": id,
+            "packageId": null,
+            "quantity": 1,
+          });
+
+          this.fetchUserCards();
+          this.showAlert = true
+
+          setTimeout(() => {
+            this.showAlert = false;
+          }, 2000);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      async fetchUserCards() {
+        try {
+          const userId = useUserStore().user.id;
+          const response = await http.get(`api/cards/get-all/${userId}`);
+          this.serviceCarts = response.data.filter(card => card.service != null);
+          console.log('user carts:');
+          console.log(this.serviceCarts);
+        } catch (error) {
+          console.log(error)
+        }
+      },
+      routeToCartView() {
+          this.$router.push({ path: '/profile/cards' });
+      },
+    },
+    mounted() {
+      const serviceId = this.$route.params.serviceId;
+      this.fetchServiceDetails(serviceId);
+      this.fetchUserCards();
     },
   };
   </script>

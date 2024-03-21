@@ -57,7 +57,7 @@
                 </div>
                 <div class="h-5/6 overflow-x-auto flex items-center relative pb-3">
                     <!-- Favorite Cards Container -->
-                    <div class="px-4 h-full">
+                    <div v-if="favorites.length" class="px-4 h-full">
                         <div class="flex space-x-4 h-full text-2xl">
                             <!-- Loop through your shop cards -->
                             <div
@@ -85,6 +85,11 @@
                             </div>
                         </div>
                     </div>
+                    <div v-else class="px-4 w-full h-48">
+                        <div class="flex items-center justify-center text-3xl h-full">
+                            No favorite shops!
+                        </div>
+                    </div>
                 </div>
             </div>
             <div >
@@ -100,7 +105,7 @@
                 </div>
                 <div class="h-fit overflow-x-auto flex items-center relative pb-3">
                     <!-- Cart Cards Container -->
-                    <div class="px-4 h-full">
+                    <div v-if="cart.length" class="px-4 h-full">
                         <div class="flex space-x-4 h-full text-2xl">
                             <!-- Loop through your shop cards -->
                             <div v-for="cart in cart" :key="cart.id" class="flex flex-col w-64 bg-stone-200 justify-center items-center rounded-lg h-full relative">
@@ -161,6 +166,11 @@
                                     </div>
                                 </router-link>
                             </div> 
+                        </div>
+                    </div>
+                    <div v-else class="px-4 w-full h-48">
+                        <div class="flex items-center justify-center text-3xl h-full">
+                            No items in cart!
                         </div>
                     </div>
                 </div>

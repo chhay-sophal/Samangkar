@@ -191,7 +191,7 @@ const routes = [
         component: ShopOwnerProfile
     },
     {
-        path: "/shop/service/detail",
+        path: "/shop/:shopId/service/:serviceId/details",
         name: "ServiceDetail",
         component: ServiceDetail
     },

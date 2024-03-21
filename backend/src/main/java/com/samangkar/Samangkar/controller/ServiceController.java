@@ -53,6 +53,12 @@ public class ServiceController {
         List<ServiceDto> services = serviceService.getAllShopServicesByShopId(shopId);
         return ResponseEntity.ok(services);
     }
+
+    @GetMapping("details/{serviceId}")
+    public ResponseEntity<?> getServiceDetails(@PathVariable Long serviceId) {
+        ServiceDto service = serviceService.getServiceById(serviceId);
+        return ResponseEntity.ok(service);
+    }
     
     @PostMapping("add")
     public ResponseEntity<?> addService(@RequestBody AddOrUpdateServiceDto request) {

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- Header Images -->
     <section class="slideshow-container">
       <div class="slides">
         <div class="slide flex items-center justify-center" v-for="(shop, index) in shops" :key="index">
@@ -10,6 +11,8 @@
       <button class="prev" @click="prevSlide">&#10094;</button>
       <button class="next" @click="nextSlide">&#10095;</button>
     </section>
+
+    <!-- Popular Shops -->
     <section class="popular-shops">
       <div class="flex">
         <h2 class="text-2xl p-5 dark:text-stone-300 grow">Popular Shops</h2>
@@ -46,7 +49,10 @@
         </div>
       </div>
     </section>
+
     <div class="title">Explore</div>
+
+    <!-- Search -->
     <div class="search-filter">
       <input type="text" v-model="searchText" placeholder="Search...">
       <select v-model="selectedCategory">
@@ -57,9 +63,11 @@
       </select>
       <button @click="searchShops()">Apply</button>
     </div>
+
+    <!-- Shops -->
     <section class="shop-list flex flex-col" id="shopList">
       <div class="flex">
-        <h2 class="text-2xl p-5 dark:text-stone-300 grow">Popular Shops</h2>
+        <h2 class="text-2xl p-5 dark:text-stone-300 grow">Shops</h2>
         <h2 class="text-2xl p-5 dark:text-stone-300">See all</h2>
       </div>
       <div class="shop-list">
@@ -89,6 +97,8 @@
         </div>
       </div>
     </section>
+
+    <!-- Services -->
     <section class="packages">
       <div class="flex">
         <h2 class="text-2xl p-5 dark:text-stone-300 grow">Services</h2>
@@ -123,7 +133,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
           </button>
-          <!-- <router-link :to="`/shop/${service.shop.id}/service/${service.id}/details`"> -->
+          <router-link :to="`/shop/${service.shopId}/service/${service.id}/details`">
             <div class="">
               <ImageViewer :imageData="service.image" />
             </div>
@@ -133,12 +143,13 @@
               <p>{{ service.description }}</p>
               <p>Shop: {{ service.shopName }}</p>
             </div>
-          <!-- </router-link> -->
+          </router-link>
         </div>
       </div>
     </section>
+
+    <!-- Packages -->
     <section class="packages">
-      <!-- <h2>Packages</h2> -->
       <div class="flex">
         <h2 class="text-2xl p-5 dark:text-stone-300 grow">Packages</h2>
         <h2 class="text-2xl p-5 dark:text-stone-300">See all</h2>

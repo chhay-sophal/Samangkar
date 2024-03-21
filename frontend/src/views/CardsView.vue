@@ -140,7 +140,7 @@ export default {
     mounted() {
         const userStore = useUserStore();
         this.userId = userStore.getUser.id;
-        this.cart = JSON.parse(localStorage.getItem('cart'));
+        this.fetchUserCards()
         console.log(this.cart);
     }
 }

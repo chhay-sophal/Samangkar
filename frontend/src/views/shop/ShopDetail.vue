@@ -32,7 +32,8 @@
       <div class="container">
         <h2 class="text-3xl p-5 dark:text-stone-300">Services</h2>
         <div v-if="services.length" class="grid grid-cols-3 gap-2">
-          <div
+          <router-link
+            :to="`/shop/${service.shopId}/service/${service.id}/details`"
             class="package-item relative"
             v-for="(service, index) in services"
             :key="index"
@@ -80,7 +81,7 @@
               <div class="package-price">{{ service.unitPrice }}$</div>
               <p>{{ service.description }}</p>
             </div>
-          </div>
+          </router-link>
         </div>
         <div v-else class="w-full flex items-center justify-center">
           No service available!
