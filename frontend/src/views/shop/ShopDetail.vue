@@ -495,10 +495,10 @@ export default {
         return match ? match[1] : url;
       } else if (platform == 'Instagram') {
         const match = url.match(/\/([^\/?#]+)\?/);
-        return match ? match[1] : null;
+        return match ? match[1] : url;
       } else if (platform == 'Tik Tok') {
         const match = url.match(/@([^/?#]+)/);
-        return match ? match[1] : null;
+        return match ? match[1] : url;
       } else {
         return;
       }
