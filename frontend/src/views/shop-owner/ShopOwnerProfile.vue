@@ -400,7 +400,7 @@
         </div>
 
         <!-- Request Form -->
-        <div v-if="showRequestForm" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-fit w-fit bg-slate-400 p-10 z-20">
+        <div v-if="showRequestForm" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-fit w-fit bg-slate-400 p-10 z-20">
             <div class="flex justify-end items-center pr-5 dark:text-stone-600">
                 <button 
                     @click="hideFormRequest()"
