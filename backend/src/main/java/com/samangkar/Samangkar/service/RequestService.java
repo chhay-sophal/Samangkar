@@ -22,24 +22,23 @@ public class RequestService {
     @Autowired
     private ShopRepository shopRepository;
 
-    @Autowired
-    private ShopService shopService;
-
     public List<RequestDto> getAllShopRequest() {
-        Iterable<ShopRequest> requests = shopRequestRepository.findAll();
+        List<ShopRequest> requests = shopRequestRepository.findAll();
+        // return requests.stream().map(this::createRequestDto).collect(Collectors.toList());
         return createRequestDtoList(requests);
     }
 
-    public void sendRequest(Long shopId, String title, String description) {
+    public void sendRequest(Long shopId, String purpose, String description) {
         Shop shop = shopRepository.findFirstById(shopId);
-        ShopRequest request = new ShopRequest(shop, title, description);
+        ShopRequest request = new ShopRequest(shop, purpose, description);
         shopRequestRepository.save(request);
     }
 
     public RequestDto createRequestDto(ShopRequest request) {
         return new RequestDto(
                     request.getId(),
-                    shopService.getShopById(request.getShop().getId()),
+                    request.getShop().getId(),
+                    request.getShop().getName(),
                     request.getPurpose(),
                     request.getDescription()
             );

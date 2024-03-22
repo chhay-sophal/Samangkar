@@ -23,6 +23,8 @@ public class ShopRequest {
     private String purpose;
     private String description;
 
+    public ShopRequest() {}
+    
     public ShopRequest(Shop shop, String title, String description) {
         this.shop = shop;
         this.purpose = title;
