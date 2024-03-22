@@ -4,28 +4,26 @@
       <div class="main-content">
         <h2>Shop Owner Requests</h2>
         <div class="table-container">
-          <table class="review-table">
+          <table class="w-full border">
             <thead>
               <tr>
-                <th>User ID</th>
-                <th>Shop ID</th>
-                <th>Title</th>
-                <th>Stars</th>
-                <th>Created At</th>
-                <th>Description</th>
-                <!-- <th>Deleted</th> -->
-                <th>Actions</th>
+                <th class="border">User ID</th>
+                <th class="border">Shop ID</th>
+                <th class="border">Purpose</th>
+                <th class="border">Description</th>
+                <th class="border">Created At</th>
+                <th class="border">Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="request in requests" :key="request.id">
-                <td>{{ request.id }}</td>
-                <td>{{ request.shopId }}</td>
-                <td>{{ request.purpose }}</td>
-                <td>{{ request.descriptions }}</td>
-                <td>{{ formatDate(request.createdAt) }}</td>
-                <td>
-                  <button v-if="!request.deleteAt" @click="handleDelete(request)" class="delete-button">Complete</button>
+              <tr v-for="request in requests" :key="request.id" class="h-10">
+                <td class="border">{{ request.id }}</td>
+                <td class="border">{{ request.shopId }}</td>
+                <td class="border">{{ request.purpose }}</td>
+                <td class="border">{{ request.description }}</td>
+                <td class="border">{{ formatDate(request.createdAt) }}</td>
+                <td class="border">
+                  <button v-if="!request.deleteAt" @click="handleDelete(request.id)" class="size-full bg-blue-600">Complete</button>
                 </td>
               </tr>
             </tbody>
@@ -81,23 +79,20 @@ export default {
 
       return formattedDate;
     },
-    handleDelete(review) {
-      if (confirm(`Are you sure to delete review with title "${review.title}"?`)) {
-        this.deleteReview(review.id);
+    async handleDelete(requestId) {
+      if (confirm(`Are you sure to delete this request?`)) {
+        try {
+          const response = await http.post(`api/requests/delete/${requestId}`);
+          console.log(response.data);
+          this.fetchRequests();
+        } catch (error) {
+          console.error("Error:", error);
+        }
       }
     },
     editReview(review) {
       // Logic to edit review
       console.log('Edit review:', review);
-    },
-    async deleteReview(reviewId) {
-      try {
-        const response = await http.put(`api/users/reviews/delete/${reviewId}`);
-        this.reviews = response.data;
-        this.fetchReviews();
-      } catch (error) {
-        console.error("Error:", error);
-      }
     },
     async fetchRequests() {
       try {

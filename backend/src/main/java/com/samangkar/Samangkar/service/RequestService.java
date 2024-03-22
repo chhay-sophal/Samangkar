@@ -1,5 +1,6 @@
 package com.samangkar.Samangkar.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -23,7 +24,7 @@ public class RequestService {
     private ShopRepository shopRepository;
 
     public List<RequestDto> getAllShopRequest() {
-        List<ShopRequest> requests = shopRequestRepository.findAll();
+        List<ShopRequest> requests = shopRequestRepository.findAllByDeletedAtIsNull();
         // return requests.stream().map(this::createRequestDto).collect(Collectors.toList());
         return createRequestDtoList(requests);
     }
@@ -34,13 +35,21 @@ public class RequestService {
         shopRequestRepository.save(request);
     }
 
+    @SuppressWarnings("null")
+    public void deleteRequest(Long requestId) {
+        ShopRequest request = shopRequestRepository.findById(requestId).get();
+        request.setDeletedAt(new Date());
+        shopRequestRepository.save(request);
+    }
+
     public RequestDto createRequestDto(ShopRequest request) {
         return new RequestDto(
                     request.getId(),
                     request.getShop().getId(),
                     request.getShop().getName(),
                     request.getPurpose(),
-                    request.getDescription()
+                    request.getDescription(),
+                    request.getCreatedAt()
             );
     }
     

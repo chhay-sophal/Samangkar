@@ -17,6 +17,5 @@ CrudRepository<ShopRequest, Long> {
     // @SuppressWarnings("null")
     // Page<ShopRequest> findAll(Pageable pageable);
 
-    @SuppressWarnings("null")
-    List<ShopRequest> findAll();
+    List<ShopRequest> findAllByDeletedAtIsNull();
 }
