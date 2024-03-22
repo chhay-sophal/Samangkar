@@ -1,161 +1,164 @@
 <template>
-  <div>
-    <!-- Shop Detail Section -->
-    <section class="shop-detail">
-      <div class="container">
-        <h1 class="main-heading">Shop Details</h1>
-        <div class="shop-info">
-          <div class="shop-image">
+  <div class="font-serif">
+    <!-- Header -->
+    <div class="text-7xl font-bold w-full flex justify-center pb-20">{{ shop.name }}</div>
+    <div class="w-full">
+      <ImageViewer :imageData="shop.imageUrl" />
+    </div>
+    <div class="w-full flex flex-col items-center justify-center p-16 ">
+      <div class="text-6xl font-bold pb-10">About Us</div>
+      <div class="text-2xl">{{ shop.description }}</div>
+    </div>
+
+    <!-- What do we offer -->
+    <div v-if="services.length || packages.length" class="w-full flex flex-col items-center justify-center p-16 ">
+      <div class="text-6xl font-bold pb-10">What do we offer?</div>
+
+      <!-- Services -->
+      <div v-if="services.length" class="w-full">
+        <div class="text-5xl font-bold w-full flex items-center justify-center p-10">Services</div>
+        <div 
+          class="w-full flex p-10"
+          v-for="(service, index) in services" 
+          :key="index"
+        >
+          <div v-if="index % 2 != 0" class="w-1/2 h-96 flex">
             <div class="">
-              <ImageViewer :imageData="shop.imageUrl" />
+              <ImageViewer :imageData="service.image" />
             </div>
           </div>
-          <div class="shop-description">
-            <h2 class="text-3xl dark:text-stone-300">{{ shop.name }}</h2>
-            <p>{{ shop.description }}</p>
-            <div class="contact-info">
-              <h3 class="text-xl pt-3 pb-1">Contact Information</h3>
-              <p v-for="contact in contacts">
-                <strong>{{ contact.contactType }}:</strong>
-                <a :href="contact.url" @click.prevent="openLink(contact.url)">{{
-                  contact.url
-                }}</a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Services Section -->
-    <section class="packages">
-      <div class="container">
-        <h2 class="text-3xl p-5 dark:text-stone-300">Services</h2>
-        <div v-if="services.length" class="grid grid-cols-3 gap-2">
-          <router-link
-            :to="`/shop/${service.shopId}/service/${service.id}/details`"
-            class="package-item relative"
-            v-for="(service, index) in services"
-            :key="index"
-          >
-            <button class="absolute right-2 top-2">
-              <svg
-                @click="removeFromCard('service', service.id)"
-                v-if="
-                  serviceCarts?.some((card) => card.service?.id === service.id)
-                "
-                xmlns="http://www.w3.org/2000/svg"
-                fill="red"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-              <svg
-                @click="addToCard('service', service.id)"
-                v-else
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-            </button>
-            <div class=""><ImageViewer :imageData="service.image" /></div>
-            <!-- <img :src="service.image" :alt="service.name" class="package-image"> -->
-            <div class="package-details">
-              <h3>{{ service.name }}</h3>
-              <div class="package-price">{{ service.unitPrice }}$</div>
-              <p>{{ service.description }}</p>
-            </div>
-          </router-link>
-        </div>
-        <div v-else class="w-full flex items-center justify-center">
-          No service available!
-        </div>
-      </div>
-    </section>
-
-    <!-- Package Section -->
-    <section class="packages pb-16">
-      <div class="container">
-        <!-- <div class="search-package">
-          <input type="text" placeholder="Search Package..." class="search-input" v-model="searchText" @input="search">
-        </div> -->
-        <h2 class="text-3xl p-5 dark:text-stone-300">Packages</h2>
-        <div v-if="packages.length" class="grid grid-cols-3 gap-2">
-          <div
-            class="package-item relative"
-            v-for="(pkg, index) in packages"
-            :key="index"
-          >
-            <button class="absolute right-2 top-2">
-              <svg
-                @click="removeFromCard('package', pkg.id)"
-                v-if="packageCarts?.some((card) => card.pkg.id === pkg.id)"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="red"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-              <svg
-                @click="addToCard('package', pkg.id)"
-                v-else
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-            </button>
-            <router-link
-              class="w-full flex flex-col items-center justify-center"
-              :to="`/shop/${pkg.shopId}/package/${pkg.id}/details`"
-            >
-              <div class="w-fit">
-                <ImageViewer :imageData="pkg.image" />
-              </div>
-              <div class="package-details">
-                <h3>{{ pkg.name }}</h3>
-                <div class="package-price">{{ pkg.price }}$</div>
-                <p>{{ pkg.description }}</p>
-              </div>
+          <div class="w-1/2 flex flex-col items-center justify-center gap-10">
+            <div class="text-5xl font-semibold">{{ service.name }}</div>
+            <div class="text-5xl font-semibold">${{ service.unitPrice }}</div>
+            <router-link :to="`/shop/${service.shopId}/service/${service.id}/details`" >
+              <div class="text-2xl">See details</div>
             </router-link>
           </div>
+          <div v-if="index % 2 == 0" class="w-1/2 h-96 flex">
+            <div class="">
+              <ImageViewer :imageData="service.image" />
+            </div>
+          </div>
         </div>
-        <div v-else class="w-full flex items-center justify-center">
-          No package available!
+        <div class="text-2xl w-full flex items-center justify-center p-5">
+          <button class="w-1/4 p-2 bg-stone-300 hover:bg-stone-500 hover:text-stone-50">See More</button>
         </div>
       </div>
-    </section>
+
+      <!-- Packages -->
+      <div v-if="packages.length" class="w-full">
+        <div class="text-5xl font-bold w-full flex items-center justify-center p-10">Packages</div>
+        <div 
+          class="w-full flex p-10"
+          v-for="(pkg, index) in packages" 
+          :key="index"
+        >
+          <div v-if="index % 2 != 0" class="w-1/2 h-96 flex">
+            <div class="">
+              <ImageViewer :imageData="pkg.image" />
+            </div>
+          </div>
+          <div class="w-1/2 flex flex-col items-center justify-center gap-10">
+            <div class="text-5xl font-semibold">{{ pkg.name }}</div>
+            <div class="text-5xl font-semibold">${{ pkg.price }}</div>
+            <router-link :to="`/shop/${pkg.shopId}/package/${pkg.id}/details`" >
+              <div class="text-2xl">See details</div>
+            </router-link>
+          </div>
+          <div v-if="index % 2 == 0" class="w-1/2 h-96 flex">
+            <div class="">
+              <ImageViewer :imageData="pkg.image" />
+            </div>
+          </div>
+        </div>
+        <div class="text-2xl w-full flex items-center justify-center p-5">
+          <button class="w-1/4 p-2 bg-stone-300 hover:bg-stone-500 hover:text-stone-50">See More</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Us -->
+    <div id="contact-us" class="w-full flex flex-col items-center justify-center py-16">
+      <div class="text-6xl font-bold pb-10">Contact Us</div>
+      <div v-for="contact in contacts" class="flex flex-col gap-10 w-full justify-between items-center">
+        <!-- Phone Number -->
+        <div v-if="contact.contactType == 'Phone Number'" class="flex h-52 w-full p-5 border-2 hover:bg-slate-200 gap-10">
+          <div class="flex items-center justify-center w-52">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-20">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+            </svg>
+          </div>
+          <div 
+          class="grow flex lg:flex-row flex-col justify-center items-center">
+            <div
+              class="text-2xl font-bold"
+            >
+              {{ contact.url }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div v-if="contact.contactType == 'Email'" class="flex h-52 w-full p-5 border-2 hover:bg-slate-200 gap-10">
+          <div class="flex items-center justify-center w-52">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-20">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+            </svg>
+          </div>
+          <div 
+          class="grow flex lg:flex-row flex-col justify-center items-center">
+            <div
+              class="text-2xl font-bold"
+            >
+              {{ contact.url }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Facebook -->
+        <div v-if="contact.contactType == 'Facebook'" class="flex h-52 w-full p-5 border-2 hover:bg-slate-200 gap-10">
+          <div class="flex items-center justify-center w-52">
+            <img class="size-full object-contain" src="@\components\pictures\facebook.png" alt="">
+          </div>
+          <div 
+          class="grow flex lg:flex-row flex-col justify-center items-center">
+              <a :href="contact.url" @click.prevent="openLink(contact.url)" class="text-2xl font-bold">
+                {{ extractUsername('Facebook', contact.url) }}
+              </a>
+          </div>
+        </div>
+
+        <!-- Instagram -->
+        <div v-if="contact.contactType == 'Instagram'" class="flex h-52 w-full p-5 border-2 hover:bg-slate-200 gap-10">
+          <div class="flex items-center justify-center w-52">
+            <img class="size-full object-contain" src="@\components\pictures\instagram.png" alt="">
+          </div>
+          <div 
+          class="grow flex lg:flex-row flex-col justify-center items-center">
+            <div>
+              <a :href="contact.url" @click.prevent="openLink(contact.url)" class="text-2xl font-bold">
+                {{ extractUsername('Instagram', contact.url) }}
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tik Tok -->
+        <div v-if="contact.contactType == 'Tik Tok'" class="flex h-52 w-full p-5 border-2 hover:bg-slate-200 gap-10">
+          <div class="flex items-center justify-center w-52">
+            <img class="size-full object-contain" src="@\components\pictures\tiktok.png" alt="">
+          </div>
+          <div 
+          class="grow flex lg:flex-row flex-col justify-center items-center">
+            <div>
+              <a :href="contact.url" @click.prevent="openLink(contact.url)" class="text-2xl font-bold">
+                {{ extractUsername('Tik Tok', contact.url) }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Review Section -->
     <section class="w-full">
@@ -254,11 +257,7 @@ export default {
         description:
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vestibulum diam eget nunc consectetur condimentum. Sed sed lacus quis libero elementum egestas.",
       },
-      contacts: {
-        phone: "123-456-7890",
-        email: "sample@example.com",
-        address: "123 Main Street, City, Country",
-      },
+      contacts: [],
       services: [],
       packages: [],
       packageCarts: [],
@@ -268,27 +267,7 @@ export default {
         title: '',
         description: '',
       },
-      reviews: [
-        // {
-        //   userName: "User1",
-        //   userAvatar: "avatar1.jpg",
-        //   date: "March 15, 2024",
-        //   comment: "Great service! Will definitely come back again.",
-        // },
-        // {
-        //   userName: "User2",
-        //   userAvatar: "avatar2.jpg",
-        //   date: "March 12, 2024",
-        //   comment: "Average experience. Could be better.",
-        // },
-        // {
-        //   userName: "User3",
-        //   userAvatar: "avatar3.jpg",
-        //   date: "March 10, 2024",
-        //   comment: "Absolutely fantastic! Highly recommend this shop.",
-        // },
-        // Add more reviews as needed
-      ],
+      reviews: [],
     };
   },
   computed: {
@@ -355,6 +334,12 @@ export default {
       try {
         const response = await http.get(`api/contacts/get-all/${shopId}`);
         this.contacts = response.data;
+        this.contacts.sort((a, b) => {
+          // Additional checks added to ensure contactTypeId exists and is a string
+          const contactTypeA = a.contactTypeId?.toString() ?? "";
+          const contactTypeB = b.contactTypeId?.toString() ?? "";
+          return contactTypeA.localeCompare(contactTypeB);
+        });
         console.log(this.contacts);
       } catch (error) {
         console.log(error);
@@ -504,6 +489,20 @@ export default {
         console.log(error);
       }
     },
+    extractUsername(platform, url) {
+      if (platform == 'Facebook') {
+        const match = url.match(/\/([^\/?#]+)$/);
+        return match ? match[1] : url;
+      } else if (platform == 'Instagram') {
+        const match = url.match(/\/([^\/?#]+)\?/);
+        return match ? match[1] : null;
+      } else if (platform == 'Tik Tok') {
+        const match = url.match(/@([^/?#]+)/);
+        return match ? match[1] : null;
+      } else {
+        return;
+      }
+    }
   },
   mounted() {
     const shopId = this.$route.params.shopId;
