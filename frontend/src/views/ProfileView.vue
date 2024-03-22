@@ -95,7 +95,7 @@
 
             <!-- Cart -->
             <div >
-                <div class="font-medium h-1/6 p-5 flex items-center">
+                <div class="font-medium p-5 flex items-center">
                     <p class="text-4xl flex-grow">
                         Cart
                     </p>
@@ -105,69 +105,74 @@
                         </button>
                     </button>
                 </div>
-                <div class="h-fit overflow-x-auto flex items-center relative pb-3">
-                    <div v-if="cart.length" class="px-4 h-full">
-                        <div class="flex space-x-4 h-full text-2xl">
-                            <!-- Loop through your shop cards -->
-                            <div v-for="cart in cart" :key="cart.id" class="flex flex-col w-64 bg-stone-200 justify-center items-center rounded-lg h-full relative">
-                                <button class="absolute right-2 top-2">
-                                    <svg 
-                                        @click="removeFromCard(cart.id)"
-                                        xmlns="http://www.w3.org/2000/svg" 
-                                        fill="red" 
-                                        viewBox="0 0 24 24" 
-                                        stroke-width="1.5" 
-                                        stroke="currentColor" 
-                                        class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>
-                                </button>
-                                <router-link 
-                                    v-if="cart.service" 
-                                    :to="`/shop/${cart.service.shopId}/package/${cart.service.id}/details`"
-                                    class="w-full h-full"
-                                >
-                                    <div class="h-full w-full">
+                <div class="overflow-x-auto h-96 items-center relative pb-3">
+                    <div v-if="cart.length" class="px-4 h-full w-fit flex gap-4">
+                        <div 
+                            v-for="cart in cart" 
+                            :key="cart.id" 
+                            class="flex h-full flex-col w-64 bg-stone-200 justify-center items-center rounded-lg relative overflow-hidden"
+                        >
+                            <button class="absolute right-2 top-2">
+                                <svg 
+                                    @click="removeFromCard(cart.id)"
+                                    xmlns="http://www.w3.org/2000/svg" 
+                                    fill="red" 
+                                    viewBox="0 0 24 24" 
+                                    stroke-width="1.5" 
+                                    stroke="currentColor" 
+                                    class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                            </button>
+                            <router-link 
+                                v-if="cart.service" 
+                                :to="`/shop/${cart.service.shopId}/package/${cart.service.id}/details`"
+                                class="w-full h-full"
+                            >
+                                <div class="w-full h-2/3">
+                                    <div class="size-full">
                                         <ImageViewer :imageData="cart.service.image" />
                                     </div>
-                                    <div class="">
-                                        <div class="flex flex-col items-center justify-center">
-                                            <div class="">
-                                                {{ cart.service.name }}
-                                            </div>
-                                            <div class="">
-                                                ${{ cart.service.unitPrice }}
-                                            </div>
-                                            <div class="">
-                                                {{ cart.service.shopName }}
-                                            </div>
+                                </div>
+                                <div class="w-full h-1/3">
+                                    <div class="flex h-full flex-col items-center justify-center">
+                                        <div class="font-bold text-2xl">
+                                            {{ cart.service.name }}
+                                        </div>
+                                        <div class="font-bold text-xl">
+                                            ${{ cart.service.unitPrice }}
+                                        </div>
+                                        <div class="font-bold text-lg">
+                                            {{ cart.service.shopName }}
                                         </div>
                                     </div>
-                                </router-link>
-                                <router-link 
-                                    v-else 
-                                    :to="`/shop/${cart.pkg.shopId}/package/${cart.pkg.id}/details`"
-                                    class="w-full h-full"
-                                >
-                                    <div class="h-full w-full">
+                                </div>
+                            </router-link>
+                            <router-link 
+                                v-else 
+                                :to="`/shop/${cart.pkg.shopId}/package/${cart.pkg.id}/details`"
+                                class="w-full h-full"
+                            >
+                                <div class="w-full h-2/3">
+                                    <div class="size-full">
                                         <ImageViewer :imageData="cart.pkg.image" />
                                     </div>
-                                    <div class="w-full">
-                                        <div class="flex flex-col items-center justify-center">
-                                                <div class="">
-                                                    {{ cart.pkg.name }}
-                                                </div>
-                                                <div class="">
-                                                    ${{ cart.pkg.price }}
-                                                </div>
-                                                <div class="">
-                                                    {{ cart.pkg.shopName }}
-                                                </div>
-                                        </div>
+                                </div>
+                                <div class="w-full h-1/3">
+                                    <div class="flex h-full flex-col items-center justify-center">
+                                            <div class="font-bold text-2xl">
+                                                {{ cart.pkg.name }}
+                                            </div>
+                                            <div class="font-bold text-xl">
+                                                ${{ cart.pkg.price }}
+                                            </div>
+                                            <div class="font-bold text-lg">
+                                                {{ cart.pkg.shopName }}
+                                            </div>
                                     </div>
-                                </router-link>
-                            </div> 
-                        </div>
+                                </div>
+                            </router-link>
+                        </div> 
                     </div>
                     <div v-else class="px-4 w-full h-48">
                         <div class="flex items-center justify-center text-3xl h-full">
