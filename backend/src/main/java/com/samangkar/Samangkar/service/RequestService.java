@@ -40,7 +40,7 @@ public class RequestService {
         return new RequestDto(
                     request.getId(),
                     shopService.getShopById(request.getShop().getId()),
-                    request.getTitle(),
+                    request.getPurpose(),
                     request.getDescription()
             );
     }

@@ -41,7 +41,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <button @click="fetchFavorites()">fetch user</button> -->
         </div>
 
         <!-- User overview on the right -->
@@ -51,10 +50,8 @@
                     <p class="text-4xl flex-grow">
                         Shops
                     </p>
-                    <button class="text-2xl">
-                        <router-link to="/profile/favorite" title="See all" class="font-bold">
-                            See all
-                        </router-link>
+                    <button @click="showRequestForm = true" class="text-2xl font-normal">
+                        Send Request
                     </button>
                 </div>
                 <div class="h-5/6 overflow-x-auto flex items-center relative pb-3">
@@ -400,6 +397,29 @@
         >
             {{ alertInfo }}
         </div>
+
+        <!-- Request Form -->
+        <div v-if="showRequestForm" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-fit bg-slate-400 p-10">
+            <div class="flex justify-end items-center pr-5 dark:text-stone-600">
+                <button 
+                    @click="hideFormRequest()"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="w-full flex items-center justify-center text-4xl pb-10 font-bold">Request Form</div>
+            <div class="w-full grid grid-cols-2 gap-5 items-center justify-center text-2xl">
+                <div class="">Purpose</div>
+                <input v-model="request.purpose" class="" />
+                <div class="">Descriptions</div>
+                <input v-model="request.descriptions" class="" />
+            </div>
+            <button @click="sendFormRequest()" class="w-full flex items-center justify-center text-2xl pt-10 font-medium">
+                <div class="border py-3 px-10 hover:bg-slate-600 hover:text-slate-100">Submit</div>
+            </button>
+        </div>
     </div>
 </template>
 
@@ -436,6 +456,7 @@ onMounted(() => {
 export default {
     data() {
         return {
+            user: [],
             showChangeInfoPanel: false,
             showChangePasswordPanel: false,
             userInput: {
@@ -449,9 +470,32 @@ export default {
             alertInfo: '',
             selectedImage: null,
             imageUrl: null,
+            showRequestForm: false,
+            request: {
+                purpose: '',
+                descriptions: '',
+            }
         }
     },
     methods: {
+        async sendFormRequest() {
+            try {
+                const response = await http.post(`api/requests/send`, {
+                    'userId': this.user.id,
+                    'purpose': this.request.purpose,
+                    'descriptions': this.request.descriptions,
+                });
+                console.log(response.data);
+                this.hideFormRequest();
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        hideFormRequest() {
+            this.showRequestForm = false;
+            this.request.purpose = '';
+            this.request.descriptions = '';
+        },
         handleShowChangeInfoPanel() {
             const userStore = useUserStore()
 
@@ -636,6 +680,8 @@ export default {
     },
     mounted() {
         const userStore = useUserStore()
+        this.user = userStore.getUser
+
         if (!userStore.user.username) {
             this.$router.push({ name: 'loginPageRoute' })
         }

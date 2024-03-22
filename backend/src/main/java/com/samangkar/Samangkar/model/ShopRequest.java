@@ -20,12 +20,12 @@ public class ShopRequest {
     @ManyToOne
     private Shop shop;
     
-    private String title;
+    private String purpose;
     private String description;
 
     public ShopRequest(Shop shop, String title, String description) {
         this.shop = shop;
-        this.title = title;
+        this.purpose = title;
         this.description = description;
     }
 }
