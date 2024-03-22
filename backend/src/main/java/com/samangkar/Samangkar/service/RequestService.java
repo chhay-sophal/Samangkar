@@ -9,51 +9,51 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.samangkar.Samangkar.dto.RequestDto;
-import com.samangkar.Samangkar.model.Shop;
-import com.samangkar.Samangkar.model.ShopRequest;
-import com.samangkar.Samangkar.repository.ShopRepository;
-import com.samangkar.Samangkar.repository.ShopRequestRepository;
+import com.samangkar.Samangkar.model.UserEntity;
+import com.samangkar.Samangkar.model.Request;
+import com.samangkar.Samangkar.repository.UserRepository;
+import com.samangkar.Samangkar.repository.RequestRepository;
 
 @Service
 public class RequestService {
     
     @Autowired
-    private ShopRequestRepository shopRequestRepository;
+    private RequestRepository requestRepository;
 
     @Autowired
-    private ShopRepository shopRepository;
+    private UserRepository userRepository;
 
     public List<RequestDto> getAllShopRequest() {
-        List<ShopRequest> requests = shopRequestRepository.findAllByDeletedAtIsNull();
+        List<Request> requests = requestRepository.findAllByDeletedAtIsNull();
         // return requests.stream().map(this::createRequestDto).collect(Collectors.toList());
         return createRequestDtoList(requests);
     }
 
-    public void sendRequest(Long shopId, String purpose, String description) {
-        Shop shop = shopRepository.findFirstById(shopId);
-        ShopRequest request = new ShopRequest(shop, purpose, description);
-        shopRequestRepository.save(request);
+    public void sendRequest(Long userId, String purpose, String description) {
+        UserEntity user = userRepository.findFirstById(userId);
+        Request request = new Request(user, purpose, description);
+        requestRepository.save(request);
     }
 
     @SuppressWarnings("null")
     public void deleteRequest(Long requestId) {
-        ShopRequest request = shopRequestRepository.findById(requestId).get();
+        Request request = requestRepository.findById(requestId).get();
         request.setDeletedAt(new Date());
-        shopRequestRepository.save(request);
+        requestRepository.save(request);
     }
 
-    public RequestDto createRequestDto(ShopRequest request) {
+    public RequestDto createRequestDto(Request request) {
         return new RequestDto(
                     request.getId(),
-                    request.getShop().getId(),
-                    request.getShop().getName(),
+                    request.getUser().getId(),
+                    request.getUser().getUsername(),
                     request.getPurpose(),
                     request.getDescription(),
                     request.getCreatedAt()
             );
     }
     
-    public List<RequestDto> createRequestDtoList(Iterable<ShopRequest> requests) {
+    public List<RequestDto> createRequestDtoList(Iterable<Request> requests) {
         return StreamSupport.stream(requests.spliterator(), false)
                 .map(this::createRequestDto)
                 .collect(Collectors.toList());

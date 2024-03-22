@@ -21,14 +21,14 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-public class ShopRequest {
+public class Request {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne
-    private Shop shop;
+    private UserEntity user;
     
     private String purpose;
     private String description;
@@ -57,10 +57,10 @@ public class ShopRequest {
         updatedAt = new Date();
     }
     
-    public ShopRequest() {}
+    public Request() {}
     
-    public ShopRequest(Shop shop, String title, String description) {
-        this.shop = shop;
+    public Request(UserEntity user, String title, String description) {
+        this.user = user;
         this.purpose = title;
         this.description = description;
     }

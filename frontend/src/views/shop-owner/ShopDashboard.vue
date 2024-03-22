@@ -46,7 +46,7 @@
             <div class="border p-2 rounded-lg relative">
               <h3>Trending</h3>
               <p>{{ shop.isTrending ? 'Yes' : 'No' }}</p>
-              <button class="absolute right-1 top-1" @click="displayPanel('changeShopTrendingPanel', shop.isTrending)">
+              <button class="absolute right-1 top-1" @click="showRequestForm = true">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                   <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                 </svg>
@@ -508,6 +508,38 @@
       </div>
   </div>
 
+  <!-- Request Form -->
+  <div v-if="showRequestForm" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-fit w-fit bg-slate-400 p-10 z-20">
+      <div class="flex justify-end items-center pr-5 dark:text-stone-600">
+          <button 
+              @click="hideFormRequest()"
+          >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+          </button>
+      </div>
+      <div class="w-full flex items-center justify-center text-4xl pb-10 font-bold">Request Form</div>
+      <div class="min-w-96 grid grid-cols-3 gap-5 items-center justify-center text-2xl">
+          <div class="">Purpose</div>
+          <input v-model="request.purpose" class="dark:bg-slate-600 col-span-2" />
+          <div class="">Descriptions</div>
+          <input v-model="request.descriptions" class="dark:bg-slate-600 col-span-2" />
+      </div>
+      <button @click="sendFormRequest()" class="w-full flex items-center justify-center text-2xl pt-10 font-medium">
+          <div class="border py-3 px-10 hover:bg-slate-600 hover:text-slate-100">Submit</div>
+      </button>
+  </div>
+
+  <!-- Alert box -->
+  <div 
+    v-if="showAlert"
+      class="text-stone-100 text-xl font-medium flex justify-center fixed top-32 left-1/2 -translate-x-1/2 p-3 rounded-lg"
+      :class="alertType == 'success' ? 'bg-green-500' : 'bg-red-500'"
+    >
+      {{ alertInfo }}
+  </div>
+
 </template>
   
 <script>
@@ -525,6 +557,7 @@ export default {
   },
   data() {
     return {
+      userId : null,
       sidebarLinks: [
         { text: 'Dashboard', icon: 'mdi-view-dashboard', route: '/dashboard' },
         { text: 'Users', icon: 'mdi-account', route: '/users' },
@@ -570,7 +603,15 @@ export default {
         label: '',
         input: null
       },
+      showAlert: false,
+      alertType: '',
+      alertInfo: '',
       newImage: null,
+      showRequestForm: false,
+      request: {
+          purpose: '',
+          descriptions: '',
+      }
     };
   },
   methods: {
@@ -902,10 +943,40 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    }
+    },
+    async sendFormRequest() {
+            try {
+              console.log(this.userId)
+              if (this.userId) {
+                const response = await http.post(`api/requests/send`, {
+                    'userId': this.userId,
+                    'purpose': this.request.purpose,
+                    'descriptions': this.request.descriptions,
+                });
+                console.log(response.data);
+
+                this.showRequestForm = false;
+                this.showAlert = true;
+                this.alertInfo = response.data;
+                this.alertType = 'success';
+
+                setTimeout(() => {
+                    this.showAlert = false;
+                    this.alertType = '';
+                    this.alertInfo = '';
+                }, 3000);
+              } else {
+                console.log('userid is null')
+              }
+            } catch (error) {
+                console.log(error);
+            }
+        },
   },
   mounted() {
       const userStore = useUserStore();
+      this.userId = userStore.user.id;
+
       if (!userStore.user.username) {
           this.$router.push({ name: 'loginPageRoute' });
       }
