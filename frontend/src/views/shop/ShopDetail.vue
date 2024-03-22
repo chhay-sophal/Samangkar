@@ -41,7 +41,7 @@
           </div>
         </div>
         <div class="text-2xl w-full flex items-center justify-center p-5">
-          <button class="w-1/4 p-2 bg-stone-300 hover:bg-stone-500 hover:text-stone-50">See More</button>
+          <button class="w-1/4 p-2 bg-stone-200 dark:text-stone-600 hover:bg-stone-500 hover:text-stone-50">See More</button>
         </div>
       </div>
 
@@ -72,7 +72,7 @@
           </div>
         </div>
         <div class="text-2xl w-full flex items-center justify-center p-5">
-          <button class="w-1/4 p-2 bg-stone-300 hover:bg-stone-500 hover:text-stone-50">See More</button>
+          <button class="w-1/4 p-2 bg-stone-200 dark:text-stone-600 hover:bg-stone-500 hover:text-stone-50">See More</button>
         </div>
       </div>
     </div>
@@ -82,7 +82,7 @@
       <div class="text-6xl font-bold pb-10">Contact Us</div>
       <div v-for="contact in contacts" class="flex flex-col gap-10 w-full justify-between items-center">
         <!-- Phone Number -->
-        <div v-if="contact.contactType == 'Phone Number'" class="flex h-52 w-full p-5 border-2 hover:bg-slate-200 gap-10">
+        <div v-if="contact.contactType == 'Phone Number'" class="flex h-52 w-full p-5 border-2 dark:hover:text-stone-700 hover:bg-slate-200 gap-10">
           <div class="flex items-center justify-center w-52">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-20">
               <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
@@ -99,7 +99,7 @@
         </div>
 
         <!-- Email -->
-        <div v-if="contact.contactType == 'Email'" class="flex h-52 w-full p-5 border-2 hover:bg-slate-200 gap-10">
+        <div v-if="contact.contactType == 'Email'" class="flex h-52 w-full p-5 border-2 dark:hover:text-stone-700 hover:bg-slate-200 gap-10">
           <div class="flex items-center justify-center w-52">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-20">
               <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
@@ -116,7 +116,7 @@
         </div>
 
         <!-- Facebook -->
-        <div v-if="contact.contactType == 'Facebook'" class="flex h-52 w-full p-5 border-2 hover:bg-slate-200 gap-10">
+        <div v-if="contact.contactType == 'Facebook'" class="flex h-52 w-full p-5 border-2 dark:hover:text-stone-700 hover:bg-slate-200 gap-10">
           <div class="flex items-center justify-center w-52">
             <img class="size-full object-contain" src="@\components\pictures\facebook.png" alt="">
           </div>
@@ -129,7 +129,7 @@
         </div>
 
         <!-- Instagram -->
-        <div v-if="contact.contactType == 'Instagram'" class="flex h-52 w-full p-5 border-2 hover:bg-slate-200 gap-10">
+        <div v-if="contact.contactType == 'Instagram'" class="flex h-52 w-full p-5 border-2 dark:hover:text-stone-700 hover:bg-slate-200 gap-10">
           <div class="flex items-center justify-center w-52">
             <img class="size-full object-contain" src="@\components\pictures\instagram.png" alt="">
           </div>
@@ -144,7 +144,7 @@
         </div>
 
         <!-- Tik Tok -->
-        <div v-if="contact.contactType == 'Tik Tok'" class="flex h-52 w-full p-5 border-2 hover:bg-slate-200 gap-10">
+        <div v-if="contact.contactType == 'Tik Tok'" class="flex h-52 w-full p-5 border-2 dark:hover:text-stone-700 hover:bg-slate-200 gap-10">
           <div class="flex items-center justify-center w-52">
             <img class="size-full object-contain" src="@\components\pictures\tiktok.png" alt="">
           </div>
