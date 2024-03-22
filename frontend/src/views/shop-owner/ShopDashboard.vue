@@ -945,33 +945,38 @@ export default {
       }
     },
     async sendFormRequest() {
-            try {
-              console.log(this.userId)
-              if (this.userId) {
-                const response = await http.post(`api/requests/send`, {
-                    'userId': this.userId,
-                    'purpose': this.request.purpose,
-                    'descriptions': this.request.descriptions,
-                });
-                console.log(response.data);
+        try {
+          console.log(this.userId)
+          if (this.userId) {
+            const response = await http.post(`api/requests/send`, {
+                'userId': this.userId,
+                'purpose': this.request.purpose,
+                'descriptions': this.request.descriptions,
+            });
+            console.log(response.data);
 
-                this.showRequestForm = false;
-                this.showAlert = true;
-                this.alertInfo = response.data;
-                this.alertType = 'success';
+            this.showRequestForm = false;
+            this.showAlert = true;
+            this.alertInfo = response.data;
+            this.alertType = 'success';
 
-                setTimeout(() => {
-                    this.showAlert = false;
-                    this.alertType = '';
-                    this.alertInfo = '';
-                }, 3000);
-              } else {
-                console.log('userid is null')
-              }
-            } catch (error) {
-                console.log(error);
-            }
-        },
+            setTimeout(() => {
+                this.showAlert = false;
+                this.alertType = '';
+                this.alertInfo = '';
+            }, 3000);
+          } else {
+            console.log('userid is null')
+          }
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    hideFormRequest() {
+        this.showRequestForm = false;
+        this.request.purpose = '';
+        this.request.descriptions = '';
+    },
   },
   mounted() {
       const userStore = useUserStore();
