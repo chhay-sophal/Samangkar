@@ -103,11 +103,8 @@
       },
       async addToCard(id) {
         try {
-          const userId = useUserStore().user.id;
-          console.log(id)
-          console.log(userId)
           await http.post(`api/cards/add`, {
-            "userId": userId,
+            "userId": this.userId,
             "serviceId": id,
             "packageId": null,
             "quantity": 1,
@@ -121,6 +118,9 @@
           }, 2000);
         } catch (error) {
           console.log(error);
+          if (!this.userId) {
+            this.$router.push({ name: 'loginPageRoute' })
+          }
         }
       },
       async fetchUserCards() {
@@ -139,6 +139,9 @@
       },
     },
     mounted() {
+      const userStore = useUserStore()
+      this.userId = userStore.user.id;
+
       const serviceId = this.$route.params.serviceId;
       this.fetchServiceDetails(serviceId);
       this.fetchUserCards();

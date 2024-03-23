@@ -334,6 +334,9 @@ export default {
         this.fetchFavorites();
       } catch (error) {
         console.log(error);
+        if (!this.userId) {
+            this.$router.push({ name: 'loginPageRoute' })
+        }
       }
     },
     findFavoriteId(shopId) {
@@ -365,6 +368,9 @@ export default {
         this.fetchUserCards();
       } catch (error) {
         console.log(error);
+        if (!this.userId) {
+            this.$router.push({ name: 'loginPageRoute' })
+        }
       }
     },
     async removeFromCard(productType, id) {
@@ -407,9 +413,9 @@ export default {
     const userStore = useUserStore()
     this.userId = userStore.user.id;
 
-    if (!userStore.user.username) {
-        this.$router.push({ name: 'loginPageRoute' })
-    }
+    // if (!userStore.user.username) {
+    //     this.$router.push({ name: 'loginPageRoute' })
+    // }
 
     this.fetchShops();
     this.fetchPackages();
