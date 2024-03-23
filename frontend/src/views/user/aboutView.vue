@@ -98,9 +98,9 @@
     data() {
       return {
         team: [
-          { name: 'Ni det', image: 'https://z-p3-scontent.fpnh5-3.fna.fbcdn.net/v/t39.30808-6/329052155_1850690681965274_1978295266539606826_n.jpg?stp=cp6_dst-jpg&_nc_cat=100&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeFCZ9fMg8AcjinFOAv6oHUGIVqTHl-Bpj4hWpMeX4GmPqMZnMi_zzHc1sc_Zd03ueI4DJVwxnxPlKbO5A08infW&_nc_ohc=dgQ0z2V8y2gAX8l-rcF&_nc_zt=23&_nc_ht=z-p3-scontent.fpnh5-3.fna&oh=00_AfDaRr-S3apW9wNg6oP998Z34GwuH4qzK3lrc2x_qtk2Mw&oe=65F566E3' },
-          { name: 'Sophal', image: 'https://z-p3-scontent.fpnh5-3.fna.fbcdn.net/v/t39.30808-6/431014663_1406884703534782_7426384464290656983_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeFb8RO8QfNVn2etRyPpS_p7p0ol2HLIyR6nSiXYcsjJHkNAxFjRG9wUFAzujhudP7iQx0fpwVfbGpVmZ-bne6Rz&_nc_ohc=osULpzuBLtEAX8u-5jq&_nc_zt=23&_nc_ht=z-p3-scontent.fpnh5-3.fna&oh=00_AfDRRlhueEmsmryXe4EfY0YA165Qgh9KX56xo8B48cHo3A&oe=65F65416' },
-          { name: 'Kimheak', image: 'https://z-p3-scontent.fpnh5-3.fna.fbcdn.net/v/t39.30808-6/347625404_1462685914540306_3404721810023646087_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEaQHPj0yBMTDDFRQ8YqQ5uwvmJQ6Svsp3C-YlDpK-ynQjHJvAVgPZ370svZ-W1j_14yKFWEl9fs3fPHs5UVMLe&_nc_ohc=7wgtbA3FEXEAX83GKAi&_nc_zt=23&_nc_ht=z-p3-scontent.fpnh5-3.fna&oh=00_AfDDZDiXPCPye_DEjzjWcq5AXEr-aMZJ1G0H-_3xl-e6bA&oe=65F545BA' }
+          { name: 'Ni det', image: '/Nidate.JPG' },
+          { name: 'Sophal', image: '/Sophal.png' },
+          { name: 'Kimheak', image: '/Kimheak.JPG' }
         ]
       }
     }
