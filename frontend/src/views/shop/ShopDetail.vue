@@ -40,9 +40,9 @@
             </div>
           </div>
         </div>
-        <div class="text-2xl w-full flex items-center justify-center p-5">
+        <!-- <div class="text-2xl w-full flex items-center justify-center p-5">
           <button class="w-1/4 p-2 bg-stone-200 dark:text-stone-600 hover:bg-stone-500 hover:text-stone-50">See More</button>
-        </div>
+        </div> -->
       </div>
 
       <!-- Packages -->
@@ -71,9 +71,9 @@
             </div>
           </div>
         </div>
-        <div class="text-2xl w-full flex items-center justify-center p-5">
+        <!-- <div class="text-2xl w-full flex items-center justify-center p-5">
           <button class="w-1/4 p-2 bg-stone-200 dark:text-stone-600 hover:bg-stone-500 hover:text-stone-50">See More</button>
-        </div>
+        </div> -->
       </div>
     </div>
 
