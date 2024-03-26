@@ -1,8 +1,10 @@
 package com.samangkar.Samangkar.controller;
 import com.samangkar.Samangkar.dto.AddOrUpdateShopDto;
+import com.samangkar.Samangkar.dto.MailRequest;
 import com.samangkar.Samangkar.dto.ShopDto;
 import com.samangkar.Samangkar.model.Shop;
 import com.samangkar.Samangkar.repository.ShopRepository;
+import com.samangkar.Samangkar.service.MailSenderService;
 import com.samangkar.Samangkar.service.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,6 +37,9 @@ public class ShopController {
 
     @Autowired
     private ShopRepository shopRepository;
+
+    @Autowired
+    private MailSenderService mailService;
 
     //GET ALL SHOP (SPECIFIC COLUMNS)
     @GetMapping("get/{id}")
@@ -235,5 +240,16 @@ public class ShopController {
         }
     }
 
+    @PostMapping("/mail")
+    public ResponseEntity<?> mailTo(@RequestBody MailRequest mailRequest){
+        System.out.println(mailRequest.getEmail());
+        try{
+            mailService.sendNewMail(mailRequest.getEmail(), "Stay Connect with Samangkar", "Thank you for choosing to stay connected with us. We look forward to sharing exciting updates with you soon!");
+            return ResponseEntity.ok("Email subscribed successfully");
+        }catch(Exception e){
+            return ResponseEntity.status(500).body("Error Sending Mail: " + e.getMessage());
+        }
+
+    }
 
 }

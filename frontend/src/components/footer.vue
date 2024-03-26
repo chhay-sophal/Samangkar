@@ -1,7 +1,7 @@
 <template>
   <footer class="footer w-full bg-slate-200 dark:bg-stone-800 text-stone-800 dark:text-slate-200">
     <div class="">
-      <p>© 2024 Your Website. All rights reserved.</p>
+      <p>© 2024 SamAngKar. All rights reserved.</p>
       <ul class="footer-links">
         <li><a href="#">Home</a></li>
         <li><a href="#">About Us</a></li>
