@@ -52,17 +52,19 @@
           </div>
           <div class="py-4 bg-white">  
               <div class="container m-auto px-6 text-gray-500 md:px-12 xl:px-0">
-                  <div class="mx-auto grid gap-6 md:w-3/4 lg:w-full lg:grid-cols-3">                     
-                    <div class="bg-slate-200 rounded-2xl shadow-xl px-8 py-12 sm:px-12 lg:px-8" v-for="(member, index) in team"
+                  <div class="mx-auto grid gap-6 w-full sm:grid-cols-3">                     
+                    <div class="bg-slate-200 rounded-2xl shadow-xl px-8 lg:pt-12 pt-5 sm:px-3 lg:px-8" v-for="(member, index) in team"
                     :key="index">
-                        <div class="mb-12 space-y-4">
+                        <div class="xl:mb-12 sm:mb-5 space-y-4">
                             <h3 class="text-2xl font-semibold text-orange-300">{{ member.name }}</h3>
                         </div>
-                        <img
+                        <div class="w-full xl:h-96 lg:h-72 md:h-52 sm:h-32 h-80 overflow-hidden">
+                          <img
                           class="card-img-top card-img-blk"
                           :src="member.image"
                           :alt="member.name"
-                        />                    
+                        />   
+                        </div>           
                     </div>                       
                   </div>
               </div>
@@ -134,9 +136,9 @@
       return {
         // dak pic us png wherever pic u desired
         team: [
-          { name: 'Ni det', image: '/Nidate.JPG' },
-          { name: 'Sophal', image: '/Sophal.png' },
-          { name: 'Kimheak', image: '/Kimheak.JPG' }
+          { name: 'Ni det', image: '/nidate.png' },
+          { name: 'Sophal', image: '/sophal.png' },
+          { name: 'Kimheak', image: '/kimheak.png' }
         ]
       }
     },
