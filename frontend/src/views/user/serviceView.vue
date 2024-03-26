@@ -122,6 +122,11 @@
           </div>
         </div>
       </div>
+
+      <!-- Contact us button -->
+      <div class="w-full flex items-center justify-center">
+        <router-link to="/" title="Home" class="px-10 py-5 bg-slate-400 text-xl">Start Browsing</router-link>
+      </div>
     </div>
 
     <!-- For Shop Owners -->
@@ -224,6 +229,11 @@
             <img class="object-cover" src="@\components\pictures\partnership.png" alt="">
           </div>
         </div>
+      </div>
+
+      <!-- Contact us button -->
+      <div class="w-full flex items-center justify-center">
+        <router-link to="/contact" title="Contact" class="px-10 py-5 bg-slate-400 text-xl">Contact Us</router-link>
       </div>
     </div>
 

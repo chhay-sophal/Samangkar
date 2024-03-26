@@ -393,13 +393,14 @@
         <!-- Alert box -->
         <div 
             v-if="showAlert"
-            class="bg-red-500 text-stone-100 text-xl font-medium flex justify-center fixed left-1/2 p-3 rounded-lg"
-        >
+            class="text-stone-100 text-xl font-medium flex justify-center fixed top-32 left-1/2 -translate-x-1/2 p-3 rounded-lg"
+            :class="alertType == 'success' ? 'bg-green-500' : 'bg-red-500'"
+            >
             {{ alertInfo }}
         </div>
 
         <!-- Request Form -->
-        <div v-if="showRequestForm" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-fit bg-slate-400 p-10">
+        <div v-if="showRequestForm" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-fit w-fit bg-slate-400 p-10 z-20">
             <div class="flex justify-end items-center pr-5 dark:text-stone-600">
                 <button 
                     @click="hideFormRequest()"
@@ -410,11 +411,11 @@
                 </button>
             </div>
             <div class="w-full flex items-center justify-center text-4xl pb-10 font-bold">Request Form</div>
-            <div class="w-full grid grid-cols-2 gap-5 items-center justify-center text-2xl">
+            <div class="min-w-96 grid grid-cols-3 gap-5 items-center justify-center text-2xl">
                 <div class="">Purpose</div>
-                <input v-model="request.purpose" class="" />
+                <input v-model="request.purpose" class="dark:bg-slate-600 col-span-2" />
                 <div class="">Descriptions</div>
-                <input v-model="request.descriptions" class="" />
+                <input v-model="request.descriptions" class="dark:bg-slate-600 col-span-2" />
             </div>
             <button @click="sendFormRequest()" class="w-full flex items-center justify-center text-2xl pt-10 font-medium">
                 <div class="border py-3 px-10 hover:bg-slate-600 hover:text-slate-100">Submit</div>
@@ -456,7 +457,7 @@ onMounted(() => {
 export default {
     data() {
         return {
-            user: [],
+            userId: null,
             showChangeInfoPanel: false,
             showChangePasswordPanel: false,
             userInput: {
@@ -467,6 +468,7 @@ export default {
                 confirmNewPassword: ref(null),
             },
             showAlert: false,
+            alertType: '',
             alertInfo: '',
             selectedImage: null,
             imageUrl: null,
@@ -481,12 +483,22 @@ export default {
         async sendFormRequest() {
             try {
                 const response = await http.post(`api/requests/send`, {
-                    'userId': this.user.id,
+                    'userId': this.userId,
                     'purpose': this.request.purpose,
                     'descriptions': this.request.descriptions,
                 });
                 console.log(response.data);
                 this.hideFormRequest();
+
+                this.showAlert = true;
+                this.alertInfo = response.data;
+                this.alertType = 'success';
+
+                setTimeout(() => {
+                    this.showAlert = false;
+                    this.alertType = '';
+                    this.alertInfo = '';
+                }, 3000);
             } catch (error) {
                 console.log(error);
             }
@@ -679,9 +691,10 @@ export default {
         },
     },
     mounted() {
-        const userStore = useUserStore()
-        this.user = userStore.getUser
-
+        const userStore = useUserStore();
+        this.userId = userStore.user.id;
+        console.log(this.userId);
+        
         if (!userStore.user.username) {
             this.$router.push({ name: 'loginPageRoute' })
         }

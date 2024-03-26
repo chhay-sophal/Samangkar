@@ -18,6 +18,7 @@ import ShopView from './views/admin/ShopView.vue'
 import AddPackageView from './views/admin/AddPackage.vue'
 import PackageView from './views/admin/PackageView.vue'
 import ReviewView from './views/admin/ReviewView.vue'
+import RequestView from './views/admin/RequestView.vue'
 import ServiceView from './views/user/serviceView.vue'
 import ContactView from './views/user/contactView.vue'
 import AboutView from './views/user/aboutView.vue'
@@ -109,6 +110,12 @@ const routes = [
         path: '/admin/reviews',
         name: 'ReviewView',
         component: ReviewView,
+        meta: { hideHeaderFooter: true } 
+    },
+    {
+        path: '/admin/request',
+        name: 'RequestView',
+        component: RequestView,
         meta: { hideHeaderFooter: true } 
     },
     {

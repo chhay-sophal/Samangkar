@@ -134,9 +134,9 @@
       return {
         // dak pic us png wherever pic u desired
         team: [
-          { name: 'Ni det', image: 'https://static.vecteezy.com/system/resources/thumbnails/008/442/086/small_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg', email : 'nidet@samagkar.com' },
-          { name: 'Sophal', image: 'https://static.vecteezy.com/system/resources/thumbnails/008/442/086/small_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg',email : 'sophal@samagkar.com'  },
-          { name: 'Kimheak', image: 'https://static.vecteezy.com/system/resources/thumbnails/008/442/086/small_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg',email : 'kimheak@samagkar.com'  }
+          { name: 'Ni det', image: '/Nidate.JPG' },
+          { name: 'Sophal', image: '/Sophal.png' },
+          { name: 'Kimheak', image: '/Kimheak.JPG' }
         ]
       }
     },

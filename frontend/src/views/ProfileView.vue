@@ -693,6 +693,7 @@ export default {
 
                     console.log('Image uploaded successfully:', response.data)
                     this.selectedImage = null
+                    this.user = userStore.user;
                 })
                 .catch(error => {
                     console.error('Error uploading image:', error)

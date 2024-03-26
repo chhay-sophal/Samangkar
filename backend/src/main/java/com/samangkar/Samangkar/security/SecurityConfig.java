@@ -34,6 +34,10 @@ public class SecurityConfig {
                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                .authorizeRequests(requests -> requests
                        .requestMatchers("/api/auth/**").permitAll()
+                       .requestMatchers("/api/shops/**").permitAll()
+                       .requestMatchers("/api/services/**").permitAll()
+                       .requestMatchers("/api/packages/**").permitAll()
+                //        .requestMatchers("/api/shops/search/**").permitAll()
                        .anyRequest().authenticated())
                .httpBasic(withDefaults());
        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

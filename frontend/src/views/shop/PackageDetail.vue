@@ -93,6 +93,7 @@
 <script>
 import ImageViewer from '@/components/ImageViewer.vue';
 import http from '@/services/httpService';
+import { useUserStore } from "@/store/userStore";
 
 export default {
   components: {
@@ -100,6 +101,7 @@ export default {
   },
   data() {
     return {
+      userId: null,
       pkg: {},
     };
   },
@@ -113,8 +115,33 @@ export default {
         console.log(error);
       }
     },
+    async addToCard(id) {
+      try {
+        await http.post(`api/cards/add`, {
+          "userId": this.userId,
+          "serviceId": null,
+          "packageId": id,
+          "quantity": 1,
+        });
+
+        this.fetchUserCards();
+        this.showAlert = true
+
+        setTimeout(() => {
+          this.showAlert = false;
+        }, 2000);
+      } catch (error) {
+        console.log(error);
+        if (!this.userId) {
+          this.$router.push({ name: 'loginPageRoute' })
+        }
+      }
+    },
   },
   mounted() {
+    const userStore = useUserStore()
+    this.userId = userStore.user.id;
+
     const pkgId = this.$route.params.packageId;
     this.fetchPackageDetails(pkgId);
   },

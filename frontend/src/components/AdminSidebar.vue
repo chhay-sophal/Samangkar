@@ -24,6 +24,7 @@
           <div class="menu"><router-link to="/admin/packages"><i class="fas fa-shopping-cart"></i> Package</router-link></div>
           <!-- <div class="menu"><router-link to="/contact"><i class="fas fa-box"></i> contact</router-link></div> -->
           <div class="menu"><router-link to="/admin/reviews"><i class="fas fa-comments"></i> Review</router-link></div>
+          <div class="menu"><router-link to="/admin/request"><i class="fas fa-comments"></i> Request</router-link></div>
         </ul>
       </div>
     </nav>
