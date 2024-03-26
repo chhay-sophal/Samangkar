@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/USR01")
 public class UserController {
 
     @Autowired
@@ -298,5 +298,13 @@ public class UserController {
         }
     }
 
-
+    @GetMapping("/USR01")
+    public ResponseEntity<?> countReview(){
+        try {
+           long total =  userReviewService.countUserReview();
+            return ResponseEntity.ok(total);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+        }
+    }
 }

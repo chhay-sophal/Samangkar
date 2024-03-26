@@ -151,4 +151,8 @@ public class UserReviewService {
         userReviewRepository.save(existingUserReview);
     }
 
+    public long countUserReview(){
+        return userReviewRepository.count();
+    }
+
 }

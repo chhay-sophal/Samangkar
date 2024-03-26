@@ -58,5 +58,7 @@ public interface ShopRepository extends PagingAndSortingRepository<Shop, Long>,
 
     @SuppressWarnings("null")
     List<Shop> findAll();
+
+    long count();
     
 }
