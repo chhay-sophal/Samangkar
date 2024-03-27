@@ -24,7 +24,7 @@ public class RequestService {
     private UserRepository userRepository;
 
     public List<RequestDto> getAllShopRequest() {
-        List<Request> requests = requestRepository.findAllByDeletedAtIsNull();
+        Iterable<Request> requests = requestRepository.findAll();
         // return requests.stream().map(this::createRequestDto).collect(Collectors.toList());
         return createRequestDtoList(requests);
     }
@@ -49,7 +49,8 @@ public class RequestService {
                     request.getUser().getUsername(),
                     request.getPurpose(),
                     request.getDescription(),
-                    request.getCreatedAt()
+                    request.getCreatedAt(),
+                    request.getDeletedAt()
             );
     }
     
