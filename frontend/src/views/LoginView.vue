@@ -27,9 +27,9 @@
                           type="password" class="border-2 rounded-lg p-1 px-2 dark:bg-custom-dark dark:border-gray-700 dark:text-white"
                       >
                       <div class="flex justify-end text-sm">
-                        <button @click="">
+                        <RouterLink to="/forgot-password">
                           <a>Forgot password?</a>
-                        </button>
+                        </RouterLink>
                       </div>
                   </div>
                 </div>
@@ -76,9 +76,9 @@
                         type="password" class="border-2 rounded-lg p-1 px-2 dark:bg-custom-dark dark:border-gray-700 dark:text-white"
                     >
                     <div class="flex justify-end text-sm">
-                      <button @click="">
-                        <a>Forgot password?</a>
-                      </button>
+                      <RouterLink to="/forgot-password">
+                          <a>Forgot password?</a>
+                        </RouterLink>
                     </div>
                 </div>
               </div>
@@ -115,6 +115,7 @@
 <script>
 import { login } from '@/services/authService'
 import { useUserStore } from '@/store/userStore';
+import { RouterLink } from 'vue-router';
 
 export default {
   data() {

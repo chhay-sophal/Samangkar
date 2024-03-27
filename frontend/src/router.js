@@ -153,13 +153,13 @@ const routes = [
         meta: { requiresAuth: false, hideHeaderFooter: true } 
     },
     {
-        path: '/forgotPassword',
+        path: '/forgot-password',
         name: 'forgotPassword',
         component: ForgotPasswordVue,
         meta: { requiresAuth: false, hideHeaderFooter: true } 
     },
     {
-        path: '/resetPassword',
+        path: '/reset-password:token?',
         name: 'resetPassword',
         component: ResetPasswordVue,
         meta: { requiresAuth: false, hideHeaderFooter: true } 

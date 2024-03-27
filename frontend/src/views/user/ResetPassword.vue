@@ -58,6 +58,10 @@
                     this.OpenWarningAlert = true
                     this.alertMsg = 'Password does not match'
                 } else {
+                    const token = this.$route.params.token;
+                    console.log(token)
+                    // const response = await http.post(`api/auth/reset-password/?token=${}`, { email: this.email });
+
                     //make request 
                     // const respons = await 
                     // if(response.status === 200){
@@ -76,5 +80,9 @@
           
         }
     },
+    mounted() {
+        const token = this.$route.params.token;
+        console.log(token)
+    }
     };
 </script>

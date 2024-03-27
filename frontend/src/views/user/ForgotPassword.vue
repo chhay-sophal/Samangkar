@@ -16,6 +16,12 @@
           </div>
         </form>
       </div>
+      <div v-if="sentEmail" class="sm:mx-auto sm:w-full sm:max-w-sm">
+        <p class="mt-4 text-left font-bold text-orange-300">We have send a link to reset your password. Please check your email. You can safely close this page.</p>
+      </div>
+      <div v-if="noEmail" class="sm:mx-auto sm:w-full sm:max-w-sm">
+        <p class="mt-4 text-left font-bold text-orange-300">Sorry, we could not find the email address that you input. Please input the email address that you have registered with us.</p>
+      </div>
     </div>
 </template>
 
@@ -25,6 +31,8 @@
     data() {
         return {
             email: null,
+            sentEmail: false,
+            noEmail: false,
         };
     },
     methods: {
@@ -33,12 +41,12 @@
           try {
             const response = await http.post('api/auth/forgot-password', { email: this.email });
             if(response.status === 200){
-                
+                this.sentEmail = true
             }else{
-                console.log("something went wrong");
+                this.noEmail = true
             }
           } catch (error) {
-            console.error();
+            this.noEmail = true
           }
         },
     },
