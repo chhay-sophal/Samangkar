@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
-@RequestMapping("/USR01")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
