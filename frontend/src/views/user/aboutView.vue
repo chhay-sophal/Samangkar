@@ -1,6 +1,6 @@
 <template>
     <div>
-      <section class="bg-gray-100 py-8">
+      <section class="py-8">
         <div class="container mx-auto">
             <div>
                 <h3 class="text-3xl font-bold uppercase">F O R E V E R</h3>
@@ -10,10 +10,10 @@
                 <div class="group grid w-full grid-cols-2">
                   <div>
                     <div class="pr-12">
-                      <p class="peer mb-6 text-gray-400">
+                      <p class="peer mb-6 text-gray-800">
                         A ecommerce website was found by 4 young talent student from Cambodia in 2023. The website began its construction in the mid of 2023 and fully finished on June. Forever is considered to be the first website in Cambodia that provivde many choice of wedding planning to user which had made many cambodian grooms and bride more convenience so far
                       </p>
-                      <h3 class="mb-4 font-semibold text-xl text-gray-400">Our vision</h3>
+                      <h3 class="mb-4 font-bold uppercase">Our vision</h3>
                       <ul role="list" class="marker:text-sky-400 list-disc pl-5 space-y-3 text-slate-500">
                         <li>A go-to destination for couples embarking on their journey</li>
                         <li>A platform that guides couples through every step of the wedding</li>
@@ -29,7 +29,6 @@
                     </div>
                     <a class="font-bold text-sm flex mt-2 mb-8 items-center gap-2" href="">
                       <span>
-                        <!-- FIX THIS ROUTE, WRONG REDIRECT  -->
                         <router-link to="/login" title="Contact">SIGN UP</router-link>
                       </span>
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -37,7 +36,7 @@
                       </svg>
                     </a>
                     <div class="rounded-xl overflow-hidden">
-                      <img src="https://th.bing.com/th/id/R.861abc25f468a0d3d8f167d3d9f474ea?rik=XcRf6xkD2a8DxA&pid=ImgRaw&r=0" alt="">
+                      <img src="https://foxandloon.com/wp-content/uploads/2023/02/The-Whim-Wedding-01280.jpg" alt="">
                     </div>
                   </div>
                 </div>
@@ -52,8 +51,8 @@
           </div>
           <div class="py-4 bg-white">  
               <div class="container m-auto px-6 text-gray-500 md:px-12 xl:px-0">
-                  <div class="mx-auto grid gap-6 w-full sm:grid-cols-3">                     
-                    <div class="bg-slate-200 rounded-2xl shadow-xl px-8 lg:pt-12 pt-5 sm:px-3 lg:px-8" v-for="(member, index) in team"
+                  <div class="mx-auto grid gap-6 md:w-3/4 lg:w-full lg:grid-cols-3">                     
+                    <div class="bg-gray-800 rounded-2xl shadow-xl px-8 py-12 sm:px-12 lg:px-8" v-for="(member, index) in team"
                     :key="index">
                         <div class="xl:mb-12 sm:mb-5 space-y-4">
                             <h3 class="text-2xl font-semibold text-orange-300">{{ member.name }}</h3>
@@ -82,12 +81,14 @@
             </div>
             <div class="md:w-1/3 px-4 mt-8 md:mt-0">
                 <div class="flex justify-center items-center mb-4">
-                    <h5 class="section-subheading text-muted ">Welcome to our office! Nestled in the heart of Pnhom Penh, our vibrant workspace combines modern amenities with a touch of warmth and professionalism. Our office is a hub of creativity, collaboration, and innovation. Step inside to experience a dynamic environment where ideas flourish, connections thrive, and success stories are written. Whether you're a client, partner, or visitor, we look forward to welcoming you to our inspiring space</h5>
+                    <h2 class="text-gray-600 ">Welcome to our office! Nestled in the heart of Pnhom Penh, our vibrant workspace combines modern amenities with a touch of warmth and professionalism. </h2>
+                </div>
+                <div class="flex justify-center items-center mb-4">
+                    <h2 class="text-gray-600 ">Our office is a hub of creativity, collaboration, and innovation. Step inside to experience a dynamic environment where ideas flourish, connections thrive, and success stories are written. Whether you're a client, partner, or visitor, we look forward to welcoming you to our inspiring space </h2>
                 </div>
                 <div class="flex items-start">
-                  <a class="font-bold text-sm flex mt-2 mb-8 items-center gap-2" href="">
+                  <a class="font-bold text-2xl flex mt-2 mb-8 items-center gap-2 text-orange-300" href="">
                     <span>
-                      <!-- FIX THIS ROUTE, WRONG REDIRECT  -->
                       <router-link to="/contact" title="Contact">Contact Us</router-link>
                     </span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -101,27 +102,23 @@
       </section>
       <section class="page-section py-8">
         <div class="relative z-20 sm:z-auto">
-          <div class="tex-left">
-            <h3 class="text-xl font-bold uppercase px-4">Cilents Satifications</h3>
+          <div class="tex-left py-8">
+            <h3 class="text-xl font-bold uppercase px-4">What we have made so far</h3>
           </div>
-          <div class="py-4 bg-white">  
-              <div class="container m-auto px-6 text-gray-500 md:px-12 xl:px-0">
-                <div class="mx-auto grid gap-6 md:w-3/4 lg:w-full lg:grid-cols-3">
-                  <!-- FIX USER REVIEWS MIN 3  -->
-                  <div class="flex">
-                    <div class="flex max-w-md bg-white shadow-lg rounded-lg overflow-hidden">
-                      <div class="w-2 bg-gray-800"></div>
-                      <div class="flex items-center px-2 py-3">
-                        <!-- also Fetch user image if possible -->
-                        <img class="w-12 h-12 object-cover rounded-full" src="">
-                        <div class="mx-3">
-                          <h2 class="text-xl font-semibold text-gray-800"></h2>
-                          <p class="text-gray-600">UserName <a href="#" class="text-blue-500">user review here</a>.</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+          <div class="p-4">  
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4">
+              <div class="backdrop-blur-sm bg-white/20 p-6 rounded-md shadow-sm cursor-pointer border-2 border-gray-400 hover:border-gray-600 hover:border-2 transition-colors duration-300">
+                <h2 class="text-xl font-semibold mb-4 text-gray-800">Shop Register</h2>
+                <p class="mt-6 flex items-baseline gap-x-1">
+                  <span class="text-4xl font-bold tracking-tight text-orange-400">{{ totalShop }}</span>
+                </p>                
+              </div>
+              <div class="backdrop-blur-sm bg-white/20 p-6 rounded-md shadow-sm cursor-pointer border-2 border-gray-400 hover:border-gray-600 hover:border-2 transition-colors duration-300">
+                <h2 class="text-xl font-semibold mb-4 text-gray-800">User Satification</h2>
+                <p class="mt-6 flex items-baseline gap-x-1">
+                  <span class="text-4xl font-bold tracking-tight text-orange-400">{{ totalReview }}</span>
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -134,26 +131,44 @@
   export default {
     data() {
       return {
-        // dak pic us png wherever pic u desired
         team: [
-          { name: 'Ni det', image: '/nidate.png' },
-          { name: 'Sophal', image: '/sophal.png' },
-          { name: 'Kimheak', image: '/kimheak.png' }
-        ]
+          { name: 'Ni det', image: '/Nidate.JPG' },
+          { name: 'Sophal', image: '/Sophal.png' },
+          { name: 'Kimheak', image: '/Kimheak.JPG' }
+        ],
+        totalShop: 0,
+        totalReview: 0
       }
     },
     created() {
-    this.fetchReviews(); 
+    this.fetchTotalShop(); 
+    this.fetchTotalReview();
     },
     methods:{
-      async fetchReviews() {
+      async fetchTotalShop() {
         try {
-          const response = await http.get(`api/users/reviews/all`);
-          console.log(response);
+          const response = await http.get(`api/users/USR01`);
+          if(response.status === 200){
+            this.totalShop = response.data 
+          }else{
+            console.log('something went wrong');
+          }
         } catch (error) {
           console.error(error.message);
         }
       },
+      async fetchTotalReview() {
+        try {
+          const response = await http.get(`api/shops/S01`);
+          if(response.status === 200){
+            this.totalReview = response.data
+          }else{
+            console.log('something went wrong');
+          }
+        } catch (error) {
+          console.error(error.message);
+        }
+      }
     }
   }
 </script>

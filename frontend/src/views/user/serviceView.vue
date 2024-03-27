@@ -1,6 +1,6 @@
 <template>
-  <div class="pb-20 flex flex-col gap-7 font-serif">
-    <div class="w-full flex items-center justify-center text-6xl font-bold">
+  <div class="pb-20 flex flex-col gap-7">
+    <div class="w-full flex items-center justify-center text-6xl">
       What do we offer?
     </div>
 

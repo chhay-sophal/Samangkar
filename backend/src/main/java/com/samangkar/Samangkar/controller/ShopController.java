@@ -252,4 +252,15 @@ public class ShopController {
 
     }
 
+    @GetMapping("/S01")
+    public ResponseEntity<?> countShop(){
+        try{
+           Long result =  shopService.countShop();
+            return ResponseEntity.ok(result);
+        }catch(Exception e){
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
+        }
+    }
+
+
 }

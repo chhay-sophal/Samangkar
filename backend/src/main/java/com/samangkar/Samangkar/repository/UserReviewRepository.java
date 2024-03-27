@@ -31,5 +31,6 @@ public interface UserReviewRepository extends PagingAndSortingRepository<UserRev
 
     Optional<UserReview> findByUserId(Long UserId);
 
+    long count();
 
 }
