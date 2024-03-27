@@ -2,13 +2,17 @@ package com.samangkar.Samangkar.controller;
 
 import com.samangkar.Samangkar.dto.AuthResponseDto;
 import com.samangkar.Samangkar.dto.LoginDto;
+import com.samangkar.Samangkar.dto.MailRequest;
 import com.samangkar.Samangkar.dto.RegisterDto;
 import com.samangkar.Samangkar.dto.UserDto;
+import com.samangkar.Samangkar.model.PasswordResetToken;
 import com.samangkar.Samangkar.model.Role;
 import com.samangkar.Samangkar.model.UserEntity;
 import com.samangkar.Samangkar.repository.RoleRepository;
 import com.samangkar.Samangkar.repository.UserRepository;
 import com.samangkar.Samangkar.security.JwtGenerator;
+import com.samangkar.Samangkar.service.MailSenderService;
+import com.samangkar.Samangkar.service.PasswordResetTokenService;
 import com.samangkar.Samangkar.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -38,6 +42,10 @@ public class AuthController {
     private JwtGenerator jwtGenerator;
     @Autowired
     private UserService userService;
+    @Autowired
+    private MailSenderService mailService;
+    @Autowired
+    private PasswordResetTokenService passwordResetTokenService;
 
     public AuthController(AuthenticationManager authenticationManager,
                           UserRepository userRepository,
@@ -63,6 +71,53 @@ public class AuthController {
         } else {
             return ResponseEntity.ok("User not found!");
         }
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody MailRequest mailRequest){
+        System.out.println(mailRequest.getEmail());
+
+        try{
+            UserEntity user = userRepository.findByEmail(mailRequest.getEmail()).get();
+
+            if (user == null) {
+                return ResponseEntity.badRequest().body("User with this email does not exist!");
+            }
+            
+            PasswordResetToken resetToken = passwordResetTokenService.createToken(user);
+
+            String resetLink = "http://localhost:5173/reset-password?token=" + resetToken.getToken();
+    
+            mailService.sendNewMail(mailRequest.getEmail(), "Reset Password", "You have request for a reset password. Please follow this link to continue: " + resetLink);
+
+            return ResponseEntity.ok("Password reset instructions sent to your email!");
+        }catch(Exception e){
+            return ResponseEntity.status(500).body("Error Sending Mail: " + e.getMessage());
+        }
+
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestParam String token, @RequestParam String newPassword) {
+        PasswordResetToken resetToken = passwordResetTokenService.findByToken(token);
+        if (resetToken == null) {
+            return ResponseEntity.badRequest().body("Invalid or expired token!");
+        }
+
+        // Check if token is expired
+        if (passwordResetTokenService.isExpired(resetToken)) {
+            return ResponseEntity.badRequest().body("Token has expired. Please request a new one.");
+        }
+
+        // Update user's password and invalidate the token
+        UserEntity user = resetToken.getUser();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        // Invalidate the token
+        passwordResetTokenService.expireToken(resetToken);
+
+        return ResponseEntity.ok("Password reset successfully!");
     }
 
     @GetMapping("profile")
