@@ -258,8 +258,4 @@ public class ShopService {
         return dtos;
     }
 
-    public Long countShop(){
-        return shopRepository.count();
-    }
-
 }
