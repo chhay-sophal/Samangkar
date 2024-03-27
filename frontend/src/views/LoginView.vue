@@ -14,9 +14,9 @@
         <div>
           <div class="flex items-center justify-between">
             <label for="password" class="block text-sm font-medium leading-6 text-black">Password</label>
-            <div class="text-sm">
-              <a href="#" class="font-bold text-orange-300 hover:text-orange-500">Forgot password?</a>
-            </div>
+            <router-link to="/forgot-password" class="text-sm">
+              <div class="font-bold text-orange-300 hover:text-orange-500">Forgot password?</div>
+            </router-link>
           </div>
           <div class="mt-2">
             <input v-model="password" type="password" class="px-4 block w-full rounded-md border-0 bg-white/5 py-1.5 text-black shadow-sm ring-1 ring-inset ring-black-500 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6">

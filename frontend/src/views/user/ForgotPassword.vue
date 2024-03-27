@@ -22,6 +22,9 @@
       <div v-if="noEmail" class="sm:mx-auto sm:w-full sm:max-w-sm">
         <p class="mt-4 text-left font-bold text-orange-300">Sorry, we could not find the email address that you input. Please input the email address that you have registered with us.</p>
       </div>
+      <div v-if="error" class="sm:mx-auto sm:w-full sm:max-w-sm">
+        <p class="mt-4 text-left font-bold text-orange-300">Sorry, there is something wrong at the server, please try again later. {{ errorMsg }}</p>
+      </div>
     </div>
 </template>
 
@@ -33,6 +36,8 @@
             email: null,
             sentEmail: false,
             noEmail: false,
+            error: false,
+            errorMsg: '',
         };
     },
     methods: {
@@ -46,7 +51,8 @@
                 this.noEmail = true
             }
           } catch (error) {
-            this.noEmail = true
+            this.error = true
+            this.errorMsg = error.toString()
           }
         },
     },

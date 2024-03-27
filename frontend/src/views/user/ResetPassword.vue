@@ -44,6 +44,7 @@
     export default {
     data() {
         return {
+            token: null,
             newPassword: null,
             newConfirmPassword: null,
             OpenSuccessAlert: false,
@@ -54,22 +55,34 @@
     methods: {
         async handleResetPassword() {
             if (this.newPassword.length > 8) {
-                if (this.newPassword === this.newConfirmPassword) {
+                if (this.newPassword !== this.newConfirmPassword) {
                     this.OpenWarningAlert = true
                     this.alertMsg = 'Password does not match'
                 } else {
-                    const token = this.$route.params.token;
-                    console.log(token)
-                    // const response = await http.post(`api/auth/reset-password/?token=${}`, { email: this.email });
+                    // const token = this.$route.params.token;
+                    // console.log(token)
+                    const response = await http.post(`api/auth/reset-password?token=${this.token}&newPassword=${this.newPassword}`);
 
                     //make request 
                     // const respons = await 
-                    // if(response.status === 200){
-                    //     this.OpenSuccessAlert = true
-                    // }else{
-                    //     this.OpenWarningAlert = true
-                    //     this.alertMsg = 'something went wrong'
-                    // }
+                    if(response.status === 200){
+                        this.OpenSuccessAlert = true
+                        this.alertMsg = 'Changed password successfully'
+
+                        setTimeout(() => {
+                            this.OpenWarningAlert = false;
+                        }, 2000);
+
+                        this.$router.push({ name: 'profilePageRoute' })
+
+                    }else{
+                        this.OpenWarningAlert = true
+                        this.alertMsg = 'something went wrong'
+
+                        setTimeout(() => {
+                            this.OpenWarningAlert = false;
+                        }, 2000);
+                    }
                 }
                  
             }else{
@@ -80,9 +93,16 @@
           
         }
     },
-    mounted() {
-        const token = this.$route.params.token;
-        console.log(token)
+    // mounted() {
+    //     // const token = this.$route.params.token;
+    //     // console.log(token)
+    // },
+    created() {
+        // Get the URL parameters
+        const params = new URLSearchParams(window.location.search);
+        // Extract the token value
+        this.token = params.get('token');
+        console.log(this.token)
     }
-    };
+};
 </script>
