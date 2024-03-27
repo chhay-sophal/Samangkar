@@ -54,13 +54,13 @@
 
     <!-- Search -->
     <div class="search-filter">
-      <input type="text" v-model="searchText" placeholder="Search...">
-      <select v-model="selectedCategory">
+      <input class="grow" type="text" v-model="searchText" placeholder="Search...">
+      <!-- <select v-model="selectedCategory">
         <option value="">All Categories</option>
         <option value="Premium">Premium</option>
         <option value="MiddleClass">MiddleClass</option>
         <option value="Simple">Simple</option>
-      </select>
+      </select> -->
       <button @click="searchShops()">Apply</button>
     </div>
 

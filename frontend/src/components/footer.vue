@@ -3,10 +3,10 @@
     <div class="">
       <p>© 2024 SamAngKar. All rights reserved.</p>
       <ul class="footer-links">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Services</a></li>
-        <li><a href="#">Contact</a></li>
+          <router-link class="px-2" to="/" title="Home">Home</router-link>
+          <router-link class="px-2" to="/about" title="About">About</router-link>
+          <router-link class="px-2" to="/services" title="Services">Services</router-link>
+          <router-link class="px-2" to="/contact" title="Contact">Contact</router-link>
       </ul>
     </div>
   </footer>
