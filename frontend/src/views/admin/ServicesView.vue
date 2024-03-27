@@ -2,14 +2,16 @@
     <div class="package-table-page">
         <Sidebar :links="sidebarLinks" />
         <div class="main-content">
-            <h2>Services Table</h2>
-            <div class="p-5 pt-0">
-                <button @click="handleShowAddServicePanel()" class="edit-button">Add Service</button>
+          <div class="flex items-center justify-center py-5">
+            <div class="grow text-3xl font-bold">
+              Services Table
             </div>
-            <!-- <div class="search-container">
+            <button @click="handleShowAddServicePanel()" class="h-full p-3 rounded-md bg-blue-400 hover:bg-blue-600 text-white">Add Service</button>
+          </div>
+            <div class="search-container">
                 <label for="search">Search:</label>
                 <input type="text" id="search" v-model="searchQuery" placeholder="Search" @input="searchServices">
-            </div> -->
+            </div>
             <div class="table-container">
             <table class="package-table">
                 <thead>
@@ -355,22 +357,22 @@ export default {
         console.error("Error:", error);
       }
     },
-    // async searchServices() {
-    //   try {
-    //     if (this.searchQuery) {
-    //       const response = await http.get(`api/services/search/${this.searchQuery}?page=${this.currentPage - 1}&size=${this.size}`);
-    //       this.services = response.data.content;
-    //       this.totalPages = response.data.totalPages;
-    //       this.first = response.data.first;
-    //       this.last = response.data.last;
-    //       console.log(this.services)
-    //     } else {
-    //       this.fetchPackages();
-    //     }
-    //   } catch (error) {
-    //     console.error("Error:", error);
-    //   }
-    // },
+    async searchServices() {
+      try {
+        if (this.searchQuery) {
+          const response = await http.get(`api/services/search/${this.searchQuery}?page=${this.currentPage - 1}&size=${this.size}`);
+          this.services = response.data.content;
+          this.totalPages = response.data.totalPages;
+          this.first = response.data.first;
+          this.last = response.data.last;
+          console.log(this.services)
+        } else {
+          this.fetchServices();
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    },
     async fetchServices() {
       try {
         const response = await http.get(`api/services/get-all/pageable?page=${this.currentPage - 1}&size=${this.size}`);
@@ -396,6 +398,22 @@ export default {
       this.currentPage = newPage;
       await this.fetchServices();
     },
+    // async searchServices() {
+    //   try {
+    //     if (this.searchQuery) {
+    //       const response = await http.get(`api/services/search/${this.searchQuery}?page=${this.currentPage - 1}&size=${this.size}`);
+    //       this.services = response.data.content;
+    //       this.totalPages = response.data.totalPages;
+    //       this.first = response.data.first;
+    //       this.last = response.data.last;
+    //       console.log(this.packages)
+    //     } else {
+    //       this.fetchPackages();
+    //     }
+    //   } catch (error) {
+    //     console.error("Error:", error);
+    //   }
+    // },
   },
   mounted() {
     this.fetchServices();

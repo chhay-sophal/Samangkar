@@ -40,20 +40,20 @@
         </div>
       </div>
       <div class="section">
-        <h2>Review Management</h2>
-        <router-link to="/admin/reviews" class="view-all-link">View All</router-link>
+        <h2>Requests Management</h2>
+        <router-link to="/admin/request" class="view-all-link">View All</router-link>
         <div class="stats">
           <div class="stat dark:bg-gray-700">
-            <h3>Total Reviews</h3>
-            <p>{{ totalReviews }}</p>
+            <h3>Total Requests</h3>
+            <p>{{ requests.length }}</p>
           </div>
           <div class="stat dark:bg-gray-700">
-            <h3>Positive Reviews</h3>
-            <p>{{ positiveReviews }}</p>
+            <h3>Pending Requests</h3>
+            <p>{{ requests.filter(r => !r.deletedAt).length }}</p>
           </div>
           <div class="stat dark:bg-gray-700">
-            <h3>Negative Reviews</h3>
-            <p>{{ negativeReviews }}</p>
+            <h3>Completed Requests</h3>
+            <p>{{ requests.filter(r => r.deletedAt).length }}</p>
           </div>
         </div>
       </div>
@@ -74,6 +74,7 @@
 <script>
 import Sidebar from "./../../components/AdminSidebar.vue"; // Adjust the path as per your project structure
 import http from "@/services/httpService";
+import { useUserStore } from '@/store/userStore'
 
 export default {
   components: {
@@ -102,6 +103,7 @@ export default {
       shopsData: [],
       reviewsData: [],
       packagesData: [],
+      requests: [],
     };
   },
   methods: {
@@ -132,11 +134,30 @@ export default {
         console.error(error)
       }
     },
+    async fetchRequests() {
+      try {
+        this.requests = (await http.get(`api/requests/get-all`)).data;
+        this.requests = response.data;
+        console.log(this.requests)
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
   },
   mounted() {
+    const userStore = useUserStore()
+    if (userStore.user.role == "USER") {
+        this.$router.push({ name: 'profilePageRoute' })
+    } else if (userStore.user.role == "SHOP_OWNER") {
+        this.$router.push({ name: 'ShopOwnerProfile' })
+    } else {
+        this.$router.push({ name: 'loginPageRoute' })
+    }
+
     this.fetchUserList();
     this.fetchShopList();
     this.fetchPackageList();
+    this.fetchRequests();
   }
 };
 </script>

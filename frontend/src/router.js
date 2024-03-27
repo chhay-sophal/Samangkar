@@ -32,6 +32,8 @@ import Review from './views/shop/Review.vue'
 import AllShopView from './views/user/AllShopView.vue'
 import AllServiceView from './views/user/AllServiceView.vue'
 import AllPackageView from './views/user/AllPackageView.vue'
+import ForgotPasswordVue from './views/user/ForgotPassword.vue'
+import ResetPasswordVue from './views/user/ResetPassword.vue'
 
 const routes = [
     {
@@ -148,6 +150,18 @@ const routes = [
         path: '/register',
         name: 'registerPageRoute',
         component: RegisterUserView,
+        meta: { requiresAuth: false, hideHeaderFooter: true } 
+    },
+    {
+        path: '/forgot-password',
+        name: 'forgotPassword',
+        component: ForgotPasswordVue,
+        meta: { requiresAuth: false, hideHeaderFooter: true } 
+    },
+    {
+        path: '/reset-password:token?',
+        name: 'resetPassword',
+        component: ResetPasswordVue,
         meta: { requiresAuth: false, hideHeaderFooter: true } 
     },
     {

@@ -36,9 +36,9 @@ public interface PackageRepository extends PagingAndSortingRepository<PackageMod
     @Query("SELECT pkg FROM PackageModel pkg WHERE " +
         "LOWER(pkg.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
         "LOWER(pkg.description) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-        "pkg.deletedAt IS NULL OR " +
-        "LOWER(pkg.shop.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
-    Page<PackageModel> findPackagesByKeyword(String keyword, Pageable pageable);
+        "LOWER(pkg.shop.name) LIKE LOWER(CONCAT('%', :keyword, '%')) AND " + 
+        "pkg.deletedAt IS NULL")
+    Page<PackageModel> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT p FROM PackageModel p WHERE SIZE(p.services) > 0 AND p.deletedAt IS NULL")
     Page<PackageModel> findPackagesWithServicesAndDeletedAtIsNull(Pageable pageable);

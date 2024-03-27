@@ -35,6 +35,12 @@ public class ServiceService {
         return services.map(this::createServiceDto);
     }
 
+    public Page<ServiceDto> serchServicesPageable(String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ServiceModel> services = serviceRepository.searchPackagesByKeyword(keyword, pageable);
+        return services.map(this::createServiceDto);
+    }
+
     public List<ServiceDto> getAllServices() {
         Iterable<ServiceModel> services = serviceRepository.findAll();
         return StreamSupport.stream(services.spliterator(), false)

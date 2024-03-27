@@ -45,6 +45,7 @@
 <script>
 import { login } from '@/services/authService'
 import { useUserStore } from '@/store/userStore';
+import { RouterLink } from 'vue-router';
 
 export default {
   data() {

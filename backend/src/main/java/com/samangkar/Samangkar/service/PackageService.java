@@ -57,7 +57,7 @@ public class PackageService {
 
     public Page<PackageDto> searchPackages(String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<PackageModel> packages = packageRepository.findPackagesByKeyword(keyword, pageable);
+        Page<PackageModel> packages = packageRepository.searchByKeyword(keyword, pageable);
         return packages.map(this::createPackageDto);
     }
 

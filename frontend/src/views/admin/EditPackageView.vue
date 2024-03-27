@@ -58,24 +58,21 @@ export default {
     };
   },
   methods: {
-    handleUpdate() {
-      if (confirm("Are you sure you want to update?")) {
-        // Call update method
-        this.updatePackage();
-      }
-    },
-    updatePackage() {
+    async handleUpdate() {
       try {
-        http.put(`api/packages/update/${this.packageInfo.id}`, { 
-          "packageName": this.packageInfo.name,
-          "description": this.packageInfo.description,
-          "shopId": this.packageInfo.shopId,
-          "serviceIds": this.packageInfo.serviceIds,
-        });
+        if (confirm("Are you sure you want to update?")) {
+          await http.put(`api/packages/update/${this.packageInfo.id}`, { 
+            "packageName": this.packageInfo.name,
+            "description": this.packageInfo.description,
+            "shopId": this.packageInfo.shopId,
+            "serviceIds": this.packageInfo.serviceIds,
+          });
     
-        console.log("Package updated:", this.packageInfo);
-        alert("Package updated successfuly!");
-        this.$router.push("/admin/packages");
+          console.log("Package updated:", this.packageInfo);
+          alert("Package updated successfuly!");
+          this.$router.push("/admin/packages");
+        }
+
       } catch (error) {
         console.error(error);
       }

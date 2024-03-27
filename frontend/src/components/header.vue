@@ -49,7 +49,7 @@
           </div>
         </router-link>
         <router-link
-          v-if="Object.keys(user).length > 0 && !hideProfileIcon"
+          v-if="Object.keys(user.role !== 'ADMIN').length > 0 && !hideProfileIcon"
           to="/profile"
           title="Profile"
         >
@@ -67,6 +67,23 @@
                 stroke-linejoin="round"
                 d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
               />
+            </svg>
+          </div>
+        </router-link>
+        <router-link
+          v-else-if="user.role == 'ADMIN'"
+          to="/admin"
+          title="Dashboard"
+        >
+          <div class="icon-container">
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              viewBox="0 0 448 512"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-10 h-10"
+            >
+              <path d="M96 128a128 128 0 1 0 256 0A128 128 0 1 0 96 128zm94.5 200.2l18.6 31L175.8 483.1l-36-146.9c-2-8.1-9.8-13.4-17.9-11.3C51.9 342.4 0 405.8 0 481.3c0 17 13.8 30.7 30.7 30.7H162.5c0 0 0 0 .1 0H168 280h5.5c0 0 0 0 .1 0H417.3c17 0 30.7-13.8 30.7-30.7c0-75.5-51.9-138.9-121.9-156.4c-8.1-2-15.9 3.3-17.9 11.3l-36 146.9L238.9 359.2l18.6-31c6.4-10.7-1.3-24.2-13.7-24.2H224 204.3c-12.4 0-20.1 13.6-13.7 24.2z"/>
             </svg>
           </div>
         </router-link>

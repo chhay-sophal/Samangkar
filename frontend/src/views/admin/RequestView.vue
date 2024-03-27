@@ -2,7 +2,13 @@
     <div class="review-table-page">
       <Sidebar :links="sidebarLinks" />
       <div class="main-content">
-        <h2>Shop Owner Requests</h2>
+        <div class="flex items-center justify-center py-5">
+          <div class="grow text-3xl font-bold">
+            Shop Owner Requests
+          </div>
+          <button v-if="!showCompleted" @click="showCompleted = true" class="h-full p-3 rounded-md bg-blue-400 hover:bg-blue-600 text-white">Show completed</button>
+          <button v-else @click="showCompleted = false" class="h-full p-3 rounded-md bg-blue-400 hover:bg-blue-600 text-white">Hide completed</button>
+        </div>
         <div class="table-container">
           <table class="w-full border">
             <thead>
@@ -12,18 +18,18 @@
                 <th class="border">Purpose</th>
                 <th class="border">Description</th>
                 <th class="border">Created At</th>
-                <th class="border">Actions</th>
+                <th v-if="!showCompleted" class="border">Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="request in requests" :key="request.id" class="h-10">
+              <tr v-for="request in filteredRequests" :key="request.id" class="h-10">
                 <td class="border">{{ request.id }}</td>
                 <td class="border">{{ request.shopId }}</td>
                 <td class="border">{{ request.purpose }}</td>
                 <td class="border">{{ request.description }}</td>
                 <td class="border">{{ formatDate(request.createdAt) }}</td>
-                <td class="border">
-                  <button v-if="!request.deleteAt" @click="handleDelete(request.id)" class="size-full bg-blue-600">Complete</button>
+                <td v-if="!request.deletedAt" class="border">
+                  <button @click="handleDelete(request.id)" class="size-full bg-blue-600 text-stone-100">Complete</button>
                 </td>
               </tr>
             </tbody>
@@ -49,8 +55,20 @@ export default {
         { text: 'Shops', icon: 'mdi-store', route: '/shops' },
         // Add more sidebar links as needed
       ],
-      requests: []
+      requests: [],
+      showCompleted: false
     };
+  },
+  computed: {
+    filteredRequests() {
+      // Adjust this condition based on how you determine a request is "completed"
+      // This example assumes requests with `deletedAt` are considered "completed"
+      if (this.showCompleted) {
+        return this.requests.filter(r => r.deletedAt);
+      } else {
+        return this.requests.filter(r => !r.deletedAt);
+      }
+    }
   },
   methods: {
     formatDate(dateString) {
@@ -89,10 +107,6 @@ export default {
           console.error("Error:", error);
         }
       }
-    },
-    editReview(review) {
-      // Logic to edit review
-      console.log('Edit review:', review);
     },
     async fetchRequests() {
       try {
