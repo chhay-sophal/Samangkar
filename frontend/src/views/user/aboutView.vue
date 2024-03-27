@@ -54,14 +54,16 @@
                   <div class="mx-auto grid gap-6 md:w-3/4 lg:w-full lg:grid-cols-3">                     
                     <div class="bg-gray-800 rounded-2xl shadow-xl px-8 py-12 sm:px-12 lg:px-8" v-for="(member, index) in team"
                     :key="index">
-                        <div class="mb-12 space-y-4">
+                        <div class="xl:mb-12 sm:mb-5 space-y-4">
                             <h3 class="text-2xl font-semibold text-orange-300">{{ member.name }}</h3>
                         </div>
-                        <img
-                          class="card-img-top card-img-blk "
+                        <div class="w-full xl:h-96 lg:h-72 md:h-52 sm:h-32 h-80 overflow-hidden">
+                          <img
+                          class="card-img-top card-img-blk"
                           :src="member.image"
                           :alt="member.name"
-                        />                    
+                        />   
+                        </div>           
                     </div>                       
                   </div>
               </div>
