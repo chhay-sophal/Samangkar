@@ -65,6 +65,16 @@ public class ServiceController {
         ServiceDto service = serviceService.getServiceById(serviceId);
         return ResponseEntity.ok(service);
     }
+
+    @GetMapping("search/{query}")
+    public ResponseEntity<?> searchServices(@PathVariable String query, @RequestParam int page, @RequestParam int size) {
+        try {
+            Page<ServiceDto> services = serviceService.serchServicesPageable(query, page, size);
+            return ResponseEntity.ok(services);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
+        }
+    }
     
     @PostMapping("add")
     public ResponseEntity<?> addService(@RequestBody AddOrUpdateServiceDto request) {
