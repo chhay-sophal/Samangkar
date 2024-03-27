@@ -773,6 +773,10 @@ export default {
         if (userStore.user.role == "SHOP_OWNER") {
             this.$router.push({ name: 'ShopOwnerProfile' })
         }
+
+        if (userStore.user.role == "ADMIN") {
+            this.$router.push({ name: 'AdminPageRoute' })
+        }
         
         this.user = userStore.user;
         this.fetchUserFavorites();

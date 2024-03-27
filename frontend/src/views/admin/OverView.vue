@@ -41,7 +41,7 @@
       </div>
       <div class="section">
         <h2>Requests Management</h2>
-        <router-link to="/admin/reviews" class="view-all-link">View All</router-link>
+        <router-link to="/admin/request" class="view-all-link">View All</router-link>
         <div class="stats">
           <div class="stat dark:bg-gray-700">
             <h3>Total Requests</h3>
@@ -74,6 +74,7 @@
 <script>
 import Sidebar from "./../../components/AdminSidebar.vue"; // Adjust the path as per your project structure
 import http from "@/services/httpService";
+import { useUserStore } from '@/store/userStore'
 
 export default {
   components: {
@@ -144,6 +145,13 @@ export default {
     }
   },
   mounted() {
+    const userStore = useUserStore()
+    if (userStore.user.role == "USER") {
+        this.$router.push({ name: 'profilePageRoute' })
+    } else if (userStore.user.role == "SHOP_OWNER") {
+        this.$router.push({ name: 'ShopOwnerProfile' })
+    }
+
     this.fetchUserList();
     this.fetchShopList();
     this.fetchPackageList();
