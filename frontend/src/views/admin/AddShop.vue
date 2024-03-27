@@ -2,26 +2,45 @@
     <div class="admin-dashboard">
       <Sidebar :links="sidebarLinks" />
       <div class="main-content">
+        <router-link to="/admin/shops" class="back-icon">
+          <i class="mdi mdi-arrow-left">Back</i> 
+        </router-link>
         <div class="admin-form">
-          <h2 class="form-title">Admin Registration</h2>
-          <form @submit.prevent="registerAdmin">
+          <h2 class="form-title">Add Shop</h2> 
+          <form @submit.prevent="registerShop">
             <div class="form-group">
-              <label for="username">Username</label>
-              <input type="text" id="username" v-model="admin.username" required>
+              <label for="shop-id">Owner</label>
+              <input type="text" id="search" v-model="shopInfo.ownerId" list="shops-list" />
+              <datalist id="shops-list">
+                <option v-for="user in users.filter(u => u.role == 'SHOP_OWNER')" :value="user.id">
+                  {{ user.username }}
+                </option>
+              </datalist>
             </div>
             <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" id="email" v-model="admin.email" required>
+              <label for="name">Shop Name</label>
+              <input class="dark:text-stone-600" type="text" id="name" v-model="shopInfo.name" required>
             </div>
             <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" id="password" v-model="admin.password" required>
+              <label for="description">Description</label>
+              <textarea class="w-full rounded-lg p-3 dark:text-stone-600" id="description" v-model="shopInfo.description" required></textarea>
             </div>
-            <div class="form-group">
-              <label for="profile-picture">Profile Picture</label>
-              <input type="file" id="profile-picture" accept="image/*" @change="onFileChange">
-            </div>
-            <button type="submit" class="submit-button">Register</button>
+            <!-- <div class="form-group">
+              <label for="trending">Trending</label>
+              <label>
+                <input type="radio" id="trending" v-model="shopInfo.isTrending" value="true" />
+                  Yes
+              </label>
+              <label>
+                <input type="radio" id="trending" v-model="shopInfo.isTrending" value="false" />
+                  No
+              </label>
+            </div> -->
+            <!-- <div class="form-group">
+              <label for="image">Shop Image</label>
+              <input type="file" id="image" accept="image/*" @change="onFileChange">
+            </div> -->
+            <button type="submit" class="submit-button">Add</button>
           </form>
         </div>
       </div>
@@ -30,7 +49,9 @@
   
   <script>
 import Sidebar from "./../../components/AdminSidebar.vue"; // Adjust the path as per your project structure
-  
+import http from "@/services/httpService";
+import convertImageToBlob from "@/services/convertImageToBlob";
+
   export default {
     name: 'AdminDashboard',
     components: {
@@ -48,24 +69,79 @@ import Sidebar from "./../../components/AdminSidebar.vue"; // Adjust the path as
           email: '',
           password: '',
           profilePicture: null
-        }
+        },
+        shopInfo: {
+          shopId: null,
+          ownerId: null,
+          name: '',
+          description: '',
+          isTrending: null,
+          image: null,
+        },
+        shops: [],
+        users: []
       };
     },
     methods: {
+      async fetchShops() {
+        try {
+          const response = await http.get(`api/shops/get-all`);
+          this.shops = response.data;
+          console.log(this.shops)
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      },
       onFileChange(event) {
         this.admin.profilePicture = event.target.files[0];
       },
-      registerAdmin() {
-        // Logic to register new admin
-        console.log(this.admin);
-        // Reset form fields after submission
-        this.admin = {
-          username: '',
-          email: '',
-          password: '',
-          profilePicture: null
-        };
+      // registerShop() {
+      //   // Logic to register new admin
+      //   // console.log(this.admin);
+      //   // Reset form fields after submission
+      //   this.admin = {
+      //     username: '',
+      //     email: '',
+      //     password: '',
+      //     profilePicture: null
+      //   };
+      // },
+      async registerShop() {
+        try {
+          await http.post(`api/shops/insert`, { 
+            "shopName": this.shopInfo.name, 
+            "shopImageUrl": null,
+            "shopOwnerId": this.shopInfo.ownerId,
+            "description": this.shopInfo.description,
+            "isTrending": this.shopInfo.isTrending,
+          });
+
+          // if (this.shopInfo.image) {
+          //   const formData = new FormData();
+          //   formData.append('file', convertImageToBlob(this.shopInfo.image), 'image.jpg')
+
+          //   await http.post(`api/shops/${this.shopInfo.shopId}/image/upload`, formData);
+          // }
+
+          console.log("Shop added:", this.shopInfo);
+          alert("Shop added successfuly!");
+          this.$router.push("/admin/shops");
+        } catch (error) {
+          console.error(error);
+        }
+      },
+      async fetchUserList() {
+      try {
+        const response = await http.get(`api/users/get-all`);
+        this.users = response.data;
+        console.log(this.users)
+      } catch (error) {
+        console.error(error)
       }
+    },
+    },
+    mounted() {
+      this.fetchUserList();
     }
   }
   </script>

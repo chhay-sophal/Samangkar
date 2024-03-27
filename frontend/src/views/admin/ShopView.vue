@@ -3,9 +3,12 @@
     <Sidebar />
     <h1 class="page-title">Shop Table</h1>
     <div class="flex gap-5">
-      <div class="search-container">
+      <div class="search-container grow">
         <label for="search">Search:</label>
         <input type="text" id="search" v-model="searchQuery" placeholder="Search" @input="searchShops">
+      </div>
+      <div class="">
+        <router-link to="/admin/shops/add">Add shop</router-link>
       </div>
       <!-- <div class="search-container">
         <label for="search">Search:</label>

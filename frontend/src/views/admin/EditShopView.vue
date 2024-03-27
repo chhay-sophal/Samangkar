@@ -6,7 +6,7 @@
           <i class="mdi mdi-arrow-left">Back</i> 
         </router-link>
         <div class="admin-form">
-          <h2 class="form-title">Edit User</h2> 
+          <h2 class="form-title">Edit Shop</h2> 
           <form @submit.prevent="handleUpdate">
             <div class="form-group">
               <label for="name">Shop Name</label>

@@ -170,11 +170,11 @@ public class ShopService {
             throw new IllegalStateException("Shop name & description can not be null");
         }
 
-        if(addShopDto.getShopImageUrl() != null){
-            shop.setShopImageUrl(addShopDto.getShopImageUrl());
-        }else{
-            shop.setShopImageUrl(null);
-        }
+        // if(addShopDto.getShopImageUrl() != null){
+        //     shop.setShopImageUrl(addShopDto.getShopImageUrl());
+        // }else{
+        //     shop.setShopImageUrl(null);
+        // }
 
         //VALIDATE OWNER => TYPE = 2
         UserEntity owner = userRepository.findById(addShopDto.getShopOwnerId()).get();
