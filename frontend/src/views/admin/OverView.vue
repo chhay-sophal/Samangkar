@@ -150,7 +150,9 @@ export default {
         this.$router.push({ name: 'profilePageRoute' })
     } else if (userStore.user.role == "SHOP_OWNER") {
         this.$router.push({ name: 'ShopOwnerProfile' })
-    } else {
+    } 
+    
+    if (!userStore.user) {
         this.$router.push({ name: 'loginPageRoute' })
     }
 

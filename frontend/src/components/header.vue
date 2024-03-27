@@ -49,7 +49,7 @@
           </div>
         </router-link>
         <router-link
-          v-if="Object.keys(user.role !== 'ADMIN').length > 0 && !hideProfileIcon"
+          v-if="(user.role == 'USER' || user.role == 'SHOP_OWNER') && !hideProfileIcon"
           to="/profile"
           title="Profile"
         >

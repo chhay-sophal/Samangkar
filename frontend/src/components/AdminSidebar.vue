@@ -27,27 +27,27 @@
             <div class="grow flex items-center justify-center font-bold text-xl overflow-visible">{{ user.username }}</div>
         </div>
         <hr class="pb-3"/>
-        <ul class="grow flex flex-col w-full text-xl font-medium">
-          <router-link v-for="url in urls" :to="url.path" class="px-5 py-3 hover:bg-slate-500">{{ url.name }}</router-link>
+        <ul class="grow flex flex-col w-full text-md font-medium">
+          <router-link v-for="url in urls" :to="url.path" class="px-5 py-1 hover:bg-slate-500">{{ url.name }}</router-link>
         </ul>
-        <div class="flex flex-col text-xl font-medium">
-          <div class="flex w-full px-5 py-3 hover:bg-green-600">
+        <div class="flex flex-col text-md font-medium">
+          <div class="flex w-full px-5 py-1 hover:bg-green-600">
             <button @click="showChangePasswordPanel = true" class="grow text-left">
               Change Password
             </button>
           </div>
-          <div class="flex w-full px-5 py-3 hover:bg-green-600">
+          <div class="flex w-full px-5 py-1 hover:bg-green-600">
             <button @click="handleShowChangeInfoPanel()" class="grow text-left">
               Change Info
             </button>
           </div>
-          <div class="flex w-full px-5 py-3 hover:bg-green-600">
+          <div class="flex w-full px-5 py-1 hover:bg-green-600">
             <button @click="openFileInput()" class="grow text-left">
               <input type="file" ref="fileInput" style="display: none" @change="handleFileChange">
               <button>Change Profile</button>
             </button>
           </div>
-          <div class="flex w-full px-5 py-3 hover:bg-red-600">
+          <div class="flex w-full px-5 py-1 hover:bg-red-600">
             <RouterLink class="grow text-left" to="/logout" title="Logout">
               Log out
             </RouterLink>
@@ -62,7 +62,7 @@
     <!-- Choose profile picture -->
     <div
         v-if="selectedImage"
-        class="top-1/2 left-1/2 dark:bg-stone-700 xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl sm:h-1/2 h-2/5 -translate-x-1/2 -translate-y-1/2 fixed flex flex-col gap-5 justify-center items-center"
+        class="top-1/2 left-1/2 dark:bg-stone-700 xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl h-fit -translate-x-1/2 -translate-y-1/2 fixed flex flex-col gap-5 justify-center items-center"
     >
         <div class="flex w-full justify-end items-center pr-5 dark:text-stone-600">
             <button 
@@ -82,7 +82,7 @@
     <!-- Change User Information Box -->
     <div 
         v-if="showChangeInfoPanel"
-        class="top-1/2 left-1/2 bg-green-100 xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl sm:h-1/3 h-2/5 -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
+        class="top-1/2 left-1/2 bg-green-100 xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl h-fit -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
     >
         <div class="flex justify-end items-center pr-5 dark:text-stone-600">
             <button 
@@ -228,7 +228,7 @@
     <!-- Change Password Box -->
     <div 
         v-if="showChangePasswordPanel"
-        class="top-1/2 left-1/2 bg-green-100 2xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl sm:h-1/3 h-2/5 -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
+        class="top-1/2 left-1/2 bg-green-100 2xl:w-1/3 lg:w-1/2 sm:w-3/4 w-5/6 rounded-xl h-fit -translate-x-1/2 -translate-y-1/2 fixed flex flex-col justify-center"
     >
         <div class="flex justify-end items-center pr-5 dark:text-stone-600">
             <button 
